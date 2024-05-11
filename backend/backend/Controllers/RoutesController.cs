@@ -3,6 +3,7 @@ using backend.Dtos.Location;
 using backend.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -18,19 +19,19 @@ namespace backend.Controllers
 
         // Get all items in the DB
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var routes = _context.Routes.ToList()
-                .Select(s => s.ToRouteDto());
+            var routes = await _context.Routes.ToListAsync();
+            var routesDto = routes.Select(s => s.ToRouteDto());
 
-            return Ok(routes);
+            return Ok(routesDto);
         }
 
         //Get a single item in the DB based on the ID
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var routes = _context.Routes.Find(id);
+            var routes = await _context.Routes.FindAsync(id);
 
             if (routes == null)
             {
@@ -43,11 +44,11 @@ namespace backend.Controllers
         // Add new Items
         [HttpPost]
 
-        public IActionResult Create([FromBody] CreateRoutesRequestDto routesDto)
+        public async Task<IActionResult> Create([FromBody] CreateRoutesRequestDto routesDto)
         {
             var routesModel = routesDto.ToLocationFromCreateDto();
-            _context.Routes.Add(routesModel);
-            _context.SaveChanges();
+            await _context.Routes.AddAsync(routesModel);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = routesModel.Id, }, routesModel.ToRouteDto());
         }
 
@@ -55,9 +56,9 @@ namespace backend.Controllers
 		[HttpPut]
         [Route("{id}")]
 
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateRoutesRequestDto UpdateDto) 
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRoutesRequestDto UpdateDto) 
         {
-            var routeModel = _context.Routes.FirstOrDefault(x => x.Id == id);
+            var routeModel = await _context.Routes.FirstOrDefaultAsync(x => x.Id == id);
             if (routeModel == null)
             {
                 return NotFound();
@@ -66,7 +67,7 @@ namespace backend.Controllers
 			routeModel.RouteName = UpdateDto.RouteName;
             routeModel.MinFare = UpdateDto.MinFare;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(routeModel.ToRouteDto());
 
@@ -74,9 +75,9 @@ namespace backend.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var locationModel = _context.Routes.FirstOrDefault(x => x.Id == id);
+            var locationModel = await _context.Routes.FirstOrDefaultAsync(x => x.Id == id);
             if (locationModel == null) 
             {
                 return NotFound();
@@ -84,7 +85,7 @@ namespace backend.Controllers
 
             _context.Routes.Remove(locationModel);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
