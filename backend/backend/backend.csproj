@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Waypoints\" />
+    <Folder Include="Dtos\Locations\" />
   </ItemGroup>
 
 </Project>

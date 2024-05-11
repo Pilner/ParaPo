@@ -10,8 +10,8 @@ namespace backend.Data
             
         }
 
-        public DbSet<Location> Location { get; set; }
-        public DbSet<Waypoints> Waypoints { get; set; }
+        public DbSet<Routes> Routes { get; set; }
+        public DbSet<Locations> Locations { get; set; }
 
 
     }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Controllers
 {
 
-	public class WaypointsController : ControllerBase
+	public class Locations : ControllerBase
 	{
 	}
 }

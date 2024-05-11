@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-	public class Location
+	public class Routes
 	{
 
         // Items to add in the database
@@ -12,13 +12,13 @@ namespace backend.Models
 
         public int Id { get; set; }
 
-        public string LocName { get; set; } = string.Empty;
+        public string RouteName { get; set; } = string.Empty;
 
 
 		[Column(TypeName = "decimal (18,2)")]
 		public decimal MinFare { get; set; }
 
 		// One to many Relationships
-		public List<Waypoints> Waypoints { get; set; } = new List<Waypoints>();
+		public List<Locations> Locations { get; set; } = new List<Locations>();
 	}
 }

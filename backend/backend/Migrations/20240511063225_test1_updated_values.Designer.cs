@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240510120121_test1")]
-    partial class test1
+    [Migration("20240511063225_test1_updated_values")]
+    partial class test1_updated_values
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace backend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("backend.Models.Location", b =>
+            modelBuilder.Entity("backend.Models.Locations", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,60 +33,63 @@ namespace backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("LocName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("MinFare")
-                        .HasColumnType("decimal (18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Location");
-                });
-
-            modelBuilder.Entity("backend.Models.Waypoints", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Latitude")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LocationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Longitude")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
+                    b.Property<int?>("RoutesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("locationName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("RoutesId");
 
-                    b.ToTable("Waypoints");
+                    b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("backend.Models.Waypoints", b =>
+            modelBuilder.Entity("backend.Models.Routes", b =>
                 {
-                    b.HasOne("backend.Models.Location", "Location")
-                        .WithMany("Waypoints")
-                        .HasForeignKey("LocationId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Location");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("MinFare")
+                        .HasColumnType("decimal (18,2)");
+
+                    b.Property<string>("RouteName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Routes");
                 });
 
-            modelBuilder.Entity("backend.Models.Location", b =>
+            modelBuilder.Entity("backend.Models.Locations", b =>
                 {
-                    b.Navigation("Waypoints");
+                    b.HasOne("backend.Models.Routes", "Routes")
+                        .WithMany("Locations")
+                        .HasForeignKey("RoutesId");
+
+                    b.Navigation("Routes");
+                });
+
+            modelBuilder.Entity("backend.Models.Routes", b =>
+                {
+                    b.Navigation("Locations");
                 });
 #pragma warning restore 612, 618
         }
