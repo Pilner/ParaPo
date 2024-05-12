@@ -11,7 +11,8 @@ namespace backend.Mappers
 			{
 				Id = routeModel.Id,
 				RouteName = routeModel.RouteName,
-				MinFare = routeModel.MinFare
+				MinFare = routeModel.MinFare,
+				Locations = routeModel.Locations.Select(c => c.ToLocationsDto()).ToList()
 			};
 		}
 

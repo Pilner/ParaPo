@@ -1,4 +1,6 @@
-﻿namespace backend.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace backend.Models
 {
 	public class Locations
 	{
@@ -15,6 +17,7 @@
 
 		// Linking together Relationships
 
+		[ForeignKey("RoutesId")]
 		public int? RoutesId { get; set; }
 		public Routes? Routes { get; set; }
     }

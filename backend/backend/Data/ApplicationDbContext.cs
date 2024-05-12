@@ -1,5 +1,6 @@
 ﻿using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace backend.Data
 {
@@ -12,7 +13,5 @@ namespace backend.Data
 
         public DbSet<Routes> Routes { get; set; }
         public DbSet<Locations> Locations { get; set; }
-
-
-    }
+	}
 }

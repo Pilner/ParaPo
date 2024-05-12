@@ -1,5 +1,6 @@
 ﻿using backend.Data;
 using backend.Dtos.Location;
+using backend.Interfaces;
 using backend.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +13,10 @@ namespace backend.Controllers
     public class RoutesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public RoutesController(ApplicationDbContext context)
+        private readonly IRoutesRepository _routesRepo;
+        public RoutesController(ApplicationDbContext context, IRoutesRepository routesRepo)
         {
+            _routesRepo = routesRepo;
             _context = context;
         }
 
@@ -21,7 +24,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var routes = await _context.Routes.ToListAsync();
+            var routes = await _routesRepo.GetAllAsync();
             var routesDto = routes.Select(s => s.ToRouteDto());
 
             return Ok(routesDto);
@@ -31,7 +34,7 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var routes = await _context.Routes.FindAsync(id);
+            var routes = await _routesRepo.GetByIdAsync(id);
 
             if (routes == null)
             {
@@ -47,8 +50,7 @@ namespace backend.Controllers
         public async Task<IActionResult> Create([FromBody] CreateRoutesRequestDto routesDto)
         {
             var routesModel = routesDto.ToLocationFromCreateDto();
-            await _context.Routes.AddAsync(routesModel);
-            await _context.SaveChangesAsync();
+            await _routesRepo.CreateAsync(routesModel);
             return CreatedAtAction(nameof(GetById), new { id = routesModel.Id, }, routesModel.ToRouteDto());
         }
 
@@ -58,34 +60,26 @@ namespace backend.Controllers
 
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRoutesRequestDto UpdateDto) 
         {
-            var routeModel = await _context.Routes.FirstOrDefaultAsync(x => x.Id == id);
+            var routeModel = await _routesRepo.UpdateAsync(id, UpdateDto);
             if (routeModel == null)
             {
                 return NotFound();
             }
 
-			routeModel.RouteName = UpdateDto.RouteName;
-            routeModel.MinFare = UpdateDto.MinFare;
-
-            await _context.SaveChangesAsync();
-
             return Ok(routeModel.ToRouteDto());
 
         }
 
+        // Delete Data from the DB using ID
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var locationModel = await _context.Routes.FirstOrDefaultAsync(x => x.Id == id);
-            if (locationModel == null) 
+            var routesModel = await _routesRepo.DeleteAsync(id);
+            if (routesModel == null) 
             {
                 return NotFound();
             }
-
-            _context.Routes.Remove(locationModel);
-
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
