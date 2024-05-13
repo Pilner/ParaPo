@@ -17,5 +17,26 @@ namespace backend.Mappers
 				RoutesId = locationsModel.RoutesId,
 			};
 		}
+
+		public static Locations ToLocationsFromCreate(this CreateLocationDto locationDto, int RoutesId)
+		{
+			return new Locations
+			{
+				locationName = locationDto.locationName,
+				Longitude = locationDto.Longitude,
+				Latitude = locationDto.Latitude,
+				RoutesId = RoutesId,
+			};
+		}
+
+		public static Locations ToCommentFromUpdate(this UpdateLocationRequestDto locationDto)
+		{
+			return new Locations
+			{
+				locationName = locationDto.locationName,
+				Longitude = locationDto.Longitude,
+				Latitude = locationDto.Latitude,
+			};
+		}
 	}
 }

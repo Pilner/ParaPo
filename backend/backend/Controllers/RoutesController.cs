@@ -14,10 +14,13 @@ namespace backend.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IRoutesRepository _routesRepo;
-        public RoutesController(ApplicationDbContext context, IRoutesRepository routesRepo)
+        private readonly ILocationsRepository _locationsRepo;
+        public RoutesController(ApplicationDbContext context, IRoutesRepository routesRepo, ILocationsRepository locationsRepo)
         {
             _routesRepo = routesRepo;
             _context = context;
+            _locationsRepo = locationsRepo;
+
         }
 
         // Get all items in the DB
@@ -75,7 +78,9 @@ namespace backend.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var routesModel = await _routesRepo.DeleteAsync(id);
+			var locationsModel = await _locationsRepo.DeleteAllAsync(id);
+			var routesModel = await _routesRepo.DeleteAsync(id);
+
             if (routesModel == null) 
             {
                 return NotFound();

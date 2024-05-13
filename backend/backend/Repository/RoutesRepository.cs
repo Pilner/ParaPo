@@ -46,6 +46,11 @@ namespace backend.Repository
 			return await _context.Routes.Include(c => c.Locations).FirstOrDefaultAsync(i => i.Id == id);
 		}
 
+		public Task<bool> RoutesExists(int id)
+		{
+			return _context.Routes.AnyAsync(r => r.Id == id);
+		}
+
 		public async Task<Routes?> UpdateAsync(int id, UpdateRoutesRequestDto routesDto)
 		{
 			var existingRoutes = await _context.Routes.FirstOrDefaultAsync(x => x.Id == id);

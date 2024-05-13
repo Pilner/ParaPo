@@ -13,5 +13,7 @@ namespace backend.Interfaces
 
 		Task<Routes?> UpdateAsync(int id, UpdateRoutesRequestDto routesDto);
 		Task<Routes?> DeleteAsync(int id);
+
+		Task<bool> RoutesExists(int id);
 	}
 }
