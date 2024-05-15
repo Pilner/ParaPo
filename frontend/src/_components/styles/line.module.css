@@ -1,0 +1,7 @@
+.line {
+	height: 3.5px !important;
+	width: 85%;
+	margin: 1em auto;
+	border-radius: 5vmin;
+	background-color: rgba(0, 0, 0, 0.2);
+}

@@ -1,95 +1,99 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import Navbar from "@/_components/semantics/Navbar";
+import Footer from "@/_components/semantics/Footer";
+import Button, {AltButton} from "@/_components/Button";
+import Line from "@/_components/Line";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    return (
+		<>
+			<section id={styles.heroPage}>
+				<div className="container">
+					<Navbar />
+					<div id={styles.hero}>
+						<h1 className="hero-title">
+							NAVIGATE WITH <span className="orange">EASE</span>
+						</h1>
+						<p className="hero-text">
+							A Navigation App Tailored for Public
+							<br />
+							Utility Vehicles and Commuters.
+						</p>
+						<div className={styles.buttonDiv}>
+							<div>
+								<Button text="Try Now" url="#" />
+								<AltButton text="About Us" url={"#aboutPage"} />
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<div className="transition1"></div>
+			<section id={styles.aboutPage}>
+				<div className="container">
+					<div>
+						<div className={styles.aboutPicture}>
+							<div>
+								<div>
+									<Image
+										src={"/images/parapo_example1.png"}
+										alt="ParaPo Software Example 1"
+										width={0}
+										height={0}
+										style={{
+											width: "60%",
+											height: "auto",
+										}}
+										unoptimized={true}
+									/>
+									<Image
+										src={"/images/parapo_example2.png"}
+										alt="ParaPo Software Example 2"
+										width={0}
+										height={0}
+										style={{
+											width: "60%",
+											height: "auto",
+										}}
+										unoptimized={true}
+									/>
+								</div>
+							</div>
+						</div>
+						<div className={styles.aboutContent}>
+							<div>
+								<h2 className="section-title">
+									<span className="vline"></span>
+									About <span className="orange">ParaPo</span>
+								</h2>
+								<p className="section-text">
+									ParaPo emerges as a solution to address the
+									common challenge faced by visitors and
+									foreigners in unfamiliar cities, where the
+									lack of knowledge about PUV routes can
+									hinder mobility and exploration. By
+									providing clear, concise, and user-friendly
+									information about PUV routes, stops, and
+									schedules, ParaPo bridges the gap between
+									insider knowledge and outsider navigation,
+									empowering users to navigate urban
+									environments with confidence and ease.
+								</p>
+								<p className="section-text">
+									In essence, ParaPo represents a step towards
+									democratizing access to transportation
+									information, promoting inclusivity, and
+									enhancing the overall travel experience for
+									visitors and foreigners in the Philippines.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<Line></Line>
+			<Footer />
+		</>
+	);
 }

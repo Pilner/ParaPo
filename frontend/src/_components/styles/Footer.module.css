@@ -1,0 +1,64 @@
+#footer {
+	height: 20vh;
+	width: 100%;
+	background-color: var(--gray);
+}
+
+#footer > div {
+	height: 100%;
+	display: flex;
+}
+
+#footer #footerLeft,
+#footer #footerRight {
+	flex: 1;
+}
+
+#footer #footerLeft {
+	display: flex;
+	align-items: center;
+}
+
+#footer #footerLeft > div > div:first-child {
+	text-align: center;
+}
+
+#footer #footerLeft > div > div:last-child {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+}
+
+#footer #footerLeft > div > div:last-child > * {
+	width: 2rem;
+}
+
+#footer #footerLeft > div > div:last-child > *:not(:first-child, :last-child) {
+	padding: 0 1rem;
+}
+
+#footer #footerLeft > div > div:last-child > *:first-child {
+	padding: 0 1rem 0 0;
+}
+#footer #footerLeft > div > div:last-child > *:last-child {
+	padding: 0 0 0 1rem;
+}
+
+#footer #footerRight {
+	width: 100%;
+	height: 100%;
+}
+
+#footer #footerRight > div {
+	height: 100%;
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+}
+#footer #footerRight > div > ul {
+	display: flex;
+	align-items: center;
+}
+#footer #footerRight > div > ul li {
+	margin: 0 1rem;
+}
