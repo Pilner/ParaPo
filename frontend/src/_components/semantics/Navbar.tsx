@@ -28,17 +28,17 @@ export default function Navbar() {
 				<div>
 					<ul>
 						<li>
-							<Link href="#" scroll={false}>
+							<Link href="/" scroll={false}>
 								HOME
 							</Link>
 						</li>
 						<li>
-							<Link href="#aboutPage" scroll={false}>
+							<Link href="/#aboutPage" scroll={false}>
 								ABOUT
 							</Link>
 						</li>
 						<li>
-							<Link href="#">CATALOGS</Link>
+							<Link href="/catalog">CATALOGS</Link>
 						</li>
 						<li>
 							<Button text="GET STARTED" url="#" />

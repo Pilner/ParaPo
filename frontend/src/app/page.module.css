@@ -63,7 +63,7 @@
 }
 
 #aboutPage .aboutPicture > div > div > img {
-	/* filter: drop-shadow(0 0.5rem 0.5rem rgba(0,0,0,0.5)); */
+	filter: drop-shadow(0 0.5rem 0.5rem rgba(0,0,0,0.5));
 }
 
 #aboutPage .aboutPicture > div > div > img:hover {
