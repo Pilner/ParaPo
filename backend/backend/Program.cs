@@ -1,3 +1,4 @@
+using backend;
 using backend.Data;
 using backend.Interfaces;
 using backend.Repository;
@@ -39,4 +40,6 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
+
+app.Seed();
 app.Run();
