@@ -37,13 +37,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(x => x
- .AllowAnyMethod()
- .AllowAnyHeader()
- .WithOrigins("Put frontend URL here") // Remove final slash in the URL to avoid errors use the format "http://localhost:3000" instead of "http://localhost:3000/"
- .SetIsOriginAllowed(origin => true)
- );
-
 app.MapControllers();
 
 app.Run();
