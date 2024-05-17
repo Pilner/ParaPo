@@ -11,7 +11,7 @@ A web-based navigation application designed for Filipino commuters. A transit ro
 1. First clone this git repository to your local device
 ```
 git clone https://github.com/Pilner/ParaPo
-cd frontend
+cd ParaPo/frontend
 ```
 2. Download all the dependencies and packages needed in this repository
 ```
@@ -21,7 +21,7 @@ npm install
 ```
 npm run dev
 ```
-4. Open a new instance of Visual Studio and open the Solution(.sln) file
+4. Open a new instance of Visual Studio and open the Solution(.sln) file in `ParaPo/backend`
 5. Run the Backend Process using the `https` run button.
 6. View the website on browser at
 ```
@@ -33,6 +33,13 @@ localhost:3000
 * `/` is the Home Page
 * `/catalog` is the Catalog Page
 * `/catalog/route/[id]` is the Catalog Route Map Page
+
+## API Routes
+
+* `/api/routes` gets all routes
+* `/api/routes/[id]` gets the route for the route_id specified
+* `/api/locations` gets all locations
+* `/api/locations[id]` gets the location for the location_id specified
 
 ## Collaborators
 - Abesamis, Gabriel
