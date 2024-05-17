@@ -101,15 +101,16 @@ namespace backend
 							new Models.Locations { locationName = "Magsaysay Blvd / V. Mapa Street Intersection, Manila", Latitude = "14.603012", Longitude = "121.01581", CreatedOn = DateTime.Now, RoutesId = 1 },
 							new Models.Locations { locationName = "V. Mapa Street  / Old Sta. Mesa St Intersection, Manila", Latitude = "14.59963", Longitude = "121.015071", CreatedOn = DateTime.Now, RoutesId = 1 },
 							new Models.Locations { locationName = "Old Sta. Mesa St , Manila", Latitude = "14.59963", Longitude = "121.015071", CreatedOn = DateTime.Now, RoutesId = 1 },
-							new Models.Locations { locationName = "Valenzuela St ", Latitude = "14.599297", Longitude = "121.014338", CreatedOn = DateTime.Now, RoutesId = 1 },
-							new Models.Locations { locationName = "Valenzuela St ", Latitude = "14.59746", Longitude = "121.015692", CreatedOn = DateTime.Now, RoutesId = 1 },
+							new Models.Locations { locationName = "Teresa, Old Sta. Mesa St , Manila", Latitude = "14.60096", Longitude = "121.01309", CreatedOn = DateTime.Now, RoutesId = 1 },
+							new Models.Locations { locationName = "Old Sta. Mesa St , Manila - Magsaysay Blvd", Latitude = "14.60201", Longitude = "121.01198", CreatedOn = DateTime.Now, RoutesId = 1 },
+							new Models.Locations { locationName = "Magsaysay Blvd / V. Mapa Street Intersection, Manila", Latitude = "14.603012", Longitude = "121.01581", CreatedOn = DateTime.Now, RoutesId = 1 },
 
 							// Go back starts here at this ID 
 
 							// Return to Terminal SSS Village
 
 							//Montalban - Cubao Data
-							new Models.Locations { locationName = "Luvers, San Rafael, Montalban", Latitude = "14.637213", Longitude = "121.119111", CreatedOn = DateTime.Now, RoutesId = 2},
+							new Models.Locations { locationName = "Luvers, San Rafael, Montalban", Latitude = "14.73537", Longitude = "121.15431", CreatedOn = DateTime.Now, RoutesId = 2},
 							new Models.Locations { locationName = "Total , San Rafae l, Montalban", Latitude = "14.73532", Longitude = "121.15219", CreatedOn = DateTime.Now, RoutesId = 2 },
 							new Models.Locations { locationName = "Balite, San Rafael, Montalban", Latitude = "14.7355", Longitude = "121.1464", CreatedOn = DateTime.Now, RoutesId = 2 },
 							new Models.Locations { locationName = "Bayan, Montalban", Latitude = "14.73241", Longitude = "121.14523", CreatedOn = DateTime.Now, RoutesId = 2 },
@@ -164,7 +165,7 @@ namespace backend
 
 							// Returning
 							new Models.Locations { locationName = "Times Square Avenue", Latitude = "14.62237", Longitude = "121.05464", CreatedOn = DateTime.Now, RoutesId = 2 },
-							new Models.Locations { locationName = "Times Square Avenue - Aurora Blvd", Latitude = "14.62338", Longitude = "121.05386", CreatedOn = DateTime.Now, RoutesId = 2 },
+							new Models.Locations { locationName = "Times Square Avenue - Aurora Blvd", Latitude = "14.62316", Longitude = "121.05398", CreatedOn = DateTime.Now, RoutesId = 2 },
 							new Models.Locations { locationName = "Aurora Blvd. - Gen. Romulo Ave. Intersection", Latitude = "14.62416", Longitude = "121.05544", CreatedOn = DateTime.Now, RoutesId = 2 }
 
 							);
