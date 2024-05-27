@@ -1,0 +1,124 @@
+#catalogPage {
+	height: 100vh;
+	width: 100%;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.1)), url("/images/homepage_bg.png");
+	background-repeat: no-repeat;
+	background-size:cover;
+	background-position: 50% 50%;
+	position: relative;
+}
+
+#catalogPage #catalog {
+	margin-top: 10rem;
+	width: 100%;
+	/* display: flex; */
+	/* gap: 2rem; */
+}
+
+#catalogPage #catalog > div {
+	width: 100%;
+	margin: auto;
+	display: flex;
+	justify-content: center;
+	/* text-align: center; */
+}
+
+#catalogPage #catalog > div > div {
+	/* border: 1px solid red; */
+	/* flex: 1; */
+}
+
+#catalogPage #catalog div > .catalogLeft {
+	text-align: right;
+	padding-right: 1rem;
+	border-right: 2.5px solid var(--red);
+}
+
+#catalogPage #catalog div > .catalogRight {
+	display: flex;
+	align-items: center;
+	padding-left: 1rem;
+	border-left: 2.5px solid var(--red);
+}
+
+#catalogPage #catalog > .catalogRight p {
+	padding: 0;
+}
+
+.transition1 {
+	position: absolute;
+	transform: translateY(-10rem);
+	width: 100%;
+	height: 10rem;
+	background: linear-gradient(rgba(0,0,0,0), var(--coral));
+}
+
+#catalogList {
+	background-color: var(--coral);
+	height: 100vh;
+	width: 100%;
+}
+
+#catalogList > div {
+	padding-top: 5rem;
+}
+
+#catalogList > div > div {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+}
+
+#catalogList > div > div > div.searchDiv {
+	margin: auto;
+	text-align: center;
+	width: 100%;
+	margin-bottom: 5rem;
+}
+
+#catalogList > div > div > div.searchDiv input {
+	padding: 0.5rem 1rem;
+	width: 30rem;
+	border-radius: 2.5rem;
+}
+
+#catalogList > div > div > div.catalogListItems {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 5rem;
+}
+
+#catalogList > div > div > div.catalogListItems > a > div {
+	color: var(--black);
+	background-color: var(--white);
+	border-radius: 1rem;
+	padding: 1rem;
+	display: flex;
+}
+
+#catalogList > div > div > div.catalogListItems > a > div > div {
+	/* border: 1px solid green; */
+	min-height: 7.5rem;
+}
+
+#catalogList > div > div > div.catalogListItems > a > div > .routeId {
+	flex: 1;
+	border-right: 0.5px solid rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#catalogList > div > div > div.catalogListItems > a > div > .routeId > p {
+	padding: 0;
+}
+
+#catalogList > div > div > div.catalogListItems > a > div > .routeName {
+	flex: 5;
+	border-left: 0.5px solid rgba(0, 0, 0, 0.5);
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
