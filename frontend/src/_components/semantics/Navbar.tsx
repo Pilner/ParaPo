@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link";
 import Image from "next/image";
 import Button from "../Button";
@@ -9,7 +11,7 @@ export default function Navbar() {
 			<div id={styles.navLeft}>
 				<div>
 					<Image
-						src={"/images/temp_logo.png"}
+						src={"/images/TextLogo.svg"}
 						alt="logo"
 						width={0}
 						height={0}
@@ -19,9 +21,6 @@ export default function Navbar() {
 						}}
 						unoptimized={true}
 					/>
-				</div>
-				<div>
-					<p>ParaPo</p>
 				</div>
 			</div>
 			<div id={styles.navRight}>
@@ -33,15 +32,10 @@ export default function Navbar() {
 							</Link>
 						</li>
 						<li>
-							<Link href="/#aboutPage" scroll={false}>
-								ABOUT
-							</Link>
-						</li>
-						<li>
 							<Link href="/catalog">CATALOGS</Link>
 						</li>
 						<li>
-							<Button text="GET STARTED" url="#" />
+							<Button text="GET STARTED" url="/catalog" />
 						</li>
 					</ul>
 				</div>

@@ -1,9 +1,9 @@
 import Image from "next/image";
+import { useEffect } from "react";
 import styles from "./page.module.css";
 import Navbar from "@/_components/semantics/Navbar";
 import Footer from "@/_components/semantics/Footer";
 import Button, {AltButton} from "@/_components/Button";
-import Line from "@/_components/Line";
 
 export default function Home() {
     return (
@@ -22,14 +22,14 @@ export default function Home() {
 						</p>
 						<div className={styles.buttonDiv}>
 							<div>
-								<Button text="Try Now" url="#" />
-								<AltButton text="About Us" url={"#aboutPage"} />
+								<Button text="Try Now" url={"/catalog"} />
+								{/* <AltButton text="Catalog" url={"/catalog"} /> */}
 							</div>
 						</div>
 					</div>
 				</div>
 			</section>
-			<div className="transition1"></div>
+			<div className={styles.transition1}></div>
 			<section id={styles.aboutPage}>
 				<div className="container">
 					<div>
@@ -42,7 +42,7 @@ export default function Home() {
 										width={0}
 										height={0}
 										style={{
-											width: "60%",
+											width: "100%",
 											height: "auto",
 										}}
 										unoptimized={true}
@@ -53,7 +53,7 @@ export default function Home() {
 										width={0}
 										height={0}
 										style={{
-											width: "60%",
+											width: "100%",
 											height: "auto",
 										}}
 										unoptimized={true}
@@ -92,7 +92,6 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
-			<Line></Line>
 			<Footer />
 		</>
 	);
