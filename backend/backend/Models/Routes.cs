@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
@@ -14,6 +15,9 @@ namespace backend.Models
 
         public string RouteName { get; set; } = string.Empty;
 
+
+		[AllowedValues("P2P Buses", "Jeep", "City Buses", "Train")]
+		public string Category { get; set; } = string.Empty;
 
 		[Column(TypeName = "decimal (18,2)")]
 		public decimal MinFare { get; set; }

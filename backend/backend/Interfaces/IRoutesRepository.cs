@@ -5,6 +5,7 @@ namespace backend.Interfaces
 {
 	public interface IRoutesRepository
 	{
+		// Abstracts everything and sets up Code Repository
 		Task<List<Routes>> GetAllAsync();
 
 		Task<Routes?> GetByIdAsync(int id); //FirstOrDefault can be NULL

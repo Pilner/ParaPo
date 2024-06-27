@@ -5,6 +5,7 @@ namespace backend.Mappers
 {
 	public static class LocationMapper
 	{
+		// Maps the DTO to the Mapper
 		public static LocationsDto ToLocationsDto(this Locations locationsModel) 
 		{
 			return new LocationsDto

@@ -4,6 +4,7 @@ using System.Reflection.Metadata;
 
 namespace backend.Data
 {
+    // This will Setup the backend
 	public class ApplicationDbContext : DbContext
 	{
         public ApplicationDbContext(DbContextOptions dbContextOptions) : base (dbContextOptions)

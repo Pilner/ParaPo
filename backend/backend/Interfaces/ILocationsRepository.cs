@@ -4,6 +4,7 @@ namespace backend.Interfaces
 {
 	public interface ILocationsRepository
 	{
+		// Abstracts everything and sets up Code Repository
 		Task<List<Locations>> GetAllAsync();
 
 		Task<Locations?> GetByIdAsync(int id);
