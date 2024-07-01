@@ -41,7 +41,7 @@ namespace backend.Repository
 
 		public async Task<List<Routes>> GetAllAsync()
 		{
-			return await _context.Routes.Include(c => c.Locations).ToListAsync();
+			return await _context.Routes.Include(c => c.Locations).OrderBy(r => r.RouteName).ToListAsync();
 		}
 
 		public async Task<Routes?> GetByIdAsync(int id)
