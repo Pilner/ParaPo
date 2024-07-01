@@ -1,129 +1,89 @@
 #heroPage {
-	height: 100vh;
-	width: 100%;
-	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.1)), url("/images/homepage_bg.png");
-	background-repeat: no-repeat;
-	background-size:cover;
-	background-position: 50% 50%;
+	height: 85vh;
+}
+
+#heroPage > div {
+	display: flex;
 	position: relative;
 }
 
-#heroPage #hero {
-	margin-top: 10rem;
-	text-align: center;
-	width: 100%;
+.heroText, .heroPic {
+	flex: 1;
 }
 
-#heroPage #hero > .buttonDiv {
-	width: 100%;
-	height: 100%;
+.heroText {
+	display: flex;
+	align-items: center;
 }
 
-#heroPage #hero > .buttonDiv > div > * {
-	display: inline;
-	margin: 0 1rem;
+.heroText .heroButtonDiv {
+	display: flex;
+	justify-content: space-evenly;
 }
 
-.transition1 {
+.heroText .heroButtonDiv > * {
+	margin: 0;
+}
+
+.heroPic {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.scrollIndicator {
 	position: absolute;
-	transform: translateY(-10rem);
-	width: 100%;
-	height: 10rem;
-	background: linear-gradient(rgba(0,0,0,0), var(--gray));
+	bottom: 5%;
+	left: 50%;
+	transform: translateX(-50%);
+	color: rgba(0,0,0, 0.5);
+}
+
+#examplePage {
+	height: 100vh;
+	background-color: var(--gray);
+}
+
+#examplePage > div {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #aboutPage {
+	height: 50vh;
 	background-color: var(--gray);
-	min-height: 100vh;
-	width: 100%;
-	display: flex;
-	align-items: center;
 }
 
-/* container */
 #aboutPage > div {
-	/* border: 1px solid red; */
 	display: flex;
 	align-items: center;
-	height: 100%;
+	justify-content: center;
 }
-/* container */
 
-#aboutPage > div > div {
-    width: 100%;
-	height: 100%;
+#aboutPage .aboutText {
+	text-align: center;
+}
+
+#catalogPage {
+	height: 75vh;
+	background-color: var(--gray);
+}
+
+#catalogPage > div {
 	display: flex;
-	gap: 5rem;
-	padding: 2.5rem 0;
-}
-
-#aboutPage .aboutPicture {
-	/* border: 1px solid green; */
-	flex: 1;
-    width: 100%;
-}
-
-#aboutPage .aboutPicture > div {
-	/* width: 100%;
-	height: 100%; */
-	/* width: 60%; */
-	display: flex;
-	align-items: center;
-}
-
-#aboutPage .aboutPicture > div > div {
-	/* height: 25rem; */
-	width: 100%;
-	position: relative;
-}
-
-#aboutPage .aboutPicture > div > div > img {
-	filter: drop-shadow(0 0.5rem 0.5rem rgba(0,0,0,0.5));
-}
-
-/* #aboutPage .aboutPicture > div > div > img:hover {
-	transform: scale(125%);
-	transition: ease-out 0.1s;
-} */
-
-#aboutPage .aboutPicture > div > div > img:last-child:hover {
-	z-index: 2;
-}
-#aboutPage .aboutPicture > div > div > img:last-child:not(:hover) {
-	z-index: 1;
-}
-
-#aboutPage .aboutPicture > div > div > img:not(:hover) {
-	transition: 0.1s;
 }
 
 
-#aboutPage .aboutPicture > div > div > img:first-child {
-	/* position: absolute; */
-	z-index: 2;
-	/* bottom: 0; */
-}
-#aboutPage .aboutPicture > div > div > img:last-child {
-	/* position: absolute; */
-	z-index: 1;
-	/* right: 0; */
-}
-
-
-/* #aboutPage .aboutPicture > div > div > img:first-child {
-	position: absolute;
-	z-index: 2;
-	bottom: 0;
-}
-#aboutPage .aboutPicture > div > div > img:last-child {
-	position: absolute;
-	z-index: 1;
-	left: 60%;
-} */
-
-#aboutPage .aboutContent {
+.catalogText {
 	flex: 1;
 	display: flex;
 	align-items: center;
-	/* text-align: justify; */
+}
+
+.catalogPic {
+	flex: 2;
+	display: flex;
+	justify-content: end;
+	align-items: center;
 }
