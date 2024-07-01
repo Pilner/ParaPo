@@ -4,6 +4,7 @@ using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace backend.Repository
 {
@@ -56,12 +57,15 @@ namespace backend.Repository
 		public async Task<List<Routes>> SearchRoutesAndLocationsAsync(string keyword)
 		{
 			var routes = await _context.Routes
-			.Where(r => r.RouteName.Contains(keyword) || r.Locations.Any(l => l.locationName.Contains(keyword)))
-			.Include(r => r.Locations)
-			.ToListAsync();
+				.Include(r => r.Locations)
+				.ToListAsync();
 
-			routes = routes.Where(r => r.RouteName.Contains(keyword) || r.Locations.Any(l => l.locationName.Contains(keyword))).ToList();
-			return routes;
+			var filteredRoutes = routes
+								.Where(r => r.RouteName.Contains(keyword, StringComparison.Ordinal) ||
+								r.Locations.Any(l => l.locationName.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+								.ToList();
+
+			return filteredRoutes;
 		}
 
 		public async Task<Routes?> UpdateAsync(int id, UpdateRoutesRequestDto routesDto)
@@ -78,7 +82,6 @@ namespace backend.Repository
 			await _context.SaveChangesAsync();
 			return existingRoutes;
 		}
-
-
 	}
 }
+
