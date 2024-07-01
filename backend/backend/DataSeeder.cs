@@ -119,7 +119,7 @@ namespace backend
 							new Models.Locations { locationName = "Santa Mesa Blvd/ LRT 2 - V.Mapa Station, Manila", Latitude = "14.604273", Longitude = "121.017107", CreatedOn = DateTime.Now, RoutesId = 1 },
 
 							new Models.Locations { locationName = "Magsaysay Blvd / V. Mapa Street Intersection, Manila", Latitude = "14.603012", Longitude = "121.01581", CreatedOn = DateTime.Now, RoutesId = 1 },
-							new Models.Locations { locationName = "V. Mapa Street  / Old Sta. Mesa St Intersection, Manila", Latitude = "14.59963", Longitude = "121.015071", CreatedOn = DateTime.Now, RoutesId = 1 },
+							new Models.Locations { locationName = "V. Mapa Street  / Old Sta. Mesa St Intersection, Manila", Latitude = "14.6002", Longitude = "121.016771", CreatedOn = DateTime.Now, RoutesId = 1 },
 							new Models.Locations { locationName = "Old Sta. Mesa St , Manila", Latitude = "14.59963", Longitude = "121.015071", CreatedOn = DateTime.Now, RoutesId = 1 },
 							new Models.Locations { locationName = "Teresa, Old Sta. Mesa St , Manila", Latitude = "14.60096", Longitude = "121.01309", CreatedOn = DateTime.Now, RoutesId = 1 },
 							new Models.Locations { locationName = "Old Sta. Mesa St , Manila - Magsaysay Blvd", Latitude = "14.60201", Longitude = "121.01198", CreatedOn = DateTime.Now, RoutesId = 1 },
