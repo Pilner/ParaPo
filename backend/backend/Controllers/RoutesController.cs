@@ -3,14 +3,16 @@ using backend.Dtos.Location;
 using backend.Dtos.Locations;
 using backend.Interfaces;
 using backend.Mappers;
+using backend.Models;
+using backend.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
-	[Produces("application/json")]
-	[Route("api/routes")]
+    [Produces("application/json")]
+    [Route("api/routes")]
     [ApiController]
     public class RoutesController : ControllerBase
     {
@@ -36,12 +38,12 @@ namespace backend.Controllers
         /// 
 
         // Get all items in the DB
-            
-		[HttpGet]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesDefaultResponseType(typeof(RoutesDto))]
-		
-		public async Task<IActionResult> GetAll()
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType(typeof(RoutesDto))]
+
+        public async Task<IActionResult> GetAll()
         {
             var routes = await _routesRepo.GetAllAsync();
             var routesDto = routes.Select(s => s.ToRouteDto());
@@ -49,20 +51,20 @@ namespace backend.Controllers
             return Ok(routesDto);
         }
 
-		/// <summary>
-		/// Returns a specific route based on the ID provided
-		/// </summary>
-		/// <param name="id">Selects the specific Route using the Id</param>
-		/// <returns></returns>
-		/// <response code="200">Returns a single route</response>
-		/// <response code="404">Route Not Found</response>
+        /// <summary>
+        /// Returns a specific route based on the ID provided
+        /// </summary>
+        /// <param name="id">Selects the specific Route using the Id</param>
+        /// <returns></returns>
+        /// <response code="200">Returns a single route</response>
+        /// <response code="404">Route Not Found</response>
         /// 
-		//Get a single item in the DB based on the ID
-		
-		[HttpGet("{id}")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesDefaultResponseType(typeof(RoutesDto))]
-		public async Task<IActionResult> GetById([FromRoute] int id)
+        //Get a single item in the DB based on the ID
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesDefaultResponseType(typeof(RoutesDto))]
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var routes = await _routesRepo.GetByIdAsync(id);
 
@@ -74,12 +76,24 @@ namespace backend.Controllers
             return Ok(routes.ToRouteDto());
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Routes>>> SearchRoutesAndLocations(string keyword)
+        {
+            var routes = await _routesRepo.SearchRoutesAndLocationsAsync(keyword);
+
+            if (routes == null || !routes.Any()) 
+            {
+                return NotFound("No routes or locations found matching the keyword.");
+            }
+			return Ok(routes);
+		}
+
 		/// <summary>
 		/// Creates a new Route
 		/// </summary>
 		/// <param name="routesDto">Route Name and Minimum Fare is needed to create a new route</param>
 		/// <response code ="200">Route Successfully Created</response>
-        /// 
+		/// 
 
 		// Add new Items
 

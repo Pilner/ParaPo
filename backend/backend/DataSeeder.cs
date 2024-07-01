@@ -37,8 +37,8 @@ namespace backend
 							new Models.Routes { RouteName = "Buendia-MOA", Category = "Jeep", MinFare = 13.0m },
 
 							// Train routes
-							new Models.Routes { RouteName = "LRT-2 Stations", Category = "Train", MinFare = 13.0m },
-							new Models.Routes { RouteName = "LRT-1 Stations", Category = "Train", MinFare = 13.0m }
+							new Models.Routes { RouteName = "Light Rail Transit 2 (LRT2)", Category = "Train", MinFare = 13.0m },
+							new Models.Routes { RouteName = "Light Rail Transit 1 (LRT1)", Category = "Train", MinFare = 13.0m }
 
 							);
 						context.SaveChanges();

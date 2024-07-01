@@ -3,6 +3,7 @@ using backend.Dtos.Location;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Repository
 {
@@ -52,6 +53,17 @@ namespace backend.Repository
 			return _context.Routes.AnyAsync(r => r.Id == id);
 		}
 
+		public async Task<List<Routes>> SearchRoutesAndLocationsAsync(string keyword)
+		{
+			var routes = await _context.Routes
+			.Where(r => r.RouteName.Contains(keyword) || r.Locations.Any(l => l.locationName.Contains(keyword)))
+			.Include(r => r.Locations)
+			.ToListAsync();
+
+			routes = routes.Where(r => r.RouteName.Contains(keyword) || r.Locations.Any(l => l.locationName.Contains(keyword))).ToList();
+			return routes;
+		}
+
 		public async Task<Routes?> UpdateAsync(int id, UpdateRoutesRequestDto routesDto)
 		{
 			var existingRoutes = await _context.Routes.FirstOrDefaultAsync(x => x.Id == id);
@@ -66,5 +78,7 @@ namespace backend.Repository
 			await _context.SaveChangesAsync();
 			return existingRoutes;
 		}
+
+
 	}
 }

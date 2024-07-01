@@ -16,5 +16,7 @@ namespace backend.Interfaces
 		Task<Routes?> DeleteAsync(int id);
 
 		Task<bool> RoutesExists(int id);
+
+		Task<List<Routes>> SearchRoutesAndLocationsAsync(string keyword);
 	}
 }
