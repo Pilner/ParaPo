@@ -1,0 +1,73 @@
+nav#navbar {
+	height: 15vh;
+	width: 100%;
+	background-color: var(--gray);
+}
+
+nav#navbar>div,
+nav#mapNavbar>div {
+	display: flex;
+	justify-content: space-between;
+	height: 100%;
+}
+
+.navLogoSide,
+.navLinkSide {
+	display: flex;
+	align-items: center;
+}
+
+.navLogoSide {
+	/* flex: 1; */
+	/* border: 1px solid red; */
+}
+
+.navLogoSide .navLogoImg {
+	aspect-ratio: 1/1;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.navLogoSide .navLogoImg a {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.navLogoSide .navLogoText {
+	font-family: var(--main-font);
+	font-weight: 700;
+	font-size: 32px;
+}
+
+.navLinkSide {
+	/* border: 1px solid blue; */
+
+}
+
+.navLinkSide ul {
+	display: flex;
+	justify-content: space-between;
+}
+
+.navLinkSide ul li {
+	display: flex;
+	align-items: center;
+	margin: 0 2em;
+	font-family: var(--secondary-font);
+	font-weight: 600;
+	font-size: 16px;
+}
+
+nav#mapNavbar {
+	height: 5rem;
+	width: 100%;
+	background-color: var(--main-accent);
+	color: var(--white);
+	border-top-left-radius: inherit;
+	border-top-right-radius: inherit;
+}

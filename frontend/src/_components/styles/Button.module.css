@@ -7,10 +7,10 @@
 	padding: 10px 25px;
 	color: var(--white);
 	font-family: var(--title-font);
-	background-color: var(--orange);
+	background-color: var(--main-accent);
 	font-size: inherit;
 	font-weight: inherit;
-	border: none;
+	border: 1px solid rgba(0, 0, 0, 0);
 	border-radius: 5px;
 	cursor: pointer;
 }
@@ -22,14 +22,15 @@
 	background: none;
 	font-size: inherit;
 	font-weight: inherit;
-	border: 1px solid var(--orange);
+	border: 1px solid var(--main-accent);
 	border-radius: 5px;
 	cursor: pointer;
 }
 
 .roundButton:hover {
-	background-color: var(--white);
-	color: var(--orange);
+	background-color: inherit;
+	color: var(--main-accent);
+	border: 1px solid var(--main-accent);
 	transition: .1s;
 }
 
