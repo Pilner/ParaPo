@@ -1,23 +1,20 @@
 'use client'
 
 import Image from "next/image";
-import Link from "next/link";
-
 import styles from "./page.module.css";
 import Navbar from "@/_components/semantics/Navbar";
-import Footer, {AltFooter} from "@/_components/semantics/Footer";
-import Button, {AltButton} from "@/_components/Button";
-import Line from "@/_components/Line";
+import Footer from "@/_components/semantics/Footer";
+import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
 export default function Catalog() {
-
 	// Initialize the state of routes
 	const [routes, setRoutes] = useState([
 		{
 			id: 0,
 			routeName: "",
+			category: "",
 			minFare: 0,
 			locations: [
 				{
@@ -33,7 +30,7 @@ export default function Catalog() {
 	useEffect(() => {
 		(async () => {
 			// Fetch routes from the Backend using API Endpoints
-			const res = await fetch(`https://localhost:7192/api/routes`);
+			const res = await fetch(`https://localhost:7192/api/routes`, {cache: "force-cache"});
 			const data = await res.json();
 
 			setRoutes(data);
@@ -42,63 +39,142 @@ export default function Catalog() {
 
     return (
 		<>
+			<Navbar />
 			<section id={styles.catalogPage}>
 				<div className="container">
-					<Navbar />
-					<div id={styles.catalog}>
+					<div className={styles.catalogText}>
 						<div>
-							<div className={styles.catalogLeft}>
-								<h1 className="hero-title">
-									PARA<span className="orange">PO</span>
-								</h1>
-								<p className="hero-text">Map Catalog</p>
-							</div>
-							<div className={styles.catalogRight}>
-								<p className="hero-text">
-									Beyond just mapping routes, our
-									<br />
-									unique catalog feature lets you
-									<br />
-									explore diverse destinations
-									<br />
-									without needing a set endpoint.
-								</p>
-							</div>
+							<h1 className="heroTitleFont">
+								PARA<span className="main-accent">PO</span>
+								<br />
+								CATALOG
+							</h1>
+							<p className="heroSubtitleFont">
+								Our application offers a curated catalog of
+								routes tailored for every mode of
+								transportation.
+							</p>
 						</div>
+					</div>
+					<div className={styles.catalogPic}>
+						<Image
+							src="images/parapo-example3.png"
+							alt="Catalog Picture"
+							width={0}
+							height={0}
+							style={{
+								width: "100%",
+								height: "auto",
+								borderRadius: "1rem",
+								boxShadow:
+									"10px 10px 10px 5px rgba(0, 0, 0, 0.1)",
+							}}
+							unoptimized={true}
+						/>
+					</div>
+					<div className={styles.scrollIndicator}>
+						<i className="fa-solid fa-chevron-down fa-2xl"></i>
 					</div>
 				</div>
 			</section>
-			<div className={styles.transition1}></div>
 			<section id={styles.catalogList}>
 				<div className="container">
-					<div>
-						<div className={styles.searchDiv}>
-							<input
-								className="body-title"
-								type="text"
-								placeholder="Routes"
-							/>
-						</div>
-						<div className={styles.catalogListItems}>
+					<form>
+						<input
+							type="text"
+							name="routeSearch"
+							id="rSearch"
+							placeholder="Search Routes"
+						/>
+					</form>
+					<div className={styles.catalogListItems}>
+						<table>
+							<thead>
+								<tr>
+									<th>
+										<i className="fa-solid fa-car fa-xl"></i>
+									</th>
+									<th>Route Name</th>
+									<th>Price</th>
+									<th>Stations</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<Link href="/catalog/route/1">
+											<>
+												<Image
+													className="fa-xl"
+													src="/images/jeepney-icon.svg"
+													alt="Jeep Icon"
+													width={0}
+													height={0}
+													style={{
+														width: "1.5em",
+														height: "auto",
+													}}
+												/>
+												<p className="bodyTextFont">
+													Jeep
+												</p>
+											</>
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											Parang Cubao SSS Villa - Stop & Shop
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											₱13.00/4 km + ₱1.80/1 km
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											999 Stations
+										</Link>
+									</td>
+								</tr>
 
-							{routes.map((route, index) => (
-								<Link href={`/catalog/route/${route.id}`}>
-									<div>
-										<div className={styles.routeId}>
-											<p className="section-title">{route.id}</p>
-										</div>
-										<div className={styles.routeName}>
-											<p className="body-title">{route.routeName}</p>
-										</div>
-									</div>
-								</Link>
-							))}
-
-						</div>
+								{/* Don't touch this */}
+								{/* {routes.map((route) => (
+									<tr key={route.id}>
+										<td>
+											<Link href={`/catalog/route/${route.id}`}>
+												{route.category == "Jeep" ? (
+													<><i className="fa-solid fa-car fa-xl"></i><p className="bodyTextFont">Jeep</p></>
+												) : ( route.category == "Bus" ? (
+													<><i className="fa-solid fa-bus fa-xl"></i><p className="bodyTextFont">Bus</p></>
+												) : ( route.category == "Train" ) ? (
+													<><i className="fa-solid fa-train fa-xl"></i><p className="bodyTextFont">Train</p></>
+												) : <><i className="fa-solid fa-question fa-xl"></i><p className="bodyTextFont">Unknown</p></>)}
+											</Link>
+										</td>
+										<td>
+											<Link href={`/catalog/route/${route.id}`}>
+												{route.routeName}
+											</Link>
+										</td>
+										<td>
+											<Link href={`/catalog/route/${route.id}`}>
+												₱{route.minFare.toFixed(2)}
+											</Link>
+										</td>
+										<td>
+											<Link href={`/catalog/route/${route.id}`}>
+												{route.locations.length} Stations
+											</Link>
+										</td>
+									</tr>
+								))} */}
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</section>
-			<AltFooter />
+			<Footer />
 		</>
 	);
 }

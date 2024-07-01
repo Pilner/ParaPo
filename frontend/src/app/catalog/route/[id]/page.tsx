@@ -1,33 +1,36 @@
 'use client'
 const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
+import {MapNavbar} from "@/_components/semantics/Navbar";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
-import Button, { AltButton } from "@/_components/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Button from "@/_components/Button";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { faBus, faBusSimple, faWallet } from "@fortawesome/free-solid-svg-icons";
 
 let map: any;
 
 export default function RoutePage() {
-	const [route, setRoute] = useState({
-		id:0,
-		routeName: "",
-		minFare: 0,
-		locations: [
-			{
-				id: 0,
-				latitude: 0,
-				longitude: 0,
-				routeId: 0
-			}
-		]
-	});
+	// Initialize the state of routes
+	const [route, setRoute] = useState(
+		{
+			id: 0,
+			routeName: "",
+			category: "",
+			minFare: 0,
+			locations: [
+				{
+					id: 0,
+					latitude: 0,
+					longitude: 0,
+					routeId: 0
+				}
+			],
+		},
+	);
 
 	// get dynamic url params
 	const { id } = useParams();
@@ -35,7 +38,7 @@ export default function RoutePage() {
 	useEffect(() => {
 		// Fetch route from the Backend using API Endpoints
 		(async () => {
-			const res = await fetch(`https://localhost:7192/api/routes/${id}`);
+			const res = await fetch(`https://localhost:7192/api/routes/${id}`, {cache: "force-cache"});
 			const data = await res.json();
 
 			setRoute(data);
@@ -60,54 +63,32 @@ export default function RoutePage() {
 
   return (
 		<section id={styles.routePage}>
-			<div className={styles.infoPart}>
-				<div>
-					<div className={styles.navbar}>
-						<Link href={"/"}>
+			<div className={styles.infoMenu}>
+				<MapNavbar />
+				<div className={styles.infoPart}>
+					<div>
+						<h1 className="bodyTitleFont">{route.routeName}</h1>
+						<p className="bodyTextFont">
+							<span>
+								<i className="fa-solid fa-tag fa-xl"></i>
+							</span>
+							₱{route.minFare.toFixed(2)}/4 km + ₱1.80/1 km
+						</p>
+						<div>
 							<Image
-								src={"/images/TextLogo.svg"}
-								alt="logo"
+								className="fa-xl"
+								src="/images/jeepney-icon.svg"
+								alt="Jeep Icon"
 								width={0}
 								height={0}
 								style={{
-									width: "auto",
-									height: "100%",
+									width: "2rem",
+									height: "auto",
 								}}
-								unoptimized={true}
 							/>
-						</Link>
-					</div>
-					<div className={styles.routeInfo}>
-						<div>
-							<p className="body-title">{route.routeName}</p>
-						</div>
-						<div>
-							<p className="body-title">
-								<span>
-									<FontAwesomeIcon icon={faWallet} />
-								</span>{" "}
-								Minimum Fare/s
+							<p className="bodyTextFont">
+								{route.category}
 							</p>
-							<p className="body-title orange">₱15 - ₱18</p>
-							<div>
-								<div>
-									<p className="body-text">
-										<span>
-										<FontAwesomeIcon icon={faBus} /></span> : {route.minFare} PHP
-									</p>
-								</div>
-								<div>
-									<p className="body-text">
-										<span>
-										<FontAwesomeIcon icon={faBusSimple} /></span> : 18 PHP
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className={styles.catalogButton}>
-						<div>
-							<Button text="Back to Catalog" url="/catalog" />
 						</div>
 					</div>
 				</div>
@@ -154,7 +135,7 @@ function decodePolyline(encoded: string) {
 // Fetch the route data between two points
 async function getRoutedLine(source: number[], destination: number[]) {
 	const lineUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${source.join(',')};${destination.join(',')}?access_token=${mapboxAccessToken}`;
-	const response = await fetch(lineUrl);
+	const response = await fetch(lineUrl, {cache: "force-cache"});
 	const data = await response.json();
 	return data;
 }
@@ -166,10 +147,6 @@ async function drawRoutedLine(routes: any) {
 	
 	// For each location, draw a marker and a line to the next location
 	newRoutes.forEach(async (route: any, index: any) => {
-		//  Return Condition
-		if (index === newRoutes.length - 1) {
-			return;
-		}
 		
 		// add markers to each location
 		let marker, coordinates;
@@ -180,13 +157,29 @@ async function drawRoutedLine(routes: any) {
 			.setText(`Location ${index + 1}: ${route.locationName}`)
 
 		// Add a marker to the map
-		marker = new mapboxgl.Marker({ color: "red", draggable: false });
-		marker.setLngLat([
-			coordinates[0],
-			coordinates[1]
-		])
-			.addTo(map)
-			.setPopup(popup)
+		if (index === 0 || index === newRoutes.length - 1) {
+			marker = new mapboxgl.Marker({ color: "red", draggable: false });
+			marker.setLngLat([
+				coordinates[0],
+				coordinates[1]
+			])
+				.addTo(map)
+				.setPopup(popup)
+		} else {
+			marker = new mapboxgl.Marker({ color: "blue", draggable: false });
+			marker.setLngLat([
+				coordinates[0],
+				coordinates[1]
+			])
+				.addTo(map)
+				.setPopup(popup)
+		}
+
+		//  Return Condition
+		if (index === newRoutes.length - 1) {
+			return;
+		}
+
 		
 
 		// Per iteration, fetch the route data between two points

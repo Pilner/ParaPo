@@ -1,0 +1,16 @@
+#notFoundPage {
+	text-align: center;
+	height: 65vh;
+}
+
+#notFoundPage > div {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.errorPicture {
+	height: 100px;
+	padding-bottom: 1rem;
+}
