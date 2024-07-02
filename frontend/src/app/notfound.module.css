@@ -14,3 +14,23 @@
 	height: 100px;
 	padding-bottom: 1rem;
 }
+
+@media (max-width: 480px) {
+	#notFoundPage {
+		height: 100%;
+	}
+
+	#notFoundPage > div {
+		padding: 0 0 5em 0;
+	}
+
+	.errorPicture {
+		height: 100%;
+		margin: 5em 0;
+	}
+
+	.errorPicture > img {
+		height: 200px !important;
+		
+	}
+}

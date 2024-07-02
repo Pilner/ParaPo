@@ -111,46 +111,51 @@ export default function MapPage() {
 					<div>
 						<div className={styles.infoLocations}>
 							<form action="GET">
-								<div className={styles.originSearch}>
-									<label htmlFor="originLocation">
-										<span>
-											<i className="fa-solid fa-location-dot"></i>
-										</span>{" "}
-										Origin
-									</label>
-									<div>
-										<input
-											type="text"
-											name="originLocation"
-											id="originLocation"
-											readOnly={true}
-											value={originLocation}
-										/>
-										<Marker
-											point="origin"
-											getDataFromChild={getDataFromChild}
-										/>
+								<div>
+									<div className={styles.originSearch}>
+										<label htmlFor="originLocation">
+											<span>
+												<i className="fa-solid fa-location-dot"></i>
+											</span>{" "}
+											Origin
+										</label>
+										<div>
+											<input
+												type="text"
+												name="originLocation"
+												id="originLocation"
+												readOnly={true}
+												value={originLocation}
+											/>
+											<Marker
+												point="origin"
+												getDataFromChild={getDataFromChild}
+											/>
+										</div>
 									</div>
-								</div>
-								<div className={styles.destSearch}>
-									<label htmlFor="destLocation">
-										<span>
-											<i className="fa-solid fa-location-dot"></i>
-										</span>{" "}
-										Destination
-									</label>
 									<div>
-										<input
-											type="text"
-											name="destLocation"
-											id="destLocation"
-											readOnly={true}
-											value={destLocation}
-										/>
-										<Marker
-											point="destination"
-											getDataFromChild={getDataFromChild}
-										/>
+										<Line />
+									</div>
+									<div className={styles.destSearch}>
+										<label htmlFor="destLocation">
+											<span>
+												<i className="fa-solid fa-location-dot"></i>
+											</span>{" "}
+											Destination
+										</label>
+										<div>
+											<input
+												type="text"
+												name="destLocation"
+												id="destLocation"
+												readOnly={true}
+												value={destLocation}
+											/>
+											<Marker
+												point="destination"
+												getDataFromChild={getDataFromChild}
+											/>
+										</div>
 									</div>
 								</div>
 								<div className={styles.submitDiv}>
@@ -158,7 +163,9 @@ export default function MapPage() {
 								</div>
 							</form>
 						</div>
-						<Line />
+						<div className={styles.line}>
+							<Line />
+						</div>
 						<div className={styles.infoMeta}>
 							<div>
 								<p className="bodyTextFont">Origin</p>

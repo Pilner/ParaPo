@@ -7,7 +7,7 @@ import styles from "../styles/Navbar.module.css";
 export default function Navbar() {
 	return (
 		<nav id={styles.navbar}>
-			<div className="container">
+			<div className="container mobileContainer">
 				<div className={styles.navLogoSide}>
 					<div className={styles.navLogoImg}>
 						<Link href="/">
@@ -47,6 +47,11 @@ export default function Navbar() {
 								<Button text="Start" url="/map" />
 							</li>
 						</ul>
+					</div>
+				</div>
+				<div className={styles.navMenu}>
+					<div className={styles.navMenuImg}>
+						<i className={`fa-solid fa-bars fa-2xl ${styles.navMenuBars}`}></i>
 					</div>
 				</div>
 			</div>
@@ -89,6 +94,12 @@ export function MapNavbar() {
 								</Link>
 							</li>
 						</ul>
+					</div>
+				</div>
+
+				<div className={styles.navMenu}>
+					<div className={styles.navMenuImg}>
+						<i className={`fa-solid fa-bars fa-2xl ${styles.navMenuBars}`}></i>
 					</div>
 				</div>
 			</div>

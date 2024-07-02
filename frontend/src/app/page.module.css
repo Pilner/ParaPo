@@ -87,3 +87,146 @@
 	justify-content: end;
 	align-items: center;
 }
+
+
+@media (max-width: 480px) {
+	#heroPage, #examplePage, #aboutPage, #catalogPage {
+		height: 100%;
+	}
+
+	#heroPage > div {
+		padding-top: 2rem;
+		padding-bottom: 0rem;
+	}
+
+	#examplePage > div, #aboutPage > div {
+		padding: 8rem 0;
+	}
+
+	.heroPic, .scrollIndicator {
+		display: none;
+	}
+
+	.heroButtonDiv button {
+		border-radius: 25px;
+		font-size: 18px;
+		height: 2.25rem;
+		padding: 0.15rem 0.75rem;
+	}
+
+	#examplePage > div > img, .catalogPic > img{
+		width: 100% !important;
+		border-radius: 1rem !important;
+	}
+
+	#catalogPage > div {
+		flex-direction: column-reverse;
+		padding: 8rem 0 10rem 0;
+	}
+
+	.catalogText {
+		text-align: center;
+	}
+
+	.catalogText h1, .catalogText p {
+		padding-bottom: 0.5rem;
+	}
+
+	.catalogText > div > div {
+		margin: 1.25rem auto;
+	}
+
+	.catalogText button {
+		border-radius: 5px;
+		font-size: 18px;
+		height: 2.25rem;
+		padding: 0rem 1.5rem;
+	}
+
+	.catalogPic {
+		justify-content: center;
+		margin-bottom: 2.5rem;
+	}
+
+}
+
+@media (max-width: 360px) {
+	.mobileContainer{
+		width: 80%;
+		padding: 1em 0;
+	}
+
+	.mobileHeroTitleFont {
+		font-size: 52px;
+		line-height: 1;
+		text-align: center;
+		margin-bottom: auto;
+	}
+
+	.mobileHeroSubtitleFont {
+		font-size: 16px;
+		text-align: center;
+		padding-bottom: 0rem;
+	}
+
+	.mobileSectionTitleFont {
+		font-size: 20px;
+	}
+
+	.mobileSectionTextFont {
+		font-size: 12px;
+	}
+
+	#heroPage, #examplePage, #aboutPage, #catalogPage {
+		height: 100%;
+	}
+
+	.heroPic, .scrollIndicator {
+		display: none;
+	}
+
+	.heroText {
+		flex-direction: column;
+	}
+
+	.heroButtonDiv button {
+		border-radius: 25px;
+		font-size: 15px;
+		height: 2rem;
+		padding: 0.15rem 0.75rem;
+	}
+
+	#examplePage > div > img, .catalogPic > img{
+		width: 90% !important;
+		border-radius: 1rem !important;
+	}
+
+	#catalogPage > .mobileContainer {
+		flex-direction: column-reverse;
+	}
+
+	.catalogText {
+		text-align: center;
+	}
+
+	.catalogText h1, .catalogText p {
+		padding-bottom: 0.5rem;
+	}
+
+	.catalogText > div > div {
+		margin: 0.5rem auto;
+	}
+
+	.catalogText button {
+		border-radius: 5px;
+		font-size: 10px;
+		height: 1.5rem;
+		padding: 0rem 0.5rem;
+	}
+
+	.catalogPic {
+		justify-content: center;
+		margin-bottom: 1.5rem;
+	}
+
+}

@@ -77,3 +77,49 @@
 	font-weight: 600;
 	font-size: 16px;
 }
+
+@media (max-width: 480px) {
+	.mobileContainer {
+		flex-direction: column;
+		padding-top: 0.5rem;
+		padding-bottom: 2rem;
+	}
+
+	#footer {
+		height: 100%;
+	}
+
+	#footerLeft, #footerRight {
+		justify-content: center;
+		align-items: normal;
+	}
+
+	#footerLeft {
+		margin-bottom: 2rem;
+	}
+
+	#footerLeft > div > div:first-child > h1  {
+		font-size: 48px;
+	}
+
+	#footerLeft > div > div:last-child {
+		justify-content: space-evenly;
+		height: auto;
+	}
+
+	#footerRight {
+		height: 25px;
+	}
+
+	#footerRight > div {
+		height: auto;
+		flex-direction: column;
+	}
+
+	#footerRight > div > ul li {
+		text-align: center;
+		margin: 0;
+		font-size: 12px;
+	}
+
+}

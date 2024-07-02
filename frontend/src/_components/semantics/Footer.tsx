@@ -8,11 +8,11 @@ export default function Footer() {
 	return (
 		<footer id={styles.footer}>
 			<Line></Line>
-			<div className="container">
+			<div className={`container ${styles.mobileContainer}`}>
 				<div id={styles.footerLeft}>
 					<div>
 						<div>
-							<h1 className="sectionTitleFont">Contact Us</h1>
+							<h1 className={`sectionTitleFont ${styles.mobileSectionTitleFont}`}>Contact Us</h1>
 						</div>
 						<div>
 							<Link href={"#"}>
@@ -55,7 +55,7 @@ export function AltFooter() {
 	return (
 		<footer id={styles.altFooter}>
 			<Line></Line>
-			<div className="container">
+			<div className={`container ${styles.mobileContainer}`}>
 				<div id={styles.footerLeft}>
 					<div>
 						<div>

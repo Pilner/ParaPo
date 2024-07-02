@@ -47,3 +47,9 @@
 
 
 /* BUTTON */
+
+@media (max-width: 480px){
+	.buttonDiv {
+		margin: 0;
+	}
+}

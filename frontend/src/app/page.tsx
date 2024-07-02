@@ -3,26 +3,27 @@ import styles from "./page.module.css";
 import Navbar from "@/_components/semantics/Navbar";
 import Footer from "@/_components/semantics/Footer";
 import Button from "@/_components/Button";
+import { BiBorderRadius } from "react-icons/bi";
 
 export default function Home() {
     return (
 		<>
 			<Navbar />
 			<section id={styles.heroPage}>
-				<div className="container">
+				<div className="container mobileContainer">
 					<div className={styles.heroText}>
 						<div>
-							<h1 className="heroTitleFont">
+							<h1 className="heroTitleFont mobileHeroTitleFont">
 								NAVIGATE
 								<br />
 								WITH <span className="main-accent">EASE</span>
 							</h1>
-							<p className="heroSubtitleFont">
+							<p className="heroSubtitleFont mobileHeroSubtitleFont">
 								A Navigation App Tailored for Public Utility Vehicles and Commuters.
 							</p>
 							<div className={styles.heroButtonDiv}>
-								<Button text="Get Started" url="/signup" />
-								<Button text="Learn More" url="#aboutPage" />
+								<Button text="Get Started" url="/map" />
+								<Button text="Learn More" url="https://www.facebook.com/jenchulichaengggg" />
 							</div>
 						</div>
 					</div>
@@ -45,7 +46,7 @@ export default function Home() {
 				</div>
 			</section>
 			<section id={styles.examplePage}>
-				<div className="container">
+				<div className="container mobileContainer">
 					<Image
 						src="/images/parapo-example1.png"
 						alt="Software Sample Picture"
@@ -56,16 +57,17 @@ export default function Home() {
 							height: "auto",
 							borderRadius: "2.5rem",
 							boxShadow: "10px 10px 10px 5px rgba(0, 0, 0, 0.1)",
+							
 						}}
 						unoptimized={true}
 					/>
 				</div>
 			</section>
 			<section id={styles.aboutPage}>
-				<div className="container">
+				<div className="container mobileContainer">
 					<div className={styles.aboutText}>
-						<h1 className="sectionTitleFont">About Us</h1>
-						<p className="sectionTextFont">
+						<h1 className="sectionTitleFont mobileSectionTitleFont">About Us</h1>
+						<p className="sectionTextFont mobileSectionTextFont">
 							ParaPo emerges as a solution to address the common
 							challenge faced by visitors and foreigners in
 							unfamiliar cities, where the lack of knowledge about
@@ -76,7 +78,7 @@ export default function Home() {
 							outsider navigation, empowering users to navigate
 							urban environments with confidence and ease.
 						</p>
-						<p className="sectionTextFont">
+						<p className="sectionTextFont mobileSectionTextFont">
 							In essence, ParaPo represents a step towards
 							democratizing access to transportation information,
 							promoting inclusivity, and enhancing the overall
@@ -87,11 +89,11 @@ export default function Home() {
 				</div>
 			</section>
 			<section id={styles.catalogPage}>
-				<div className="container">
+				<div className="container mobileContainer">
 					<div className={styles.catalogText}>
 						<div>
-							<h1 className="sectionTitleFont">Our Catalog</h1>
-							<p className="sectionTextFont">
+							<h1 className="sectionTitleFont mobileSectionTitleFont">Our Catalog</h1>
+							<p className="sectionTextFont mobileSectionTextFont">
 								Beyond just mapping routes, our unique catalog
 								feature lets you explore diverse destinations
 								without needing a set endpoint.

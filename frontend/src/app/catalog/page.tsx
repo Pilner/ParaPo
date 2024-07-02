@@ -41,15 +41,15 @@ export default function Catalog() {
 		<>
 			<Navbar />
 			<section id={styles.catalogPage}>
-				<div className="container">
+				<div className="container mobileContainer">
 					<div className={styles.catalogText}>
 						<div>
-							<h1 className="heroTitleFont">
+							<h1 className="heroTitleFont mobileHeroTitleFont">
 								PARA<span className="main-accent">PO</span>
 								<br />
 								CATALOG
 							</h1>
-							<p className="heroSubtitleFont">
+							<p className="heroSubtitleFont mobileHeroSubtitleFont">
 								Our application offers a curated catalog of
 								routes tailored for every mode of
 								transportation.
@@ -78,7 +78,7 @@ export default function Catalog() {
 				</div>
 			</section>
 			<section id={styles.catalogList}>
-				<div className="container">
+				<div className="container mobileContainer">
 					<form>
 						<input
 							type="text"
@@ -123,20 +123,97 @@ export default function Catalog() {
 									</td>
 									<td>
 										<Link href="/catalog/route/1">
-											Parang Cubao SSS Villa - Stop & Shop
+											Balintawak - PUC via Baesa
 										</Link>
 									</td>
 									<td>
 										<Link href="/catalog/route/1">
-											₱13.00/4 km + ₱1.80/1 km
+											₱13.00
 										</Link>
 									</td>
 									<td>
 										<Link href="/catalog/route/1">
-											999 Stations
+											17 Stations
 										</Link>
 									</td>
 								</tr>
+
+								<tr>
+									<td>
+										<Link href="/catalog/route/1">
+											<>
+												<Image
+													className="fa-xl"
+													src="/images/jeepney-icon.svg"
+													alt="Jeep Icon"
+													width={0}
+													height={0}
+													style={{
+														width: "1.5em",
+														height: "auto",
+													}}
+												/>
+												<p className="bodyTextFont">
+													Jeep
+												</p>
+											</>
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											Buendia-MOA
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											₱13.00
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											13 Stations
+										</Link>
+									</td>
+								</tr>
+
+								<tr>
+									<td>
+										<Link href="/catalog/route/1">
+											<>
+												<Image
+													className="fa-xl"
+													src="/images/jeepney-icon.svg"
+													alt="Jeep Icon"
+													width={0}
+													height={0}
+													style={{
+														width: "1.5em",
+														height: "auto",
+													}}
+												/>
+												<p className="bodyTextFont">
+													Jeep
+												</p>
+											</>
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											Gate 5 - Greenhills Shopping Center Loop
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											₱13.00
+										</Link>
+									</td>
+									<td>
+										<Link href="/catalog/route/1">
+											3 Stations
+										</Link>
+									</td>
+								</tr>
+
 
 								{/* Don't touch this */}
 								{/* {routes.map((route) => (
