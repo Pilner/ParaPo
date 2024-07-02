@@ -12,7 +12,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import styles from "./page.module.css";
 
-import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
@@ -26,6 +26,9 @@ export default function MapPage() {
 	const [originLocation, setOriginLocation] = useState("");
 	const [destLocation, setDestLocation] = useState("");
 
+	const router = useRouter();
+
+
 	useEffect(() => {
 		// Initialize the map from Mapbox
 		map = new mapboxgl.Map({
@@ -33,6 +36,12 @@ export default function MapPage() {
 			accessToken: mapboxAccessToken,
 			style: "mapbox://styles/mapbox/streets-v12",
 			center: [121.056, 14.582],
+			maxBounds: [
+				120.7617187,
+                14.386892905,
+                121.053525416,
+                14.691678901
+			],			
 			zoom: 12,
 		});
 
@@ -58,7 +67,7 @@ export default function MapPage() {
 					markerOrigin.remove();
 				}
 				markerOrigin = new mapboxgl.Marker({
-					color: "red",
+					color: "#f53636",
 					draggable: true,
 				})
 					.setLngLat([lng, lat])
@@ -77,7 +86,7 @@ export default function MapPage() {
 					markerDest.remove();
 				}
 				markerDest = new mapboxgl.Marker({
-					color: "blue",
+					color: "#46a3ff",
 					draggable: true,
 				})
 					.setLngLat([lng, lat])
@@ -103,6 +112,24 @@ export default function MapPage() {
 		modeRef.current = mode;
 	}, [mode]);
 
+	// submit form
+	const handleSubmit = (e: any) => {
+		e.preventDefault();
+		const data = {origin: [...originLocation.split(", ")], dest: [...destLocation.split(", ")]};
+
+		if (originLocation == "" || destLocation == "") {
+			alert("Please input both locations");
+			return;
+		}
+
+		// convert data into url format
+		const urlData = encodeURIComponent(`${data.origin.join(",")} ${data.dest.join(",")}`);
+
+		// go to another page with the route in the url
+		router.push(`/map/${urlData}`);
+
+	};
+
 	return (
 		<section id={styles.mapPage}>
 			<div className={styles.infoMenu}>
@@ -110,7 +137,7 @@ export default function MapPage() {
 				<div className={styles.infoPart}>
 					<div>
 						<div className={styles.infoLocations}>
-							<form action="GET">
+							<form action="GET" onSubmit={handleSubmit}>
 								<div className={styles.originSearch}>
 									<label htmlFor="originLocation">
 										<span>
@@ -125,9 +152,11 @@ export default function MapPage() {
 											id="originLocation"
 											readOnly={true}
 											value={originLocation}
+											required={true}
 										/>
 										<Marker
 											point="origin"
+											color="#f53636"
 											getDataFromChild={getDataFromChild}
 										/>
 									</div>
@@ -146,9 +175,11 @@ export default function MapPage() {
 											id="destLocation"
 											readOnly={true}
 											value={destLocation}
+											required={true}
 										/>
 										<Marker
 											point="destination"
+											color="#46a3ff"
 											getDataFromChild={getDataFromChild}
 										/>
 									</div>
@@ -314,28 +345,3 @@ async function drawRoutedLine(routes: any) {
 		}
 	});
 }
-
-		// // On map load, draw the routes on the map using the Backend Data
-		// map.on("load", () => {
-		// 	drawRoutedLine(route);
-		// });
-	// const [route, setRoute] = useState({
-	// 	id: 0,
-	// 	routeName: "",
-	// 	minFare: 0,
-	// 	locations: [
-	// 		{
-	// 			id: 0,
-	// 			latitude: 0,
-	// 			longitude: 0,
-	// 			routeId: 0,
-	// 		},
-	// 	],
-	// });
-
-			// alert(`${originLocation} ${destLocation}`);
-			// useEffect(() => {
-			// }, [mode]);
-	
-	
-	
