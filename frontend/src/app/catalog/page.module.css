@@ -79,3 +79,87 @@
 #catalogList .catalogListItems table td > a {
 	display: block;
 }
+
+@media (max-width: 480px) {
+	.mobileContainer{
+		width: 85%;
+		padding: 3em 0;
+	}
+
+	.mobileSectionTextFont {
+		font-size: 16px;
+		letter-spacing: 0.5px;
+	}
+
+	#catalogPage > div, #catalogList > div {
+		padding: 3em 0;
+	}
+
+	#catalogPage {
+		height: 100%;
+	}
+
+	#catalogPage > div {
+		flex-direction: column-reverse;
+	}
+
+	.catalogText {
+		align-items: baseline;
+		margin-top: 2em;
+	}
+
+	.catalogPic > img {
+		width: 95% !important;
+	}
+
+	
+	.scrollIndicator {
+		display: none;
+	}
+
+	.catalogListItems thead,
+	.catalogListItems tbody,
+	.catalogListItems th,
+	.catalogListItems td{
+		display: block;
+		width: 100%;
+		padding: 0 !important;
+		
+	}
+
+	.catalogListItems thead {
+		display: none;
+	}
+
+	.catalogListItems tr {
+		display: grid;
+		grid-template-columns: 0.20fr 1fr;
+		grid-template-rows: 0.5fr 0.25fr 0.25fr;
+		align-items: center;
+		padding: 0.5rem 0;
+		margin: 2em 0;
+		background-color: var(--dark-gray);
+		border-radius: 15px;
+
+	}
+
+	.catalogListItems td:first-child{
+		grid-column:  1/2;
+		grid-row: 1/4;
+	}
+
+	.catalogListItems td:first-child p{
+		display: none;
+	}
+
+	.catalogListItems td:not(:first-child) a {
+		text-align: start;
+		padding: 0.25rem 0.75rem;
+		font-size: 18px;
+	}
+
+	.catalogListItems td:nth-child(2) a {
+		font-weight: 700;
+	}
+
+}

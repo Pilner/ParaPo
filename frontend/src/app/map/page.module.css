@@ -36,25 +36,29 @@
 	flex: 2;
 }
 
-.infoPart > div > .infoLocations > form > div {
+.infoPart > div > .infoLocations > form > div > div {
 	display: flex;
 	flex-direction: column;
 	padding: 0.5rem 0;
 }
 
-.infoPart > div > .infoLocations > form > div > div {
+.infoPart > div > .infoLocations > form > div > div > div {
 	display: flex;
 	width: 100%;
 	margin: auto;
 }
 
-.infoPart > div > .infoLocations > form > div > div > input {
+.infoPart > div > .infoLocations > form > div > div > div > input {
 	flex: 4;
 }
 
-.infoPart > div > .infoLocations > form > div > div > div {
+.infoPart > div > .infoLocations > form > div > div > div > div {
 	flex: 1;
 	margin: auto;
+}
+
+.infoPart > div > .infoLocations > form > div > div:nth-child(2) {
+	display: none;
 }
 
 .infoPart > div > .infoLocations > form > .submitDiv {
@@ -94,4 +98,64 @@
 	height: 100%;
 	width: 100%;
 	z-index: 1;
+}
+
+@media (max-width: 480px){
+	#mapPage .infoMenu {
+		width: 85%;
+		transform: translateX(-50%);
+		left: 50%;
+		top: 2.5%;
+		position: absolute;
+		border-radius: 2rem;
+	}
+
+	.line, .infoPart .infoMeta {
+		display: none !important;
+	}
+
+	.originSearch input, .destSearch input,
+	.originSearch i, .destSearch i {
+		display: none !important;
+	}
+
+
+	.infoPart > div > .infoLocations > form > div,
+	.infopart > div > .infoLocations > form > .submitDiv {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		padding: 0 !important;
+	}
+
+	.infoPart > div > .infoLocations > form > div > div {
+		flex: 1;
+		align-items: center;
+	}
+
+	.infoPart > div > .infoLocations > form > div > div:nth-child(2) {
+		display: flex !important;
+		width: 100px;
+	}
+
+	.infoPart > div > .infoLocations > form > div > div > div {
+		flex-direction: column;
+	}
+
+	.originSearch, .destSearch {
+		align-items: center;
+		/* padding: 0.5rem 1rem !important; */
+		/* margin: 1rem 0; */
+	}
+
+	.originSearch label, .destSearch label{
+		font-size: 16px;
+		font-weight: 600;
+		margin-bottom: 1rem;
+	}
+
+	.submitDiv > .buttonDiv{
+		margin: 0;
+	}
+
 }

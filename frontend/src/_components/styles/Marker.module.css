@@ -19,3 +19,10 @@
 .marker svg[data-selected="true"]:hover {
 	cursor: default;
 }
+
+@media (max-width: 480px) {
+	/* .marker svg {
+		border: none;
+	} */
+	
+}

@@ -155,3 +155,32 @@ textarea {
 	margin: 0 auto;
 	/* border: 1px solid red; */
 }
+
+@media (max-width: 480px){
+	.mobileContainer{
+		width: 85%;
+	}
+	
+	.mobileHeroTitleFont {
+		font-size: 62px;
+		line-height: 1;
+		text-align: center;
+		margin-bottom: auto;
+	}
+	
+	.mobileHeroSubtitleFont {
+		font-size: 18px;
+		text-align: center;
+		padding-bottom: 1.25rem;
+	}
+	
+	.mobileSectionTitleFont {
+		font-size: 32px;
+	}
+	
+	.mobileSectionTextFont {
+		font-size: 16px;
+		letter-spacing: 0.5px;
+	}
+}
+
