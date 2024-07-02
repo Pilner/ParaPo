@@ -11,26 +11,30 @@ import mapboxgl from "mapbox-gl";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+interface Route {
+	id: number;
+	routeName: string;
+	category: string;
+	minFare: number;
+	locations: {
+		id: number;
+		latitude: number;
+		longitude: number;
+		routeId: number;
+	}[];
+}
+
 let map: any;
 
 export default function RoutePage() {
-	// Initialize the state of routes
-	const [route, setRoute] = useState(
-		{
-			id: 0,
-			routeName: "",
-			category: "",
-			minFare: 0,
-			locations: [
-				{
-					id: 0,
-					latitude: 0,
-					longitude: 0,
-					routeId: 0
-				}
-			],
-		},
-	);
+	// Initialize the state of route
+	const [route, setRoute] = useState({
+		id: 0,
+		routeName: "",
+		category: "",
+		minFare: 0,
+		locations: [],
+	} as Route);
 
 	// get dynamic url params
 	const { id } = useParams();
@@ -53,6 +57,12 @@ export default function RoutePage() {
 			accessToken: mapboxAccessToken,
 			style: "mapbox://styles/mapbox/streets-v12",
 			center: [121.056, 14.582],
+			maxBounds: [
+				120.7617187,
+                14.386892905,
+                121.053525416,
+                14.691678901
+			],
 			zoom: 12,
 		});
 		// On map load, draw the routes on the map using the Backend Data
@@ -158,7 +168,10 @@ async function drawRoutedLine(routes: any) {
 
 		// Add a marker to the map
 		if (index === 0 || index === newRoutes.length - 1) {
-			marker = new mapboxgl.Marker({ color: "red", draggable: false });
+			marker = new mapboxgl.Marker({
+				color: "#f53636",
+				draggable: false,
+			});
 			marker.setLngLat([
 				coordinates[0],
 				coordinates[1]
@@ -166,7 +179,10 @@ async function drawRoutedLine(routes: any) {
 				.addTo(map)
 				.setPopup(popup)
 		} else {
-			marker = new mapboxgl.Marker({ color: "blue", draggable: false });
+			marker = new mapboxgl.Marker({
+				color: "#FF9270",
+				draggable: false,
+			});
 			marker.setLngLat([
 				coordinates[0],
 				coordinates[1]
@@ -179,8 +195,6 @@ async function drawRoutedLine(routes: any) {
 		if (index === newRoutes.length - 1) {
 			return;
 		}
-
-		
 
 		// Per iteration, fetch the route data between two points
 		const data = await getRoutedLine(
