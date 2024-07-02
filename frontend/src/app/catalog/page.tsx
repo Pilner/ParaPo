@@ -8,34 +8,57 @@ import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
+interface Route {
+	id: number;
+	routeName: string;
+	category: string;
+	minFare: number;
+	locations: {
+		id: number;
+		latitude: number;
+		longitude: number;
+		routeId: number;
+	}[];
+}
+
 export default function Catalog() {
 	// Initialize the state of routes
-	const [routes, setRoutes] = useState([
-		{
-			id: 0,
-			routeName: "",
-			category: "",
-			minFare: 0,
-			locations: [
-				{
-					id: 0,
-					latitude: 0,
-					longitude: 0,
-					routeId: 0
-				}
-			],
-		},
-	]);
-
+	const [routes, setRoutes] = useState([] as Route[]);
+	
 	useEffect(() => {
 		(async () => {
 			// Fetch routes from the Backend using API Endpoints
-			const res = await fetch(`https://localhost:7192/api/routes`, {cache: "force-cache"});
+			const res = await fetch(`https://localhost:7192/api/routes`);
 			const data = await res.json();
 
 			setRoutes(data);
 		})();
 	}, []);
+
+	async function searchRoutes(e: any) {
+		e.preventDefault();
+		const search = e.target.elements.routeSearch.value;
+
+		if (search === "") {
+			const res = await fetch(`https://localhost:7192/api/routes`);
+			const data = await res.json();
+
+			setRoutes(data);
+		} else {
+	
+			const res = await fetch(`https://localhost:7192/api/routes/search?keyword=${search}`);
+			const data = await res.json();
+
+			if (data == "No routes or locations found matching the keyword.") {
+				setRoutes([]);
+			} else {
+				setRoutes(data);	
+			}
+
+
+		}
+	}
+		
 
     return (
 		<>
@@ -79,12 +102,13 @@ export default function Catalog() {
 			</section>
 			<section id={styles.catalogList}>
 				<div className="container mobileContainer">
-					<form>
+					<form action="GET" onSubmit={searchRoutes}>
 						<input
 							type="text"
 							name="routeSearch"
 							id="rSearch"
 							placeholder="Search Routes"
+							
 						/>
 					</form>
 					<div className={styles.catalogListItems}>
@@ -100,7 +124,7 @@ export default function Catalog() {
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								{/* <tr>
 									<td>
 										<Link href="/catalog/route/1">
 											<>
@@ -136,7 +160,7 @@ export default function Catalog() {
 											17 Stations
 										</Link>
 									</td>
-								</tr>
+								</tr> */}
 
 								<tr>
 									<td>
@@ -216,36 +240,96 @@ export default function Catalog() {
 
 
 								{/* Don't touch this */}
-								{/* {routes.map((route) => (
-									<tr key={route.id}>
-										<td>
-											<Link href={`/catalog/route/${route.id}`}>
-												{route.category == "Jeep" ? (
-													<><i className="fa-solid fa-car fa-xl"></i><p className="bodyTextFont">Jeep</p></>
-												) : ( route.category == "Bus" ? (
-													<><i className="fa-solid fa-bus fa-xl"></i><p className="bodyTextFont">Bus</p></>
-												) : ( route.category == "Train" ) ? (
-													<><i className="fa-solid fa-train fa-xl"></i><p className="bodyTextFont">Train</p></>
-												) : <><i className="fa-solid fa-question fa-xl"></i><p className="bodyTextFont">Unknown</p></>)}
-											</Link>
-										</td>
-										<td>
-											<Link href={`/catalog/route/${route.id}`}>
-												{route.routeName}
-											</Link>
-										</td>
-										<td>
-											<Link href={`/catalog/route/${route.id}`}>
-												₱{route.minFare.toFixed(2)}
-											</Link>
-										</td>
-										<td>
-											<Link href={`/catalog/route/${route.id}`}>
-												{route.locations.length} Stations
-											</Link>
+								{(routes.length != 0) ? (
+									routes.map((route) => {
+										return (
+											<tr key={route.id}>
+												<td>
+													<Link
+														href={`/catalog/route/${route.id}`}
+													>
+														{route.category ==
+														"Jeep" ? (
+															<>
+																<Image
+																	className="fa-xl"
+																	src="/images/jeepney-icon.svg"
+																	alt="Jeep Icon"
+																	width={0}
+																	height={0}
+																	style={{
+																		width: "1.5em",
+																		height: "auto",
+																	}}
+																/>
+																<p className="bodyTextFont">
+																	Jeep
+																</p>
+															</>
+														) : route.category ==
+														  "Bus" ? (
+															<>
+																<i className="fa-solid fa-bus fa-xl"></i>
+																<p className="bodyTextFont">
+																	Bus
+																</p>
+															</>
+														) : route.category ==
+														  "Train" ? (
+															<>
+																<i className="fa-solid fa-train fa-xl"></i>
+																<p className="bodyTextFont">
+																	Train
+																</p>
+															</>
+														) : (
+															<>
+																<i className="fa-solid fa-question fa-xl"></i>
+																<p className="bodyTextFont">
+																	Unknown
+																</p>
+															</>
+														)}
+													</Link>
+												</td>
+												<td>
+													<Link
+														href={`/catalog/route/${route.id}`}
+													>
+														{route.routeName}
+													</Link>
+												</td>
+												<td>
+													<Link
+														href={`/catalog/route/${route.id}`}
+													>
+														₱
+														{route.minFare.toFixed(
+															2
+														)}
+													</Link>
+												</td>
+												<td>
+													<Link
+														href={`/catalog/route/${route.id}`}
+													>
+														{route.locations.length}{" "}
+														Stations
+													</Link>
+												</td>
+											</tr>
+										);
+									})
+								) : (
+									<tr>
+										<td colSpan={4}>
+											<p className="bodyTextFont">
+												No routes found.
+											</p>
 										</td>
 									</tr>
-								))} */}
+								
+								)}
 							</tbody>
 						</table>
 					</div>
