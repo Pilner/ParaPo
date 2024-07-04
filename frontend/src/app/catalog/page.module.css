@@ -1,124 +1,165 @@
 #catalogPage {
-	height: 100vh;
-	width: 100%;
-	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.1)), url("/images/homepage_bg.png");
-	background-repeat: no-repeat;
-	background-size:cover;
-	background-position: 50% 50%;
+	height: 85vh;
+}
+
+#catalogPage>div {
+	display: flex;
 	position: relative;
 }
 
-#catalogPage #catalog {
-	margin-top: 10rem;
-	width: 100%;
-	/* display: flex; */
-	/* gap: 2rem; */
+.catalogText,
+.catalogPic {
+	flex: 1;
 }
 
-#catalogPage #catalog > div {
-	width: 100%;
-	margin: auto;
-	display: flex;
-	justify-content: center;
-	/* text-align: center; */
-}
-
-#catalogPage #catalog > div > div {
-	/* border: 1px solid red; */
-	/* flex: 1; */
-}
-
-#catalogPage #catalog div > .catalogLeft {
-	text-align: right;
-	padding-right: 1rem;
-	border-right: 2.5px solid var(--red);
-}
-
-#catalogPage #catalog div > .catalogRight {
+.catalogText {
 	display: flex;
 	align-items: center;
-	padding-left: 1rem;
-	border-left: 2.5px solid var(--red);
 }
 
-#catalogPage #catalog > .catalogRight p {
-	padding: 0;
+.catalogPic {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.transition1 {
+.scrollIndicator {
 	position: absolute;
-	transform: translateY(-10rem);
-	width: 100%;
-	height: 10rem;
-	background: linear-gradient(rgba(0,0,0,0), var(--coral));
+	bottom: 5%;
+	left: 50%;
+	transform: translateX(-50%);
+	color: rgba(0, 0, 0, 0.5);
 }
 
 #catalogList {
-	background-color: var(--coral);
-	height: 100vh;
-	width: 100%;
+	min-height: 75vh;
 }
 
 #catalogList > div {
-	padding-top: 5rem;
+	margin: 5rem auto;
 }
 
-#catalogList > div > div {
+#catalogList form > input[type=text] {
 	width: 100%;
-	height: 100%;
-	margin: auto;
 }
 
-#catalogList > div > div > div.searchDiv {
-	margin: auto;
+#catalogList .catalogListItems table {
+	width: 100%;
+	border-spacing: 0 1rem;
+}
+
+#catalogList .catalogListItems table thead {
+	background-color: var(--main-accent);
+	color: var(--white);
+}
+
+#catalogList .catalogListItems table th,
+#catalogList .catalogListItems table td {
+	/* border: 1px solid black; */
+	padding: 0.5rem;
 	text-align: center;
-	width: 100%;
-	margin-bottom: 5rem;
 }
 
-#catalogList > div > div > div.searchDiv input {
-	padding: 0.5rem 1rem;
-	width: 30rem;
-	border-radius: 2.5rem;
+#catalogList .catalogListItems table th:first-child,
+#catalogList .catalogListItems table td:first-child {
+	border-top-left-radius: 0.5rem;
+	border-bottom-left-radius: 0.5rem;
 }
 
-#catalogList > div > div > div.catalogListItems {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	gap: 5rem;
+#catalogList .catalogListItems table th:last-child,
+#catalogList .catalogListItems table td:last-child {
+	border-top-right-radius: 0.5rem;
+	border-bottom-right-radius: 0.5rem;
 }
 
-#catalogList > div > div > div.catalogListItems > a > div {
-	color: var(--black);
-	background-color: var(--white);
-	border-radius: 1rem;
-	padding: 1rem;
-	display: flex;
+#catalogList .catalogListItems table td {
+	background-color: var(--dark-gray);
 }
 
-#catalogList > div > div > div.catalogListItems > a > div > div {
-	/* border: 1px solid green; */
-	min-height: 7.5rem;
+#catalogList .catalogListItems table td > a {
+	display: block;
 }
 
-#catalogList > div > div > div.catalogListItems > a > div > .routeId {
-	flex: 1;
-	border-right: 0.5px solid rgba(0, 0, 0, 0.5);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-#catalogList > div > div > div.catalogListItems > a > div > .routeId > p {
-	padding: 0;
-}
+@media (max-width: 480px) {
+	.mobileContainer{
+		width: 85%;
+		padding: 3em 0;
+	}
 
-#catalogList > div > div > div.catalogListItems > a > div > .routeName {
-	flex: 5;
-	border-left: 0.5px solid rgba(0, 0, 0, 0.5);
-	height: 100%;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
+	.mobileSectionTextFont {
+		font-size: 16px;
+		letter-spacing: 0.5px;
+	}
+
+	#catalogPage > div, #catalogList > div {
+		padding: 3em 0;
+	}
+
+	#catalogPage {
+		height: 100%;
+	}
+
+	#catalogPage > div {
+		flex-direction: column-reverse;
+	}
+
+	.catalogText {
+		align-items: baseline;
+		margin-top: 2em;
+	}
+
+	.catalogPic > img {
+		width: 95% !important;
+	}
+
+	
+	.scrollIndicator {
+		display: none;
+	}
+
+	.catalogListItems thead,
+	.catalogListItems tbody,
+	.catalogListItems th,
+	.catalogListItems td{
+		display: block;
+		width: 100%;
+		padding: 0 !important;
+		
+	}
+
+	.catalogListItems thead {
+		display: none;
+	}
+
+	.catalogListItems tr {
+		display: grid;
+		grid-template-columns: 0.20fr 1fr;
+		grid-template-rows: 0.5fr 0.25fr 0.25fr;
+		align-items: center;
+		padding: 0.5rem 0;
+		margin: 2em 0;
+		background-color: var(--dark-gray);
+		border-radius: 15px;
+
+	}
+
+	.catalogListItems td:first-child{
+		grid-column:  1/2;
+		grid-row: 1/4;
+	}
+
+	.catalogListItems td:first-child p{
+		display: none;
+	}
+
+	.catalogListItems td:not(:first-child) a {
+		text-align: start;
+		padding: 0.25rem 0.75rem;
+		font-size: 18px;
+	}
+
+	.catalogListItems td:nth-child(2) a {
+		font-weight: 700;
+	}
+
 }

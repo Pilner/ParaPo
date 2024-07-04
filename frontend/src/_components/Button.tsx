@@ -1,9 +1,13 @@
 import Link from "next/link";
-import styles from "./styles/button.module.css";
+import styles from "./styles/Button.module.css";
 
 interface ButtonProps {
 	text: string;
 	url: string;
+}
+
+interface ButtonSubmitProps {
+	text: string;
 }
 
 export default function Button({ text, url }: ButtonProps) {
@@ -12,6 +16,16 @@ export default function Button({ text, url }: ButtonProps) {
 			<Link href={url} scroll={false}>
 				<button className={styles.roundButton}>{text}</button>
 			</Link>
+		</div>
+	);
+}
+
+export function ScrollButton({ text, url }: ButtonProps) {
+	return (
+		<div className={styles.buttonDiv}>
+			<a href={url}>
+				<button className={styles.roundButton}>{text}</button>
+			</a>
 		</div>
 	);
 }
@@ -26,12 +40,12 @@ export function AltButton({ text, url }: ButtonProps) {
 	);
 }
 
-// export function ButtonSubmit({ text }: ButtonProps) {
-// 	return (
-// 		<div className={styles.buttonDiv}>
-// 			<button type="submit" className={styles.roundButton}>
-// 				{text}
-// 			</button>
-// 		</div>
-// 	);
-// }
+export function ButtonSubmit({ text }: ButtonSubmitProps) {
+	return (
+		<div className={styles.buttonDiv}>
+			<button type="submit" className={styles.roundButton}>
+				{text}
+			</button>
+		</div>
+	);
+}

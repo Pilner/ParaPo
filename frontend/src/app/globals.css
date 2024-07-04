@@ -1,33 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900');
-@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
-	--title-font: "Saira Semi Condensed";
-	--text-font: "Saira";
-	--black: #0B1215;
-	--darkgray: #414141;
-	--gray: #E1E1E1;
-	--white: #FBFFF5;
-	--red: #DD6161;
-	--orange: #FF9270;
-	--coral: #FFC2AF;
+	--main-font: "Poppins", sans-serif;
+	--secondary-font: "Open Sans", sans-serif;
+	
+	--main-accent: #FF9270;
+	--black: #141414;
+	--gray: #FCFCFC;
+	--dark-gray: #F4F4F4;
+	--white: #FFFFFF;
 }
 
-.orange {
-	color: var(--orange)
-}
-.coral {
-	color: var(--coral)
+.main-accent {
+	color: var(--main-accent);
 }
 
 * {
 	margin: 0;
 	padding: 0;
-}
-
-p, h1, h2, h3, h4, h5, h6 {
-	/* line-height: 100%; */
 }
 
 html {
@@ -45,8 +35,26 @@ ol {
 	margin: 0;
 }
 
+ul li > a {
+	border: 1px solid rgba(0,0,0,0);
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	transition: 500ms;
+}
+
+ul li > a:hover {
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	transition: 500ms;
+}
+
+ul li > a[aria-theme='dark']:hover  {
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	transition: 500ms;
+}
+
+
 body {
-	font-family: var(--text-font);
+	font-family: var(--secondary-font);
 	background-color: var(--gray);
 }
 
@@ -72,10 +80,12 @@ input[type="password"],
 input[type="tel"],
 textarea,
 select {
-	font-family: var(--text-font);
-	font-size: 1.2rem;
-	border-radius: 0.5vmin;
+	font-family: inherit;
+	font-size: inherit;
+	border-radius: 1rem;
 	border: 1px solid rgba(0, 0, 0, 0.4);
+	padding: 0.5rem 1rem;
+	box-sizing: border-box;
 }
 
 input[type="text"]:focus,
@@ -89,48 +99,52 @@ select:focus {
 }
 
 textarea {
-	font-family: var(--text-font);
+	font-family: var(--secondary-font);
 }
 
-.hero-title {
-	font-family: var(--title-font);
-	font-size: 96px;
+.heroTitleFont {
+	font-family: var(--main-font);
+	font-size: 100px;
 	font-weight: 700;
-	color: var(--white);
+	color: inherit;
+	line-height: 90px;
+	margin-bottom: 1rem;
 }
 
-.hero-text {
-	font-family: var(--text-font);
+.heroSubtitleFont {
+	font-family: var(--secondary-font);
 	font-size: 32px;
-	font-weight: 600;
-	padding-bottom: 1rem;
-	color: var(--white);
-}
-
-.section-title {
-	font-family: var(--title-font);
-	font-size: 40px;
-	font-weight: 700;
-	color: var(--black);
-	padding-bottom: 1rem;
-}
-
-.section-text {
-	font-family: var(--text-font);
-	font-size: 20px;
 	font-weight: 400;
 	padding-bottom: 1rem;
-	color: var(--black);
+	color: inherit;
+	margin-bottom: 1rem;
 }
 
-.body-title {
-	font-family: var(--title-font);
+.sectionTitleFont {
+	font-family: var(--main-font);
+	font-size: 40px;
+	font-weight: 600;
+	color: inherit;
+	padding-bottom: 1rem;
+}
+
+.sectionTextFont {
+	font-family: var(--secondary-font);
+	font-size: 24px;
+	font-weight: 400;
+	padding-bottom: 1rem;
+	color: inherit;
+}
+
+.bodyTitleFont {
+	font-family: var(--main-font);
 	font-weight: 500;
 	font-size: 1.5rem;
+	padding-bottom: 1rem;
 }
 
-.body-text {
-	font-family: var(--text-font);
+.bodyTextFont {
+	font-family: var(--secondary-font);
 	font-weight: 300;
 	font-size: 1.2rem;
 }
@@ -142,42 +156,31 @@ textarea {
 	/* border: 1px solid red; */
 }
 
-.vline {
-	width: 1rem;
-	/* height: 100%; */
-	border: 2px solid var(--orange);
-	margin-right: 1rem;
+@media (max-width: 480px){
+	.mobileContainer{
+		width: 85%;
+	}
+	
+	.mobileHeroTitleFont {
+		font-size: 62px;
+		line-height: 1;
+		text-align: center;
+		margin-bottom: auto;
+	}
+	
+	.mobileHeroSubtitleFont {
+		font-size: 18px;
+		text-align: center;
+		padding-bottom: 1.25rem;
+	}
+	
+	.mobileSectionTitleFont {
+		font-size: 32px;
+	}
+	
+	.mobileSectionTextFont {
+		font-size: 16px;
+		letter-spacing: 0.5px;
+	}
 }
 
-
-
-/* .marker {
-	background-image: url('mapbox-icon.png');
-	background-size: cover;
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	cursor: pointer;
-} */
-
-.marker {
-	align-items: center;
-	z-index: 100;
-}
-
-.marker svg {
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	border-radius: 1vmin;
-}
-
-.marker svg:hover {
-	cursor: pointer;
-}
-
-.marker svg[data-selected="true"] {
-	background-color: rgba(0, 0, 0, 0.5);
-}
-
-.marker svg[data-selected="true"]:hover {
-	cursor: default;
-}

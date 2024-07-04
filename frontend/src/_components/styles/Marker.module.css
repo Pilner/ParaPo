@@ -1,0 +1,28 @@
+.marker {
+	align-items: center;
+}
+
+.marker svg {
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 1vmin;
+	float: right;
+}
+
+.marker svg:hover {
+	cursor: pointer;
+}
+
+.marker svg[data-selected="true"] {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.marker svg[data-selected="true"]:hover {
+	cursor: default;
+}
+
+@media (max-width: 480px) {
+	/* .marker svg {
+		border: none;
+	} */
+	
+}

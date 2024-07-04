@@ -4,44 +4,44 @@ import Link from "next/link";
 import Line from "@/_components/Line";
 
 import styles from "../styles/Footer.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebook, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-
 export default function Footer() {
 	return (
 		<footer id={styles.footer}>
 			<Line></Line>
-			<div className="container">
+			<div className={`container ${styles.mobileContainer}`}>
 				<div id={styles.footerLeft}>
 					<div>
 						<div>
-							<h2 className="section-title">Contact Us</h2>
+							<h1 className={`sectionTitleFont ${styles.mobileSectionTitleFont}`}>Contact Us</h1>
 						</div>
 						<div>
 							<Link href={"#"}>
-								<FontAwesomeIcon icon={faLinkedin} />
+								<i className="fa-brands fa-linkedin fa-2xl"></i>
 							</Link>
 							<Link href={"#"}>
-								<FontAwesomeIcon icon={faFacebook} />
+								<i className="fa-brands fa-facebook fa-2xl"></i>
 							</Link>
 							<Link href={"#"}>
-								<FontAwesomeIcon icon={faInstagram} />
+								<i className="fa-brands fa-instagram fa-2xl"></i>
 							</Link>
 							<Link href={"#"}>
-								<FontAwesomeIcon icon={faEnvelope} />
+								<i className="fa-solid fa-envelope fa-2xl"></i>
 							</Link>
 						</div>
 					</div>
 				</div>
 				<div id={styles.footerRight}>
 					<div>
-						<ul className="section-text">
+						<ul>
 							<li>
-								<Link href={"#"}>Privacy Policy</Link>
+								<Link href={"#"} aria-theme="dark">
+									Privacy Policy
+								</Link>
 							</li>
 							<li>
-								<Link href={"#"}>Terms & Conditions</Link>
+								<Link href={"#"} aria-theme="dark">
+									Terms & Conditions
+								</Link>
 							</li>
 						</ul>
 					</div>
@@ -55,7 +55,7 @@ export function AltFooter() {
 	return (
 		<footer id={styles.altFooter}>
 			<Line></Line>
-			<div className="container">
+			<div className={`container ${styles.mobileContainer}`}>
 				<div id={styles.footerLeft}>
 					<div>
 						<div>
@@ -63,16 +63,16 @@ export function AltFooter() {
 						</div>
 						<div>
 							<Link href={"#"}>
-								<FontAwesomeIcon icon={faLinkedin} />
+								<i className="fa-brands fa-linkedin fa-2xl"></i>
 							</Link>
 							<Link href={"#"}>
-								<FontAwesomeIcon icon={faFacebook} />
+								<i className="fa-brands fa-facebook fa-2xl"></i>
 							</Link>
 							<Link href={"#"}>
-								<FontAwesomeIcon icon={faInstagram} />
+								<i className="fa-brands fa-instagram fa-2xl"></i>
 							</Link>
 							<Link href={"#"}>
-								<FontAwesomeIcon icon={faEnvelope} />
+								<i className="fa-solid fa-envelope fa-2xl"></i>
 							</Link>
 						</div>
 					</div>
