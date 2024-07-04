@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
 {
+	// Code Repository for locations -- All functions to be used in the Location Controller
 	public class LocationsRepository : ILocationsRepository
 	{
 		private readonly ApplicationDbContext _context;

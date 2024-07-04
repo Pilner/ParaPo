@@ -3,9 +3,12 @@ using backend.Dtos.Location;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace backend.Repository
 {
+	// Code Repository for Routes -- All functions to be used in the Routes Controller
 	public class RoutesRepository : IRoutesRepository
 	{
 		private readonly ApplicationDbContext _context;
@@ -38,7 +41,7 @@ namespace backend.Repository
 
 		public async Task<List<Routes>> GetAllAsync()
 		{
-			return await _context.Routes.Include(c => c.Locations).ToListAsync();
+			return await _context.Routes.Include(c => c.Locations).OrderBy(r => r.RouteName).ToListAsync();
 		}
 
 		public async Task<Routes?> GetByIdAsync(int id)
@@ -49,6 +52,20 @@ namespace backend.Repository
 		public Task<bool> RoutesExists(int id)
 		{
 			return _context.Routes.AnyAsync(r => r.Id == id);
+		}
+
+		public async Task<List<Routes>> SearchRoutesAndLocationsAsync(string keyword)
+		{
+			var routes = await _context.Routes
+				.Include(r => r.Locations)
+				.ToListAsync();
+
+			var filteredRoutes = routes
+								.Where(r => r.RouteName.Contains(keyword, StringComparison.Ordinal) ||
+								r.Locations.Any(l => l.locationName.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+								.ToList();
+
+			return filteredRoutes;
 		}
 
 		public async Task<Routes?> UpdateAsync(int id, UpdateRoutesRequestDto routesDto)
@@ -67,3 +84,4 @@ namespace backend.Repository
 		}
 	}
 }
+

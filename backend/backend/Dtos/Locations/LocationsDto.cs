@@ -4,6 +4,7 @@ namespace backend.Dtos.Locations
 {
 	public class LocationsDto
 	{
+		// DTO for breaking or sifting data to desirable ones 
 		public int Id { get; set; }
 		public string locationName { get; set; } = string.Empty;
 

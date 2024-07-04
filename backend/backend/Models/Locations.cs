@@ -6,7 +6,7 @@ namespace backend.Models
 	{
         // Stores the waypoints 
         // Id, Title = Landmark, Longitude, Latitude 
-
+		// Data Modelsxx
         public int Id { get; set; }
         public string locationName { get; set; } = string.Empty;
 
