@@ -20,6 +20,16 @@ export default function Button({ text, url }: ButtonProps) {
 	);
 }
 
+export function ScrollButton({ text, url }: ButtonProps) {
+	return (
+		<div className={styles.buttonDiv}>
+			<a href={url}>
+				<button className={styles.roundButton}>{text}</button>
+			</a>
+		</div>
+	);
+}
+
 export function AltButton({ text, url }: ButtonProps) {
 	return (
 		<div className={styles.ButtonDiv}>

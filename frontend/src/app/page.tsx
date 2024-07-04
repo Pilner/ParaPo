@@ -2,8 +2,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import Navbar from "@/_components/semantics/Navbar";
 import Footer from "@/_components/semantics/Footer";
-import Button from "@/_components/Button";
-import { BiBorderRadius } from "react-icons/bi";
+import Button, {ScrollButton} from "@/_components/Button";
 
 export default function Home() {
     return (
@@ -23,7 +22,7 @@ export default function Home() {
 							</p>
 							<div className={styles.heroButtonDiv}>
 								<Button text="Get Started" url="/map" />
-								<Button text="Learn More" url="https://www.facebook.com/jenchulichaengggg" />
+								<ScrollButton text="Learn More" url={`#${styles.aboutPage}`} />
 							</div>
 						</div>
 					</div>
