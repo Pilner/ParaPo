@@ -24,10 +24,10 @@ model Locations {
 }
 
 model Routes {
-    route_name_id Int    @id @default(autoincrement())
-    route_name    String
-    category      String
-    minFare       Float
+    route_id   Int    @id @default(autoincrement())
+    route_name String
+    category   String
+    minFare    Float
 
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
