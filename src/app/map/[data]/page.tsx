@@ -1,5 +1,5 @@
 "use client";
-const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '';
+const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? "";
 
 import { MapNavbar } from "@/_components/semantics/Navbar";
 import { MapboxSearchBox } from "@mapbox/search-js-web";
@@ -15,16 +15,15 @@ import Image from "next/image";
 let map: any;
 
 interface Route {
-	id: number;
-	routeName: string;
+	route_id: number;
+	route_name: string;
 	category: string;
 	minFare: number;
-	locations: {
-		id: number;
-		locationName: string;
-		latitude: string;
-		longitude: string;
-		routeId: number;
+	Locations: {
+		location_name: string;
+		location_id: number;
+		latitude: number;
+		longitude: number;
 	}[];
 }
 
@@ -52,14 +51,13 @@ export default function MapPage() {
 		// console.log(temp);
 		let originTemp = temp[0].split(",");
 		let destTemp = temp[1].split(",");
-		
+
 		setDataPoints({
 			origin: [parseFloat(originTemp[0]), parseFloat(originTemp[1])],
-			dest: [parseFloat(destTemp[0]), parseFloat(destTemp[1])]
+			dest: [parseFloat(destTemp[0]), parseFloat(destTemp[1])],
 		});
-		
 	}, []);
-	
+
 	useEffect(() => {
 		if (dataPoints.origin && dataPoints.dest) {
 			(async () => {
@@ -79,8 +77,8 @@ export default function MapPage() {
 				]);
 			})();
 		}
-	}, [dataPoints]);	
-	
+	}, [dataPoints]);
+
 	useEffect(() => {
 		// Initialize the map from Mapbox
 		map = new mapboxgl.Map({
@@ -88,19 +86,13 @@ export default function MapPage() {
 			accessToken: mapboxAccessToken,
 			style: "mapbox://styles/mapbox/streets-v12",
 			center: [121.056, 14.582],
-			maxBounds: [
-				120.7617187,
-                14.386892905,
-                121.053525416,
-                14.691678901
-			],
 			zoom: 12,
 		});
 
 		// search box with access token
 		const searchBox = new MapboxSearchBox();
 		if (mapboxAccessToken != "" || mapboxAccessToken != null) {
-			searchBox.accessToken = mapboxAccessToken;;
+			searchBox.accessToken = mapboxAccessToken;
 		} else {
 			console.error("Mapbox Access Token is not set");
 			alert("Mapbox Access Token is not set");
@@ -115,20 +107,20 @@ export default function MapPage() {
 			})
 				.setLngLat([dataPoints.origin[1], dataPoints.origin[0]])
 				.addTo(map);
-	
+
 			markerDest = new mapboxgl.Marker({
 				color: "#46a3ff",
 				draggable: false,
 			})
 				.setLngLat([dataPoints.dest[1], dataPoints.dest[0]])
 				.addTo(map);
-		}		
+		}
 	}, [dataPoints]);
 
 	useEffect(() => {
 		(async () => {
 			// Fetch routes from the Backend using API Endpoints
-			const res = await fetch(`https://localhost:7192/api/routes`);
+			const res = await fetch(`http://localhost:3000/api/get/route`);
 			const data = await res.json();
 
 			setRoutes(data);
@@ -142,7 +134,7 @@ export default function MapPage() {
 			});
 		}
 	}, [dataPoints, routes]);
-		
+
 	return (
 		<section id={styles.mapPage}>
 			<div className={styles.infoMenu}>
@@ -244,110 +236,112 @@ async function getRoutedWalkingLine(source: number[], destination: number[]) {
 }
 
 async function drawRoutedLine(routes: any) {
-	
-	if (routes && routes.locations) {
+	if (routes && routes.Locations) {
 		// Store only the locations of the route
-		let newRoutes = [...routes.locations];
+		let newRoutes = [...routes.Locations];
 
 		// For each location, draw a marker and a line to the next location
-			newRoutes.forEach(async (route: any, index: any) => {
-				// add markers to each location
-				let marker, coordinates;
-				coordinates = [route.longitude, route.latitude];
+		newRoutes.forEach(async (route: any, index: any) => {
+			// add markers to each location
+			let marker, coordinates;
+			coordinates = [route.longitude, route.latitude];
 
-				// Create a popup for each location
-				const popup = new mapboxgl.Popup({
-					offset: 25,
-					closeOnClick: true,
-				}).setText(`Location ${index + 1}: ${route.locationName}
+			// Create a popup for each location
+			const popup = new mapboxgl.Popup({
+				offset: 25,
+				closeOnClick: true,
+			}).setText(`Location ${index + 1}: ${route.location_name}
 				${route.latitude}, ${route.longitude}
 					
 					`);
 
-				// Add a marker to the map
-				marker = new mapboxgl.Marker({
-					color: "#FF9270",
-					draggable: false,
-				});
-				marker
-					.setLngLat([coordinates[0], coordinates[1]])
-					.addTo(map)
-					.setPopup(popup);
+			// Add a marker to the map
+			marker = new mapboxgl.Marker({
+				color: "#FF9270",
+				draggable: false,
+			});
+			marker
+				.setLngLat([coordinates[0], coordinates[1]])
+				.addTo(map)
+				.setPopup(popup);
 
-				// Per iteration, fetch the route data between two points
-				if (index < newRoutes.length - 1) {
-					const data = await getRoutedLine(
-						[route.longitude, route.latitude],
-						[newRoutes[index + 1].longitude, newRoutes[index + 1].latitude]
-					);
+			// Per iteration, fetch the route data between two points
+			if (index < newRoutes.length - 1) {
+				const data = await getRoutedLine(
+					[route.longitude, route.latitude],
+					[
+						newRoutes[index + 1].longitude,
+						newRoutes[index + 1].latitude,
+					]
+				);
 
+				if (data && data.routes) {
+					// Decode the polyline shapes from the Mapbox API
+					const routeGeometry = data.routes[0].geometry;
+					const routedCoords = decodePolyline(routeGeometry);
 
-					if (data && data.routes) {
-						// Decode the polyline shapes from the Mapbox API
-						const routeGeometry = data.routes[0].geometry;
-						const routedCoords = decodePolyline(routeGeometry);
-	
-						// Use unique names for each source and layer
-						const sourceId = `route-source-${index}`;
-						const layerId = `route-layer-${index}`;
-						// If the source and layer does not exist, add them to the map
-						if (!map.getSource(sourceId)) {
-							map.addSource(sourceId, {
-								type: "geojson",
-								data: {
-									type: "Feature",
-									geometry: {
-										type: "LineString",
-										// Routed Lines
-										coordinates: routedCoords,
-	
-										// Straight Lines
-										// coordinates: [ [route.longitude, route.latitude], [newRoutes[index + 1].longitude, newRoutes[index + 1].latitude] ],
-									},
+					// Use unique names for each source and layer
+					const sourceId = `route-source-${index}`;
+					const layerId = `route-layer-${index}`;
+					// If the source and layer does not exist, add them to the map
+					if (!map.getSource(sourceId)) {
+						map.addSource(sourceId, {
+							type: "geojson",
+							data: {
+								type: "Feature",
+								geometry: {
+									type: "LineString",
+									// Routed Lines
+									coordinates: routedCoords,
+
+									// Straight Lines
+									// coordinates: [ [route.longitude, route.latitude], [newRoutes[index + 1].longitude, newRoutes[index + 1].latitude] ],
 								},
-							});
-						}
-	
-						if (!map.getLayer(layerId)) {
-							map.addLayer({
-								id: layerId,
-								type: "line",
-								source: sourceId,
-								paint: {
-									"line-color": "#FF9270",
-									"line-width": 5,
-								},
-							});
-						}
+							},
+						});
+					}
+
+					if (!map.getLayer(layerId)) {
+						map.addLayer({
+							id: layerId,
+							type: "line",
+							source: sourceId,
+							paint: {
+								"line-color": "#FF9270",
+								"line-width": 5,
+							},
+						});
 					}
 				}
+			}
 
-				//  Return Condition
-				if (index === newRoutes.length - 1) {
-					return;
-				}
-			});
+			//  Return Condition
+			if (index === newRoutes.length - 1) {
+				return;
+			}
+		});
 	}
 }
 
-async function drawRoutedLineTwoPoints(point: number[], route: Route, index: number) {
-	if (route && route.locations) {
+async function drawRoutedLineTwoPoints(
+	point: number[],
+	route: Route,
+	index: number
+) {
+	if (route && route.Locations) {
 		let coordinates;
 		coordinates = [point[0], point[1]];
 
 		const data = await getRoutedWalkingLine(
 			[point[1], point[0]],
-			[
-				parseFloat(route.locations[index].longitude),
-				parseFloat(route.locations[index].latitude),
-			]
+			[route.Locations[index].longitude, route.Locations[index].latitude]
 		);
 
 		if (data && data.routes) {
 			// Decode the polyline shapes from the Mapbox API
 			const routeGeometry = data.routes[0].geometry;
 			const routedCoords = decodePolyline(routeGeometry);
-			
+
 			// Use unique names for each source and layer
 			const sourceId = `route-source-point-${index}`;
 			const layerId = `route-layer-point-${index}`;
@@ -374,7 +368,7 @@ async function drawRoutedLineTwoPoints(point: number[], route: Route, index: num
 					},
 				});
 			}
-			
+
 			if (!map.getLayer(layerId)) {
 				map.addLayer({
 					id: layerId,
@@ -396,22 +390,35 @@ async function findRoutes(dataPoints: dataPointsProps, routes: Route[]) {
 	const destLocation = dataPoints.dest;
 
 	const nearestRoute = getNearestRoute(routes, originLocation, destLocation);
-	
+
+	// console.log(nearestRoute);
+
 	await drawRoutedLine(nearestRoute.minRoute);
-	await drawRoutedLineTwoPoints(originLocation, nearestRoute.minRoute, nearestRoute.originIndex);
-	await drawRoutedLineTwoPoints(destLocation, nearestRoute.minRoute, nearestRoute.destIndex);
+	await drawRoutedLineTwoPoints(
+		originLocation,
+		nearestRoute.minRoute,
+		nearestRoute.originIndex
+	);
+	await drawRoutedLineTwoPoints(
+		destLocation,
+		nearestRoute.minRoute,
+		nearestRoute.destIndex
+	);
 }
 
 // recursive function to get the route with the nearest points from the origin and destination
-function getNearestRoute(routes: Route[], origin: number[], destination: number[]) {
+function getNearestRoute(
+	routes: Route[],
+	origin: number[],
+	destination: number[]
+) {
 	let minDistance = Infinity;
 	let minRoute = {} as Route;
 	let originIndex: number = 0;
 	let destIndex: number = 0;
 	let tempOriginIndex = 0;
 	let tempDestIndex = 0;
-	
-	
+
 	// get the nearest route between the origin and destination
 	// also find the nearest point of a route from the origin and destination
 	routes.forEach((route) => {
@@ -419,31 +426,17 @@ function getNearestRoute(routes: Route[], origin: number[], destination: number[
 		let minDestDistance = Infinity;
 		tempOriginIndex = 0;
 		tempDestIndex = 0;
-		route.locations.forEach((location, index) => {
+		route.Locations.forEach((location, index) => {
 			// get the distance between the origin and the location
 			const distanceOrigin = Math.sqrt(
-				Math.pow(
-					Math.abs(parseFloat(location.latitude) - origin[0]),
-					2
-				) +
-					Math.pow(
-						Math.abs(parseFloat(location.longitude) - origin[1]),
-						2
-					)
+				Math.pow(Math.abs(location.latitude - origin[0]), 2) +
+					Math.pow(Math.abs(location.longitude - origin[1]), 2)
 			);
 
 			// get the distance between the destination and the location
 			const distanceDest = Math.sqrt(
-				Math.pow(
-					Math.abs(parseFloat(location.latitude) - destination[0]),
-					2
-				) +
-					Math.pow(
-						Math.abs(
-							parseFloat(location.longitude) - destination[1]
-						),
-						2
-					)
+				Math.pow(Math.abs(location.latitude - destination[0]), 2) +
+					Math.pow(Math.abs(location.longitude - destination[1]), 2)
 			);
 
 			// get the nearest point of the route from the origin
@@ -459,12 +452,10 @@ function getNearestRoute(routes: Route[], origin: number[], destination: number[
 				tempDestIndex = index;
 				// destIndex = index;
 			}
-
 		});
-		
+
 		const totalDistance = minOriginDistance + minDestDistance;
 
-		
 		// get the route with the nearest points from the origin and destination
 		if (totalDistance < minDistance) {
 			minDistance = totalDistance;
@@ -472,7 +463,6 @@ function getNearestRoute(routes: Route[], origin: number[], destination: number[
 			originIndex = tempOriginIndex;
 			destIndex = tempDestIndex;
 		}
-
-	});	
+	});
 	return { minRoute, originIndex, destIndex };
 }

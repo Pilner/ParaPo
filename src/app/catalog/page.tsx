@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import styles from "./page.module.css";
@@ -9,27 +9,27 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface Route {
-	id: number;
-	routeName: string;
+	route_id: number;
+	route_name: string;
 	category: string;
 	minFare: number;
-	locations: {
-		id: number;
+	Locations: {
+		location_id: number;
 		latitude: number;
 		longitude: number;
-		routeId: number;
 	}[];
 }
 
 export default function Catalog() {
 	// Initialize the state of routes
 	const [routes, setRoutes] = useState([] as Route[]);
-	
+
 	useEffect(() => {
 		(async () => {
 			// Fetch routes from the Backend using API Endpoints
-			const res = await fetch(`https://localhost:7192/api/routes`);
+			const res = await fetch(`http://localhost:3000/api/get/route`);
 			const data = await res.json();
+			console.log(data);
 
 			setRoutes(data);
 		})();
@@ -40,25 +40,27 @@ export default function Catalog() {
 		const search = e.target.elements.routeSearch.value;
 
 		if (search === "") {
-			const res = await fetch(`https://localhost:7192/api/routes`);
+			const res = await fetch(`http://localhost:3000/api/get/route`);
 			const data = await res.json();
 
 			setRoutes(data);
 		} else {
-	
-			const res = await fetch(`https://localhost:7192/api/routes/search?keyword=${search}`);
+			const res = await fetch(
+				`http://localhost:3000/api/get/route/search/${search}`
+			);
 			const data = await res.json();
 
-			if (data == "No routes or locations found matching the keyword.") {
+			// If no routes are found, set the routes to an empty array
+			if (data.message) {
 				setRoutes([]);
-			} else {
-				setRoutes(data);	
+				return;
 			}
+
+			setRoutes(data);
 		}
 	}
-		
 
-    return (
+	return (
 		<>
 			<Navbar />
 			<section id={styles.catalogPage}>
@@ -106,7 +108,6 @@ export default function Catalog() {
 							name="routeSearch"
 							id="rSearch"
 							placeholder="Search Routes"
-							
 						/>
 					</form>
 					<div className={styles.catalogListItems}>
@@ -122,13 +123,13 @@ export default function Catalog() {
 								</tr>
 							</thead>
 							<tbody>
-								{(routes.length != 0) ? (
+								{routes.length != 0 ? (
 									routes.map((route) => {
 										return (
-											<tr key={route.id}>
+											<tr key={route.route_id}>
 												<td>
 													<Link
-														href={`/catalog/route/${route.id}`}
+														href={`/catalog/route/${route.route_id}`}
 													>
 														{route.category ==
 														"Jeep" ? (
@@ -176,14 +177,14 @@ export default function Catalog() {
 												</td>
 												<td>
 													<Link
-														href={`/catalog/route/${route.id}`}
+														href={`/catalog/route/${route.route_id}`}
 													>
-														{route.routeName}
+														{route.route_name}
 													</Link>
 												</td>
 												<td>
 													<Link
-														href={`/catalog/route/${route.id}`}
+														href={`/catalog/route/${route.route_id}`}
 													>
 														₱
 														{route.minFare.toFixed(
@@ -193,9 +194,9 @@ export default function Catalog() {
 												</td>
 												<td>
 													<Link
-														href={`/catalog/route/${route.id}`}
+														href={`/catalog/route/${route.route_id}`}
 													>
-														{route.locations.length}{" "}
+														{route.Locations.length}{" "}
 														Stations
 													</Link>
 												</td>
