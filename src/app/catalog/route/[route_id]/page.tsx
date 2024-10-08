@@ -13,7 +13,7 @@ interface Route {
 	route_id: number;
 	route_name: string;
 	category: string;
-	minFare: number;
+	min_fare: number;
 	Locations: {
 		location_name: string;
 		location_id: number;
@@ -30,7 +30,7 @@ export default function RoutePage() {
 		route_id: 0,
 		route_name: "",
 		category: "",
-		minFare: 0,
+		min_fare: 0,
 		Locations: [],
 	} as Route);
 
@@ -76,7 +76,7 @@ export default function RoutePage() {
 							<span>
 								<i className="fa-solid fa-tag fa-xl"></i>
 							</span>
-							₱{route.minFare.toFixed(2)}/4 km + ₱1.80/1 km
+							₱{route.min_fare.toFixed(2)}/4 km + ₱1.80/1 km
 						</p>
 						<div>
 							<Image

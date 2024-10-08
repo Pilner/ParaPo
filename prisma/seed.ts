@@ -7,7 +7,7 @@ const routes_seed = [
 		route_name:
 			"SSS Village, Marikina - Cubao, Quezon City - Stop & Shop, Manila",
 		category: "Jeep",
-		minFare: 15,
+		min_fare: 15,
 		locations: [
 			{
 				location_name: "Panorama Jeepney Terminal, SSS Village",
@@ -322,7 +322,7 @@ const routes_seed = [
 	{
 		route_name: "Montalban - Cubao via Aurora Blvd",
 		category: "Jeep",
-		minFare: 15,
+		min_fare: 15,
 		locations: [
 			{
 				location_name: "Luvers, San Rafael, Montalban",
@@ -562,7 +562,7 @@ const routes_seed = [
 	{
 		route_name: "Montalban Heights(Rizal) - Litex",
 		category: "Jeep",
-		minFare: 15,
+		min_fare: 15,
 		locations: [
 			{
 				location_name: "Montalban Heights",
@@ -635,7 +635,7 @@ const routes_seed = [
 	{
 		route_name: "Marikina - San Mateo (Banaba)",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "Freedom Park, Marikina City",
@@ -734,7 +734,7 @@ const routes_seed = [
 	{
 		route_name: "EDSA/Shaw Blvd-E.R Ort",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "Mayflower, Mandaluyong City",
@@ -842,7 +842,7 @@ const routes_seed = [
 	{
 		route_name: "Gate 5 - Greenhills Shopping Center Loop",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "Greenhills Shopping Center Terminal",
@@ -864,7 +864,7 @@ const routes_seed = [
 	{
 		route_name: "Sta. Lucia - Binangonan",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "Felix Ave., Cainta",
@@ -913,7 +913,7 @@ const routes_seed = [
 	{
 		route_name: "Edsa/Shaw Central-Pateros",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name:
@@ -1087,7 +1087,7 @@ const routes_seed = [
 	{
 		route_name: "Blumentritt-Retiro",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name:
@@ -1164,7 +1164,7 @@ const routes_seed = [
 	{
 		route_name: "Blumentritt-Balut",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name:
@@ -1211,7 +1211,7 @@ const routes_seed = [
 	{
 		route_name: "Cabrera - Libertad",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name:
@@ -1264,7 +1264,7 @@ const routes_seed = [
 	{
 		route_name: "Balintawak - PUC via Baesa",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "Balintawak Terminal",
@@ -1368,7 +1368,7 @@ const routes_seed = [
 	{
 		route_name: "SM North EDSA-Luzon Ave (Puregold)",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "SM Hypermarket, North Avenue, Quezon City",
@@ -1411,7 +1411,7 @@ const routes_seed = [
 	{
 		route_name: "Pantranco-Proj. 2 & 3 via Kamuning",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "Hyundai, Quezon Avenue, Quezon City",
@@ -1574,7 +1574,7 @@ const routes_seed = [
 	{
 		route_name: "Buendia-MOA",
 		category: "Jeep",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name:
@@ -1617,7 +1617,7 @@ const routes_seed = [
 	{
 		route_name: "Light Rail Transit 2 (LRT2)",
 		category: "Train",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "Antipolo Station",
@@ -1689,7 +1689,7 @@ const routes_seed = [
 	{
 		route_name: "Light Rail Transit 1 (LRT1)",
 		category: "Train",
-		minFare: 13,
+		min_fare: 13,
 		locations: [
 			{
 				location_name: "Baclaran Station",
@@ -1804,7 +1804,7 @@ const seed = async () => {
 			data: {
 				route_name: route.route_name,
 				category: route.category,
-				minFare: route.minFare,
+				min_fare: route.min_fare,
 				Locations: {
 					create: route.locations,
 				},

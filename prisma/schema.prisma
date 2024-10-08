@@ -27,7 +27,7 @@ model Routes {
     route_id   Int    @id @default(autoincrement())
     route_name String
     category   String
-    minFare    Float
+    min_fare   Float
 
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt

@@ -12,7 +12,7 @@ interface Route {
 	route_id: number;
 	route_name: string;
 	category: string;
-	minFare: number;
+	min_fare: number;
 	Locations: {
 		location_id: number;
 		latitude: number;
@@ -187,7 +187,7 @@ export default function Catalog() {
 														href={`/catalog/route/${route.route_id}`}
 													>
 														₱
-														{route.minFare.toFixed(
+														{route.min_fare.toFixed(
 															2
 														)}
 													</Link>

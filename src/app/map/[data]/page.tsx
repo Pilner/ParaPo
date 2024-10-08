@@ -18,7 +18,7 @@ interface Route {
 	route_id: number;
 	route_name: string;
 	category: string;
-	minFare: number;
+	min_fare: number;
 	Locations: {
 		location_name: string;
 		location_id: number;
