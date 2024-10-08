@@ -1,61 +1,82 @@
 # ParaPo
 
-A web-based navigation application designed for Filipino commuters. A transit routing map software made using C# as the Backend and NextJS as the Frontend.
+A web-based navigation application designed for Filipino commuters. A transit routing map software made using NextJS - Prisma - SQLite3.
 
 ## How to use
 
-*Note: Make sure you have [Node.js](https://nodejs.org/en/) installed. To check, run `node -v` in your terminal*
-
-*Note: Make sure you have [Visual Studio](https://visualstudio.microsoft.com/) with Microsoft SQL Server installed. To check, run `dotnet -v` in your terminal*
+_Note: Make sure you have [Node.js](https://nodejs.org/en/) installed. To check, run `node -v` in your terminal_
 
 1. First clone this git repository to your local device
+
 ```
 git clone https://github.com/Pilner/ParaPo
-cd ParaPo/frontend
+cd ParaPo
 ```
+
 2. Download all the dependencies and packages needed in this repository
+
 ```
 npm install
 ```
-3. Run the Frontend Process
+
+3. Create and supply `.env` file with environment variables
+
+```env
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=<replace_with_mapbox_api_token>
+DATABASE_URL=<replace_with_database_url>
 ```
+
+4. Migrate the Database using Prisma
+
+```bash
+npx prisma migrate dev
+```
+
+5. Seed the Database with pre-defined data
+
+```bash
+npm run prisma-seed
+```
+
+6. Run the process
+
+```bash
 npm run dev
 ```
-4. Open a new instance of Visual Studio and open the Solution(.sln) file in `ParaPo/backend`
-5. Run the Backend Process using the `https` run button.
-6. View the website on browser at
+
+7. View the website on browser at
+
 ```
-localhost:3000
+http://localhost:3000
 ```
 
 ## Routes
 
-* `/` is the Home Page
-* `/catalog` is the Catalog Page
-* `/catalog/route/[id]` is the Catalog Route Map Page
+-   `/` - is the Home Page
+-   `/catalog` - is the Catalog Page
+-   `/catalog/route/[id]` - is the Catalog Route Map Page
+-   `/map` - is the Route Map Page
 
 ## API Routes
 
-* `/api/routes` gets all routes
-* `/api/routes/[id]` gets the route for the route_id specified
-* `/api/locations` gets all locations
-* `/api/locations[id]` gets the location for the location_id specified
+-   `/api/get/route` - gets all routes
+-   `/api/get/route/[route_id]` - gets the route for the route_id specified
+-   `/api/get/route/search/[keyword]` - gets all the routes containing the keyword
 
 ## Collaborators
-- Abesamis, Gabriel
-- Cerna, Raymond Miguel
-- Domingo, Ivan Yhuri G.
-- Enrico, Carl Andrei E.
-- Mesina, Venice Fae R.
-- Pabroquez, Jethro S.
-- Victuelles, Fabian Railey A.
 
-
+-   Cerna, Raymond Miguel
+-   Enrico, Carl Andrei E.
+-   Mabaet, Dave
+-   Mesina, Venice Fae R.
+-   Pabroquez, Jethro S.
+-   Victuelles, Fabian Railey A.
 
 ## Licenses
+
 MIT License
 
-Copyright (c) 2024 Abesamis, Cerna, Domingo, Enrico, Mesina, Pabroquez, Victuelles
+Copyright (c) 2024 Cerna, Enrico, Mabaet, Mesina, Pabroquez, Victuelles
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
