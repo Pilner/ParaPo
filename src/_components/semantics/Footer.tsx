@@ -12,7 +12,11 @@ export default function Footer() {
 				<div id={styles.footerLeft}>
 					<div>
 						<div>
-							<h1 className={`sectionTitleFont ${styles.mobileSectionTitleFont}`}>Contact Us</h1>
+							<h1
+								className={`sectionTitleFont ${styles.mobileSectionTitleFont}`}
+							>
+								Contact Us
+							</h1>
 						</div>
 						<div>
 							<Link href={"#"}>
@@ -34,12 +38,12 @@ export default function Footer() {
 					<div>
 						<ul>
 							<li>
-								<Link href={"#"} aria-theme="dark">
+								<Link href={"#"} aria-details={"dark"}>
 									Privacy Policy
 								</Link>
 							</li>
 							<li>
-								<Link href={"#"} aria-theme="dark">
+								<Link href={"#"} aria-details={"dark"}>
 									Terms & Conditions
 								</Link>
 							</li>

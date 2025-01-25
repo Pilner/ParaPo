@@ -47,7 +47,7 @@ ul li > a:hover {
 	transition: 500ms;
 }
 
-ul li > a[aria-theme='dark']:hover  {
+ul li > a[aria-details='dark']:hover  {
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	transition: 500ms;
 }

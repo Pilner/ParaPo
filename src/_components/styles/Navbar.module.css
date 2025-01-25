@@ -17,11 +17,6 @@ nav#mapNavbar>div {
 	align-items: center;
 }
 
-.navLogoSide {
-	/* flex: 1; */
-	/* border: 1px solid red; */
-}
-
 .navLogoSide .navLogoImg {
 	aspect-ratio: 1/1;
 	height: 100%;
@@ -42,11 +37,6 @@ nav#mapNavbar>div {
 	font-family: var(--main-font);
 	font-weight: 700;
 	font-size: 32px;
-}
-
-.navLinkSide {
-	/* border: 1px solid blue; */
-
 }
 
 .navLinkSide ul {
@@ -95,7 +85,7 @@ nav#mapNavbar {
 		height: 100%;
 		display: flex;
 		align-items: center;
-		justify-content: end;
+		justify-content: flex-end;
 	}
 
 	.navMenuBars{
