@@ -2,13 +2,7 @@
 import { mapboxAccessToken } from "@/_data/data";
 import RouteProps from "@/_types/Route";
 import dataPointsProps from "@/_types/DataPoints";
-import {
-	findNearestRoute,
-	drawRoute,
-	drawTwoPoints,
-	recursiveDrawRoute,
-	fetchLocationName,
-} from "@/app/_utils/map";
+import { recursiveDrawRoute, fetchLocationName } from "@/app/_utils/map";
 
 import { MapNavbar } from "@/_components/semantics/Navbar";
 import { MapboxSearchBox } from "@mapbox/search-js-web";
@@ -17,8 +11,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import styles from "./page.module.css";
 
-import { useRouter, useParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 let map: any;
@@ -93,7 +87,11 @@ export default function MapPage() {
 			container: "map",
 			accessToken: mapboxAccessToken,
 			style: "mapbox://styles/mapbox/streets-v12",
-			center: [121.056, 14.5547],
+			center: [
+				(parseFloat(origin[1]) + parseFloat(dest[1])) / 2,
+				(parseFloat(origin[0]) + parseFloat(dest[0])) / 2,
+			],
+			// maxBounds: [120.7617187, 14.386892905, 121.053525416, 14.691678901],
 			zoom: 12,
 		});
 		if (map) {
@@ -246,27 +244,6 @@ export default function MapPage() {
 										</li>
 									))}
 								</ul>
-
-								{/* <Image
-										className="fa-xl"
-										src={
-											routeMethod == "Train"
-												? "/images/train-icon.svg"
-												: routeMethod == "Jeep"
-												? "/images/jeep-icon.svg"
-												: "/images/bus-icon.svg"
-										}
-										alt={`${routeMethod} Icon`}
-										width={0}
-										height={0}
-										style={{
-											width: "auto",
-											height: "2rem",
-										}}
-									/>
-									<p className="bodyTextFont">
-										{routeMethod}
-									</p> */}
 							</div>
 						</div>
 					</div>
