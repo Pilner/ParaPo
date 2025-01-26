@@ -1,5 +1,6 @@
 "use client";
-const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '';
+
+import { mapboxAccessToken } from "@/_data/data";
 
 import { MapNavbar } from "@/_components/semantics/Navbar";
 import { ButtonSubmit } from "@/_components/Button";
@@ -28,7 +29,6 @@ export default function MapPage() {
 
 	const router = useRouter();
 
-
 	useEffect(() => {
 		// Initialize the map from Mapbox
 		map = new mapboxgl.Map({
@@ -36,25 +36,19 @@ export default function MapPage() {
 			accessToken: mapboxAccessToken,
 			style: "mapbox://styles/mapbox/streets-v12",
 			center: [121.056, 14.582],
-			maxBounds: [
-				120.7617187,
-                14.386892905,
-                121.053525416,
-                14.691678901
-			],			
+			maxBounds: [120.7617187, 14.386892905, 121.053525416, 14.691678901],
 			zoom: 12,
 		});
 
 		// search box with access token
 		const searchBox = new MapboxSearchBox();
 		if (mapboxAccessToken != "" || mapboxAccessToken != null) {
-			searchBox.accessToken = mapboxAccessToken;;
+			searchBox.accessToken = mapboxAccessToken;
 		} else {
 			console.error("Mapbox Access Token is not set");
 			alert("Mapbox Access Token is not set");
 		}
 		map.addControl(searchBox);
-		
 
 		// click makes a marker and drag end moves the location
 		map.on("click", (e: any) => {
@@ -101,10 +95,9 @@ export default function MapPage() {
 				});
 			}
 		});
-
 	}, []);
-	
-	let getDataFromChild = (data: string) => {	
+
+	let getDataFromChild = (data: string) => {
 		setMode(data);
 	};
 
@@ -115,7 +108,10 @@ export default function MapPage() {
 	// submit form
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		const data = {origin: [...originLocation.split(", ")], dest: [...destLocation.split(", ")]};
+		const data = {
+			origin: [...originLocation.split(", ")],
+			dest: [...destLocation.split(", ")],
+		};
 
 		if (originLocation == "" || destLocation == "") {
 			alert("Please input both locations");
@@ -123,11 +119,12 @@ export default function MapPage() {
 		}
 
 		// convert data into url format
-		const urlData = encodeURIComponent(`${data.origin.join(",")} ${data.dest.join(",")}`);
+		const urlData = encodeURIComponent(
+			`${data.origin.join(",")} ${data.dest.join(",")}`
+		);
 
 		// go to another page with the route in the url
 		router.push(`/map/${urlData}`);
-
 	};
 
 	return (
@@ -153,12 +150,14 @@ export default function MapPage() {
 												id="originLocation"
 												readOnly={true}
 												value={originLocation}
-                        required={true}
+												required={true}
 											/>
 											<Marker
 												point="origin"
-                        color="#f53636"
-												getDataFromChild={getDataFromChild}
+												color="#f53636"
+												getDataFromChild={
+													getDataFromChild
+												}
 											/>
 										</div>
 									</div>
@@ -179,12 +178,14 @@ export default function MapPage() {
 												id="destLocation"
 												readOnly={true}
 												value={destLocation}
-                        required={true}
+												required={true}
 											/>
 											<Marker
 												point="destination"
-                        color="#46a3ff"
-												getDataFromChild={getDataFromChild}
+												color="#46a3ff"
+												getDataFromChild={
+													getDataFromChild
+												}
 											/>
 										</div>
 									</div>
@@ -229,126 +230,4 @@ export default function MapPage() {
 			<div id="map" className={styles.mapPart}></div>
 		</section>
 	);
-}
-
-// Decode the polyline shapes from the Mapbox API
-function decodePolyline(encoded: string) {
-	const coordinates = [];
-	let index = 0,
-		len = encoded.length;
-	let lat = 0,
-		lng = 0;
-
-	while (index < len) {
-		let b,
-			shift = 0,
-			result = 0;
-		do {
-			b = encoded.charAt(index++).charCodeAt(0) - 63; //finds ascii and subtract it by 63
-			result |= (b & 0x1f) << shift;
-			shift += 5;
-		} while (b >= 0x20);
-
-		const dlat = (result & 1) !== 0 ? ~(result >> 1) : result >> 1;
-		lat += dlat;
-
-		shift = 0;
-		result = 0;
-		do {
-			b = encoded.charAt(index++).charCodeAt(0) - 63;
-			result |= (b & 0x1f) << shift;
-			shift += 5;
-		} while (b >= 0x20);
-
-		const dlng = (result & 1) !== 0 ? ~(result >> 1) : result >> 1;
-		lng += dlng;
-
-		coordinates.push([lng * 1e-5, lat * 1e-5]);
-	}
-
-	return coordinates;
-}
-
-// Fetch the route data between two points
-async function getRoutedLine(source: number[], destination: number[]) {
-	const lineUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${source.join(
-		","
-	)};${destination.join(",")}?access_token=${mapboxAccessToken}`;
-	const response = await fetch(lineUrl);
-	const data = await response.json();
-	return data;
-}
-
-async function drawRoutedLine(routes: any) {
-	// Store only the locations of the route
-	let newRoutes = [...routes.locations];
-
-	// For each location, draw a marker and a line to the next location
-	newRoutes.forEach(async (route: any, index: any) => {
-		//  Return Condition
-		if (index === newRoutes.length - 1) {
-			return;
-		}
-
-		// add markers to each location
-		let marker, coordinates;
-		coordinates = [route.longitude, route.latitude];
-
-		// Create a popup for each location
-		const popup = new mapboxgl.Popup({
-			offset: 25,
-			closeOnClick: true,
-		}).setText(`Location ${index + 1}: ${route.locationName}`);
-
-		// Add a marker to the map
-		marker = new mapboxgl.Marker({ color: "red", draggable: false });
-		marker
-			.setLngLat([coordinates[0], coordinates[1]])
-			.addTo(map)
-			.setPopup(popup);
-
-		// Per iteration, fetch the route data between two points
-		const data = await getRoutedLine(
-			[route.longitude, route.latitude],
-			[newRoutes[index + 1].longitude, newRoutes[index + 1].latitude]
-		);
-
-		// Decode the polyline shapes from the Mapbox API
-		const routeGeometry = data.routes[0].geometry;
-		const routedCoords = decodePolyline(routeGeometry);
-
-		// Use unique names for each source and layer
-		const sourceId = `route-source-${index}`;
-		const layerId = `route-layer-${index}`;
-
-		// If the source and layer does not exist, add them to the map
-		if (!map.getSource(sourceId)) {
-			map.addSource(sourceId, {
-				type: "geojson",
-				data: {
-					type: "Feature",
-					geometry: {
-						type: "LineString",
-						// Routed Lines
-						coordinates: routedCoords,
-
-						// Straight Lines
-						// coordinates: [ [route.longitude, route.latitude], [newRoutes[index + 1].longitude, newRoutes[index + 1].latitude] ],
-					},
-				},
-			});
-		}
-
-		if (!map.getLayer(layerId)) {
-			map.addLayer({
-				id: layerId,
-				type: "line",
-				source: sourceId,
-				paint: {
-					"line-color": "red",
-					"line-width": 5,
-				},
-			});
-		}
-	});
 }

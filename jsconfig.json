@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"jsx": "react",
+		"module": "ES6",
+		"target": "ES6",
+		"moduleResolution": "Bundler",
+		"baseUrl": ".",
+		"paths": {
+			"@src/*": ["src/*"]
+		}
+	},
+	"exclude": ["node_modules"]
+}
