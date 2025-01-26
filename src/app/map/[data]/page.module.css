@@ -89,6 +89,32 @@
 	padding-right: 1rem;
 }
 
+.routeInfo {
+	display: flex;
+	flex-direction: column;
+}
+
+.routeInfo > div {
+	display: flex;
+	flex-direction: column;
+}
+
+.routeList {
+	display: flex;
+	flex-direction: column;
+}
+
+.routeCard {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.routeCard > li {
+	display: flex;
+	justify-content: space-between;
+}
+
 
 #mapPage .mapPart {
 	height: 100%;
