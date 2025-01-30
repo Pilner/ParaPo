@@ -51,7 +51,9 @@ export default function Navbar() {
 				</div>
 				<div className={styles.navMenu}>
 					<div className={styles.navMenuImg}>
-						<i className={`fa-solid fa-bars fa-2xl ${styles.navMenuBars}`}></i>
+						<i
+							className={`fa-solid fa-bars fa-2xl ${styles.navMenuBars}`}
+						></i>
 					</div>
 				</div>
 			</div>
@@ -93,13 +95,20 @@ export function MapNavbar() {
 									Catalog
 								</Link>
 							</li>
+							<li>
+								<Link href="/map" scroll={false}>
+									Map
+								</Link>
+							</li>
 						</ul>
 					</div>
 				</div>
 
 				<div className={styles.navMenu}>
 					<div className={styles.navMenuImg}>
-						<i className={`fa-solid fa-bars fa-2xl ${styles.navMenuBars}`}></i>
+						<i
+							className={`fa-solid fa-bars fa-2xl ${styles.navMenuBars}`}
+						></i>
 					</div>
 				</div>
 			</div>
