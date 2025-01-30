@@ -2,12 +2,15 @@
 const mapboxAccessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 import { MapNavbar } from "@/_components/semantics/Navbar";
+import { MapboxSearchBox } from "@mapbox/search-js-web";
 import Image from "next/image";
 import styles from "./page.module.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from "mapbox-gl";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
+import { drawRoute } from "@/app/_utils/map";
 
 interface Route {
 	route_id: number;
@@ -38,6 +41,14 @@ export default function RoutePage() {
 	const { route_id } = useParams();
 
 	useEffect(() => {
+		map = new mapboxgl.Map({
+			container: "map",
+			accessToken: mapboxAccessToken,
+			style: "mapbox://styles/mapbox/streets-v12",
+			center: [121.0, 14.603],
+			zoom: 12,
+		});
+
 		// Fetch route from the Backend using API Endpoints
 		(async () => {
 			const res = await fetch(
@@ -48,22 +59,58 @@ export default function RoutePage() {
 
 			setRoute(data);
 		})();
+
+		if (map) {
+			const searchBox = new MapboxSearchBox();
+
+			if (mapboxAccessToken) {
+				searchBox.accessToken = mapboxAccessToken;
+			} else {
+				console.error("Mapbox Access Token is not set");
+				alert("Mapbox Access Token is not set");
+			}
+
+			const geolocateControl = new mapboxgl.GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true,
+				},
+				trackUserLocation: true,
+				showUserHeading: true,
+			});
+			map.addControl(geolocateControl, "bottom-right");
+			// @ts-ignore // This is a hack to prevent the camera from moving when the geolocate button is clicked
+			geolocateControl._updateCamera = () => {};
+
+			map.on("load", () => {
+				if (geolocateControl) {
+					geolocateControl.trigger();
+				}
+			});
+		}
+
+		return () => map.remove();
 	}, []);
 
 	useEffect(() => {
-		// Initialize the map from Mapbox
-		map = new mapboxgl.Map({
-			container: "map",
-			accessToken: mapboxAccessToken,
-			style: "mapbox://styles/mapbox/streets-v12",
-			center: [121.056, 14.582],
-			zoom: 12,
-		});
-		// On map load, draw the routes on the map using the Backend Data
-		map.on("load", () => {
-			drawRoutedLine(route);
-		});
-	}, [map]);
+		if (route && route.Locations && route.Locations.length > 0) {
+			// Initialize the map from Mapbox
+			// On map load, draw the routes on the map using the Backend Data
+			map.on("load", () => {
+				drawRoute("walking", "routed", route, map);
+			});
+
+			map.flyTo({
+				center: [
+					(route.Locations[0].longitude +
+						route.Locations[route.Locations.length - 1].longitude) /
+						2,
+					(route.Locations[0].latitude +
+						route.Locations[route.Locations.length - 1].latitude) /
+						2,
+				],
+			});
+		}
+	}, [map, route]);
 
 	return (
 		<section id={styles.routePage}>
@@ -72,16 +119,16 @@ export default function RoutePage() {
 				<div className={styles.infoPart}>
 					<div>
 						<h1 className="bodyTitleFont">{route.route_name}</h1>
-						<p className="bodyTextFont">
-							<span>
-								<i className="fa-solid fa-tag fa-xl"></i>
-							</span>
-							₱{route.min_fare.toFixed(2)}/4 km + ₱1.80/1 km
-						</p>
 						<div>
 							<Image
 								className="fa-xl"
-								src="/images/jeepney-icon.svg"
+								src={
+									route.category == "Train"
+										? "/images/train-icon.svg"
+										: route.category == "Jeep"
+										? "/images/jeepney-icon.svg"
+										: "/images/bus-icon.svg"
+								}
 								alt="Jeep Icon"
 								width={0}
 								height={0}
@@ -92,146 +139,23 @@ export default function RoutePage() {
 							/>
 							<p className="bodyTextFont">{route.category}</p>
 						</div>
+
+						<h1 className="bodyTitleFont">Route List</h1>
+						<ul className={styles.routeCard}>
+							{route.Locations.map((location, index) => (
+								<li key={index}>
+									<p className="bodyTextFont">
+										{`${index + 1}. ${
+											location.location_name
+										}`}
+									</p>
+								</li>
+							))}
+						</ul>
 					</div>
 				</div>
 			</div>
 			<div id="map" className={styles.mapPart}></div>
 		</section>
 	);
-}
-
-// Decode the polyline shapes from the Mapbox API
-function decodePolyline(encoded: string) {
-	const coordinates = [];
-	let index = 0,
-		len = encoded.length;
-	let lat = 0,
-		lng = 0;
-
-	while (index < len) {
-		let b,
-			shift = 0,
-			result = 0;
-		do {
-			b = encoded.charAt(index++).charCodeAt(0) - 63; //finds ascii and subtract it by 63
-			result |= (b & 0x1f) << shift;
-			shift += 5;
-		} while (b >= 0x20);
-
-		const dlat = (result & 1) !== 0 ? ~(result >> 1) : result >> 1;
-		lat += dlat;
-
-		shift = 0;
-		result = 0;
-		do {
-			b = encoded.charAt(index++).charCodeAt(0) - 63;
-			result |= (b & 0x1f) << shift;
-			shift += 5;
-		} while (b >= 0x20);
-
-		const dlng = (result & 1) !== 0 ? ~(result >> 1) : result >> 1;
-		lng += dlng;
-
-		coordinates.push([lng * 1e-5, lat * 1e-5]);
-	}
-
-	return coordinates;
-}
-
-// Fetch the route data between two points
-async function getRoutedLine(source: number[], destination: number[]) {
-	const lineUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${source.join(
-		","
-	)};${destination.join(",")}?access_token=${mapboxAccessToken}`;
-	const response = await fetch(lineUrl, { cache: "force-cache" });
-	const data = await response.json();
-	return data;
-}
-
-async function drawRoutedLine(routes: any) {
-	// Store only the locations of the route
-	let newRoutes = [...routes.Locations];
-
-	// For each location, draw a marker and a line to the next location
-	newRoutes.forEach(async (route: any, index: any) => {
-		// add markers to each location
-		let marker, coordinates;
-		coordinates = [route.longitude, route.latitude];
-
-		// Create a popup for each location
-		const popup = new mapboxgl.Popup({
-			offset: 25,
-			closeOnClick: true,
-		}).setText(`Location ${index + 1}: ${route.location_name}`);
-
-		// Add a marker to the map
-		if (index === 0 || index === newRoutes.length - 1) {
-			marker = new mapboxgl.Marker({
-				color: "#f53636",
-				draggable: false,
-			});
-			marker
-				.setLngLat([coordinates[0], coordinates[1]])
-				.addTo(map)
-				.setPopup(popup);
-		} else {
-			marker = new mapboxgl.Marker({
-				color: "#FF9270",
-				draggable: false,
-			});
-			marker
-				.setLngLat([coordinates[0], coordinates[1]])
-				.addTo(map)
-				.setPopup(popup);
-		}
-
-		//  Return Condition
-		if (index === newRoutes.length - 1) {
-			return;
-		}
-
-		// Per iteration, fetch the route data between two points
-		const data = await getRoutedLine(
-			[route.longitude, route.latitude],
-			[newRoutes[index + 1].longitude, newRoutes[index + 1].latitude]
-		);
-
-		// Decode the polyline shapes from the Mapbox API
-		const routeGeometry = data.routes[0].geometry;
-		const routedCoords = decodePolyline(routeGeometry);
-
-		// Use unique names for each source and layer
-		const sourceId = `route-source-${index}`;
-		const layerId = `route-layer-${index}`;
-
-		// If the source and layer does not exist, add them to the map
-		if (!map.getSource(sourceId)) {
-			map.addSource(sourceId, {
-				type: "geojson",
-				data: {
-					type: "Feature",
-					geometry: {
-						type: "LineString",
-						// Routed Lines
-						coordinates: routedCoords,
-
-						// Straight Lines
-						// coordinates: [ [route.longitude, route.latitude], [newRoutes[index + 1].longitude, newRoutes[index + 1].latitude] ],
-					},
-				},
-			});
-		}
-
-		if (!map.getLayer(layerId)) {
-			map.addLayer({
-				id: layerId,
-				type: "line",
-				source: sourceId,
-				paint: {
-					"line-color": "red",
-					"line-width": 5,
-				},
-			});
-		}
-	});
 }

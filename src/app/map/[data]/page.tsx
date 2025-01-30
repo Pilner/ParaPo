@@ -96,8 +96,33 @@ export default function MapPage() {
 		});
 		if (map) {
 			const searchBox = new MapboxSearchBox();
-			map.addControl(searchBox);
+
+			if (mapboxAccessToken != "" || mapboxAccessToken != null) {
+				searchBox.accessToken = mapboxAccessToken;
+			} else {
+				console.error("Mapbox Access Token is not set");
+				alert("Mapbox Access Token is not set");
+			}
+
+			const geolocateControl = new mapboxgl.GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true,
+				},
+				trackUserLocation: true,
+				showUserHeading: true,
+			});
+			map.addControl(geolocateControl, "bottom-right");
+			// @ts-ignore // This is a hack to prevent the camera from moving when the geolocate button is clicked
+			geolocateControl._updateCamera = () => {};
+
+			map.on("load", () => {
+				if (geolocateControl) {
+					geolocateControl.trigger();
+				}
+			});
 		}
+
+		return () => map.remove();
 	}, []);
 
 	useEffect(() => {

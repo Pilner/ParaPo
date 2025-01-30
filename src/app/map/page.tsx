@@ -35,66 +35,86 @@ export default function MapPage() {
 			container: "map",
 			accessToken: mapboxAccessToken,
 			style: "mapbox://styles/mapbox/streets-v12",
-			center: [121.056, 14.582],
-			maxBounds: [120.7617187, 14.386892905, 121.053525416, 14.691678901],
+			center: [121.0, 14.603],
+			// maxBounds: [120.8617187, 14.488892905, 121.043525416, 14.631678901],
 			zoom: 12,
 		});
 
-		// search box with access token
-		const searchBox = new MapboxSearchBox();
-		if (mapboxAccessToken != "" || mapboxAccessToken != null) {
-			searchBox.accessToken = mapboxAccessToken;
-		} else {
-			console.error("Mapbox Access Token is not set");
-			alert("Mapbox Access Token is not set");
-		}
-		map.addControl(searchBox);
-
-		// click makes a marker and drag end moves the location
-		map.on("click", (e: any) => {
-			const lng = e.lngLat.lng;
-			const lat = e.lngLat.lat;
-
-			if (modeRef.current === "origin") {
-				if (markerOrigin) {
-					console.log(markerOrigin);
-					markerOrigin.remove();
-				}
-				markerOrigin = new mapboxgl.Marker({
-					color: "#f53636",
-					draggable: true,
-				})
-					.setLngLat([lng, lat])
-					.addTo(map);
-
-				setOriginLocation(`${lat}, ${lng}`);
-
-				markerOrigin.on("dragend", (e: any) => {
-					setOriginLocation(
-						`${e.target._lngLat.lat}, ${e.target._lngLat.lng}`
-					);
-				});
-			} else if (modeRef.current === "destination") {
-				if (markerDest) {
-					console.log(markerDest);
-					markerDest.remove();
-				}
-				markerDest = new mapboxgl.Marker({
-					color: "#46a3ff",
-					draggable: true,
-				})
-					.setLngLat([lng, lat])
-					.addTo(map);
-
-				setDestLocation(`${lat}, ${lng}`);
-
-				markerDest.on("dragend", (e: any) => {
-					setDestLocation(
-						`${e.target._lngLat.lat}, ${e.target._lngLat.lng}`
-					);
-				});
+		if (map) {
+			// search box with access token
+			const searchBox = new MapboxSearchBox();
+			if (mapboxAccessToken != "" || mapboxAccessToken != null) {
+				searchBox.accessToken = mapboxAccessToken;
+			} else {
+				console.error("Mapbox Access Token is not set");
+				alert("Mapbox Access Token is not set");
 			}
-		});
+			map.addControl(searchBox);
+
+			const geolocateControl = new mapboxgl.GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true,
+				},
+				trackUserLocation: true,
+				showUserHeading: true,
+			});
+
+			map.addControl(geolocateControl, "bottom-right");
+
+			// click makes a marker and drag end moves the location
+			map.on("click", (e: any) => {
+				const lng = e.lngLat.lng;
+				const lat = e.lngLat.lat;
+
+				if (modeRef.current === "origin") {
+					if (markerOrigin) {
+						console.log(markerOrigin);
+						markerOrigin.remove();
+					}
+					markerOrigin = new mapboxgl.Marker({
+						color: "#f53636",
+						draggable: true,
+					})
+						.setLngLat([lng, lat])
+						.addTo(map);
+
+					setOriginLocation(`${lat}, ${lng}`);
+
+					markerOrigin.on("dragend", (e: any) => {
+						setOriginLocation(
+							`${e.target._lngLat.lat}, ${e.target._lngLat.lng}`
+						);
+					});
+				} else if (modeRef.current === "destination") {
+					if (markerDest) {
+						console.log(markerDest);
+						markerDest.remove();
+					}
+					markerDest = new mapboxgl.Marker({
+						color: "#46a3ff",
+						draggable: true,
+					})
+						.setLngLat([lng, lat])
+						.addTo(map);
+
+					setDestLocation(`${lat}, ${lng}`);
+
+					markerDest.on("dragend", (e: any) => {
+						setDestLocation(
+							`${e.target._lngLat.lat}, ${e.target._lngLat.lng}`
+						);
+					});
+				}
+			});
+
+			map.on("load", () => {
+				if (geolocateControl) {
+					geolocateControl.trigger();
+				}
+			});
+
+			return () => map.remove();
+		}
 	}, []);
 
 	let getDataFromChild = (data: string) => {
