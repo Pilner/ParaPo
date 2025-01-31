@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Providers } from '@/app/providers';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -6,7 +7,7 @@ export const metadata: Metadata = {
 	description: 'A Navigation App Tailored for Public Utility Vehicles and Commuters.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
@@ -22,7 +23,9 @@ export default function RootLayout({
 					rel="stylesheet"
 				/>
 			</head>
-			<body>{children}</body>
+			<body>
+				<Providers>{children}</Providers>
+			</body>
 		</html>
 	);
 }
