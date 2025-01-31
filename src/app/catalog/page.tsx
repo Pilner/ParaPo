@@ -1,24 +1,14 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import styles from "./page.module.css";
-import Navbar from "@/_components/semantics/Navbar";
-import Footer from "@/_components/semantics/Footer";
-import Link from "next/link";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { useEffect, useState } from "react";
+import Route from '@/_types/Route';
 
-interface Route {
-	route_id: number;
-	route_name: string;
-	category: string;
-	min_fare: number;
-	Locations: {
-		location_id: number;
-		latitude: number;
-		longitude: number;
-	}[];
-}
+import Navbar from '@/_components/semantics/Navbar';
+import Footer from '@/_components/semantics/Footer';
+import { TextInput } from '@/_components/Input';
 
 export default function Catalog() {
 	// Initialize the state of routes
@@ -35,186 +25,114 @@ export default function Catalog() {
 		})();
 	}, []);
 
-	async function searchRoutes(e: any) {
-		e.preventDefault();
-		const search = e.target.elements.routeSearch.value;
+	async function handleSearch(searchInput: string) {
+		let searchLinkAPI;
 
-		if (search === "") {
-			const res = await fetch(`http://localhost:3000/api/get/route`);
-			const data = await res.json();
-
-			setRoutes(data);
+		if (searchInput === '') {
+			searchLinkAPI = `http://localhost:3000/api/get/route`;
 		} else {
-			const res = await fetch(
-				`http://localhost:3000/api/get/route/search/${search}`
-			);
-			const data = await res.json();
-
-			// If no routes are found, set the routes to an empty array
-			if (data.message) {
-				setRoutes([]);
-				return;
-			}
-
-			setRoutes(data);
+			searchLinkAPI = `http://localhost:3000/api/get/route/search/${searchInput}`;
 		}
+
+		const res = await fetch(searchLinkAPI);
+		const data = await res.json();
+
+		// If no routes are found, set the routes to an empty array
+		if (data.message) {
+			setRoutes([]);
+			return;
+		}
+
+		setRoutes(data);
 	}
 
 	return (
 		<>
-			<Navbar />
-			<section id={styles.catalogPage}>
-				<div className="container mobileContainer">
-					<div className={styles.catalogText}>
-						<div>
-							<h1 className="heroTitleFont mobileHeroTitleFont">
-								PARA<span className="main-accent">PO</span>
-								<br />
-								CATALOG
-							</h1>
-							<p className="heroSubtitleFont mobileHeroSubtitleFont">
-								Our application offers a curated catalog of
-								routes tailored for every mode of
-								transportation.
-							</p>
+			<div className="flex h-screen flex-col">
+				<Navbar />
+				<section className="h-full flex-grow bg-gray">
+					<div className="m-auto h-full w-3/4">
+						<div className="flex h-full gap-16">
+							<div className="flex h-full flex-1 flex-col justify-center gap-4 text-black">
+								<h1 className="font-primary text-hero-title font-bold leading-[90%]">
+									PARA<span className="text-accent">PO</span> <br />
+									CATALOG
+								</h1>
+								<h3 className="font-secondary text-hero-subtitle font-normal leading-[100%]">
+									Our application offers a curated catalog of routes tailored for every mode of transportation.
+								</h3>
+							</div>
+							<div className="flex flex-1 items-center justify-center">
+								<Image
+									src="images/parapo-example3.png"
+									alt="Catalog Picture"
+									width={100}
+									height={100}
+									className="h-auto w-full overflow-hidden rounded-lg object-contain drop-shadow-lg"
+									unoptimized={true}
+								/>
+							</div>
 						</div>
 					</div>
-					<div className={styles.catalogPic}>
-						<Image
-							src="images/parapo-example3.png"
-							alt="Catalog Picture"
-							width={0}
-							height={0}
-							style={{
-								width: "100%",
-								height: "auto",
-								borderRadius: "1rem",
-								boxShadow:
-									"10px 10px 10px 5px rgba(0, 0, 0, 0.1)",
-							}}
-							unoptimized={true}
-						/>
-					</div>
-					<div className={styles.scrollIndicator}>
-						<i className="fa-solid fa-chevron-down fa-2xl"></i>
-					</div>
-				</div>
-			</section>
-			<section id={styles.catalogList}>
-				<div className="container mobileContainer">
-					<form action="GET" onSubmit={searchRoutes}>
-						<input
-							type="text"
-							name="routeSearch"
-							id="rSearch"
-							placeholder="Search Routes"
-						/>
+				</section>
+			</div>
+			<section className="bg-gray pb-16 pt-32">
+				<div className="m-auto h-full w-3/4">
+					<form className="text-regular-text">
+						<TextInput placeholder="Search Routes" onChange={handleSearch} />
 					</form>
-					<div className={styles.catalogListItems}>
-						<table>
-							<thead>
-								<tr>
-									<th>
-										<i className="fa-solid fa-car fa-xl"></i>
-									</th>
-									<th>Route Name</th>
-									<th>Price</th>
-									<th>Stations</th>
+					<table className="mt-4 w-full border-separate border-spacing-y-4 gap-4 text-regular-text">
+						<thead className="bg-accent text-white">
+							<tr>
+								<th className="rounded-l-lg py-2">
+									<i className="fa-solid fa-car fa-xl"></i>
+								</th>
+								<th className="py-2">Route Name</th>
+								<th className="py-2">Price</th>
+								<th className="rounded-r-lg py-2">Stations</th>
+							</tr>
+						</thead>
+						<tbody className="text-center">
+							{routes && routes.length > 0 ? (
+								routes.map((route, index) => (
+									<Link href={`/catalog/route/${route.route_id}`} className="contents">
+										<tr
+											key={`routeList-row-${index}`}
+											className="duration-20 bg-dark-gray transition hover:bg-[#CCCCCC]"
+										>
+											<td className="rounded-l-lg py-2 align-middle">
+												<div className="flex flex-col items-center justify-center">
+													{route.category === 'Jeep' ? (
+														<Image
+															className="fa-sm h-[1.5rem] w-auto"
+															src="/images/jeepney-icon.svg"
+															alt="Jeep Icon"
+															width={100}
+															height={100}
+														/>
+													) : (
+														<i
+															className={`fa-solid fa-sm p-2 ${route.category == 'Bus' ? 'fa-bus' : route.category == 'Train' ? 'fa-train' : 'fa-question'}`}
+														></i>
+													)}
+													<p>{route.category ?? 'Unknown'}</p>
+												</div>
+											</td>
+											<td className="py-2 align-middle">{route.route_name}</td>
+											<td className="py-2 align-middle">₱{route.min_fare.toFixed(2)}</td>
+											<td className="rounded-r-lg py-2 align-middle">{route.Locations.length} Stations</td>
+										</tr>
+									</Link>
+								))
+							) : (
+								<tr className="bg-dark-gray">
+									<td colSpan={4} className="rounded-lg py-2">
+										No Routes Found
+									</td>
 								</tr>
-							</thead>
-							<tbody>
-								{routes.length != 0 ? (
-									routes.map((route) => {
-										return (
-											<tr key={route.route_id}>
-												<td>
-													<Link
-														href={`/catalog/route/${route.route_id}`}
-													>
-														{route.category ==
-														"Jeep" ? (
-															<>
-																<Image
-																	className="fa-xl"
-																	src="/images/jeepney-icon.svg"
-																	alt="Jeep Icon"
-																	width={0}
-																	height={0}
-																	style={{
-																		width: "1.5em",
-																		height: "auto",
-																	}}
-																/>
-																<p className="bodyTextFont">
-																	Jeep
-																</p>
-															</>
-														) : route.category ==
-														  "Bus" ? (
-															<>
-																<i className="fa-solid fa-bus fa-xl"></i>
-																<p className="bodyTextFont">
-																	Bus
-																</p>
-															</>
-														) : route.category ==
-														  "Train" ? (
-															<>
-																<i className="fa-solid fa-train fa-xl"></i>
-																<p className="bodyTextFont">
-																	Train
-																</p>
-															</>
-														) : (
-															<>
-																<i className="fa-solid fa-question fa-xl"></i>
-																<p className="bodyTextFont">
-																	Unknown
-																</p>
-															</>
-														)}
-													</Link>
-												</td>
-												<td>
-													<Link
-														href={`/catalog/route/${route.route_id}`}
-													>
-														{route.route_name}
-													</Link>
-												</td>
-												<td>
-													<Link
-														href={`/catalog/route/${route.route_id}`}
-													>
-														₱
-														{route.min_fare.toFixed(
-															2
-														)}
-													</Link>
-												</td>
-												<td>
-													<Link
-														href={`/catalog/route/${route.route_id}`}
-													>
-														{route.Locations.length}{" "}
-														Stations
-													</Link>
-												</td>
-											</tr>
-										);
-									})
-								) : (
-									<tr>
-										<td colSpan={4}>
-											<p className="bodyTextFont">
-												No routes found.
-											</p>
-										</td>
-									</tr>
-								)}
-							</tbody>
-						</table>
-					</div>
+							)}
+						</tbody>
+					</table>
 				</div>
 			</section>
 			<Footer />

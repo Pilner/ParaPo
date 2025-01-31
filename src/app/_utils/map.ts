@@ -1,19 +1,12 @@
-import mapboxgl from "mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 
-import { mapboxAccessToken } from "@/_data/data";
+import { mapboxAccessToken } from '@/_data/data';
 
-import dataPointsProps from "@/_types/DataPoints";
-import RouteProps from "@/_types/Route";
+import dataPointsProps from '@/_types/DataPoints';
+import RouteProps from '@/_types/Route';
 
 // roygbiv
-const colors = [
-	"#FF7F00",
-	"#FFCC00",
-	"#00FF00",
-	"#0000FF",
-	"#4B0082",
-	"#9400D3",
-];
+const colors = ['#FF7F00', '#FFCC00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 let colorIndex = 0;
 
 // Decode the polyline shapes from the Mapbox API
@@ -54,10 +47,7 @@ const decodePolyline = (encoded: string) => {
 	return coordinates;
 };
 
-export const fetchLocationName = async (
-	latitude: number,
-	longitude: number
-) => {
+export const fetchLocationName = async (latitude: number, longitude: number) => {
 	const url = await fetch(
 		`https://api.mapbox.com/search/geocode/v6/reverse?longitude=${longitude}&latitude=${latitude}&access_token=${mapboxAccessToken}`
 	);
@@ -68,10 +58,7 @@ export const fetchLocationName = async (
 };
 
 // Find the nearest route from the origin and destination points
-export const findNearestRoute = async (
-	routes: RouteProps[],
-	dataPoints: dataPointsProps
-) => {
+export const findNearestRoute = async (routes: RouteProps[], dataPoints: dataPointsProps) => {
 	// get the origin and destination points
 	const origin = dataPoints.origin;
 	const dest = dataPoints.dest;
@@ -98,14 +85,13 @@ export const findNearestRoute = async (
 		route.Locations.forEach((location, index) => {
 			// Get the distance between the origin and the location
 			const distanceOrigin = Math.sqrt(
-				Math.pow(location.latitude - origin.latitude, 2) +
-					Math.pow(location.longitude - origin.longitude, 2)
+				Math.pow(location.latitude - (origin.latitude ?? 0), 2) +
+					Math.pow(location.longitude - (origin.longitude ?? 0), 2)
 			);
 
 			// Get the distance between the destination and the location
 			const distanceDest = Math.sqrt(
-				Math.pow(location.latitude - dest.latitude, 2) +
-					Math.pow(location.longitude - dest.longitude, 2)
+				Math.pow(location.latitude - (dest.latitude ?? 0), 2) + Math.pow(location.longitude - (dest.longitude ?? 0), 2)
 			);
 
 			// Get the nearest point of the route from the origin
@@ -134,14 +120,10 @@ export const findNearestRoute = async (
 };
 
 // Fetch the route from the Mapbox API
-const getRoutedLine = async (
-	mode: "driving" | "walking" | "cycling",
-	origin: number[],
-	dest: number[]
-) => {
+const getRoutedLine = async (mode: 'driving' | 'walking' | 'cycling', origin: number[], dest: number[]) => {
 	const lineUrl = `https://api.mapbox.com/directions/v5/mapbox/${mode}/${origin.join(
-		","
-	)};${dest.join(",")}?access_token=${mapboxAccessToken}`;
+		','
+	)};${dest.join(',')}?access_token=${mapboxAccessToken}`;
 
 	const response = await fetch(lineUrl);
 	const data = await response.json();
@@ -150,8 +132,8 @@ const getRoutedLine = async (
 
 // Draw the route on the map
 export async function drawRoute(
-	mode: "driving" | "walking" | "cycling",
-	type: "straight" | "routed",
+	mode: 'driving' | 'walking' | 'cycling',
+	type: 'straight' | 'routed',
 	route: RouteProps,
 	map: mapboxgl.Map,
 	color?: string,
@@ -170,7 +152,7 @@ export async function drawRoute(
 
 			// Create a marker for each location
 			const locationMarker = new mapboxgl.Marker({
-				color: markerColor ?? "#FF9270",
+				color: markerColor ?? '#FF9270',
 				draggable: false,
 			})
 				.setLngLat([location.longitude, location.latitude])
@@ -182,10 +164,7 @@ export async function drawRoute(
 				const data = await getRoutedLine(
 					mode,
 					[location.longitude, location.latitude],
-					[
-						route.Locations[index + 1].longitude,
-						route.Locations[index + 1].latitude,
-					]
+					[route.Locations[index + 1].longitude, route.Locations[index + 1].latitude]
 				);
 
 				if (data && data.routes) {
@@ -199,30 +178,20 @@ export async function drawRoute(
 					// If the source and layer does not exist, add them to the map
 					if (!map.getSource(sourceId)) {
 						map.addSource(sourceId, {
-							type: "geojson",
+							type: 'geojson',
 							data: {
-								type: "Feature",
+								type: 'Feature',
 								properties: {},
 								geometry: {
-									type: "LineString",
+									type: 'LineString',
 									// Routed Lines
 									coordinates:
-										type === "routed"
+										type === 'routed'
 											? coordinates
 											: [
-													[
-														location.longitude,
-														location.latitude,
-													],
-													[
-														route.Locations[
-															index + 1
-														].longitude,
-														route.Locations[
-															index + 1
-														].latitude,
-													],
-											  ],
+													[location.longitude, location.latitude],
+													[route.Locations[index + 1].longitude, route.Locations[index + 1].latitude],
+												],
 
 									// Straight Lines
 									// coordinates: [ [route.longitude, route.latitude], [newRoutes[index + 1].longitude, newRoutes[index + 1].latitude] ],
@@ -234,11 +203,11 @@ export async function drawRoute(
 					if (!map.getLayer(layerId)) {
 						map.addLayer({
 							id: layerId,
-							type: "line",
+							type: 'line',
 							source: sourceId,
 							paint: {
-								"line-color": color ?? "#FF9270",
-								"line-width": 5,
+								'line-color': color ?? '#FF9270',
+								'line-width': 5,
 							},
 						});
 					}
@@ -249,8 +218,8 @@ export async function drawRoute(
 }
 
 export const drawTwoPoints = async (
-	mode: "driving" | "walking" | "cycling",
-	type: "straight" | "routed",
+	mode: 'driving' | 'walking' | 'cycling',
+	type: 'straight' | 'routed',
 	origin: number[],
 	dest: number[],
 	map: mapboxgl.Map,
@@ -263,20 +232,19 @@ export const drawTwoPoints = async (
 		const coordinates = decodePolyline(data.routes[0].geometry);
 
 		// Use unique names for each source and layer
-		const sourceId = `route-source-${origin.join("-")}-${dest.join("-")}`;
-		const layerId = `route-layer-${origin.join("-")}-${dest.join("-")}`;
+		const sourceId = `route-source-${origin.join('-')}-${dest.join('-')}`;
+		const layerId = `route-layer-${origin.join('-')}-${dest.join('-')}`;
 
 		// If the source and layer does not exist, add them to the map
 		if (!map.getSource(sourceId)) {
 			map.addSource(sourceId, {
-				type: "geojson",
+				type: 'geojson',
 				data: {
-					type: "Feature",
+					type: 'Feature',
 					properties: {},
 					geometry: {
-						type: "LineString",
-						coordinates:
-							type === "routed" ? coordinates : [origin, dest],
+						type: 'LineString',
+						coordinates: type === 'routed' ? coordinates : [origin, dest],
 					},
 				},
 			});
@@ -285,11 +253,11 @@ export const drawTwoPoints = async (
 		if (!map.getLayer(layerId)) {
 			map.addLayer({
 				id: layerId,
-				type: "line",
+				type: 'line',
 				source: sourceId,
 				paint: {
-					"line-color": color ?? "#FF9270",
-					"line-width": 5,
+					'line-color': color ?? '#FF9270',
+					'line-width': 5,
 				},
 			});
 		}
@@ -297,14 +265,10 @@ export const drawTwoPoints = async (
 };
 
 // Fetch the route from the Mapbox API
-const fetchDistance = async (
-	mode: "driving" | "walking" | "cycling",
-	origin: number[],
-	dest: number[]
-) => {
+const fetchDistance = async (mode: 'driving' | 'walking' | 'cycling', origin: number[], dest: number[]) => {
 	const lineUrl = `https://api.mapbox.com/directions/v5/mapbox/${mode}/${origin.join(
-		","
-	)};${dest.join(",")}?access_token=${mapboxAccessToken}`;
+		','
+	)};${dest.join(',')}?access_token=${mapboxAccessToken}`;
 
 	const response = await fetch(lineUrl);
 	const data = await response.json();
@@ -320,11 +284,7 @@ const fetchDistance = async (
 	return minDistance;
 };
 
-export const recursiveDrawRoute = async (
-	routes: RouteProps[],
-	dataPoints: dataPointsProps,
-	map: mapboxgl.Map
-) => {
+export const recursiveDrawRoute = async (routes: RouteProps[], dataPoints: dataPointsProps, map: mapboxgl.Map) => {
 	let routeList = [] as {
 		minRoute: RouteProps;
 		bestIndex: { origin: number; dest: number };
@@ -341,78 +301,61 @@ export const recursiveDrawRoute = async (
 		nearestRoute.bestIndex.dest
 	) {
 		await drawTwoPoints(
-			"walking",
-			"routed",
-			[dataPoints.origin.longitude, dataPoints.origin.latitude],
+			'walking',
+			'routed',
+			[dataPoints.origin.longitude ?? 0, dataPoints.origin.latitude ?? 0],
 			[
-				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.origin]
-					.longitude,
-				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.origin]
-					.latitude,
+				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.origin].longitude,
+				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.origin].latitude,
 			],
 			map,
-			"#f53636"
+			'#f53636'
 		);
-		await drawRoute("driving", "straight", nearestRoute.minRoute, map);
+		await drawRoute('driving', 'straight', nearestRoute.minRoute, map);
 
 		// Fetch the distance between the nearest route destination to the actual destination
 		while (
 			(await fetchDistance(
-				"walking",
+				'walking',
 				[
-					nearestRoute.minRoute.Locations[
-						nearestRoute.bestIndex.origin
-					].longitude,
-					nearestRoute.minRoute.Locations[
-						nearestRoute.bestIndex.origin
-					].latitude,
+					nearestRoute.minRoute.Locations[nearestRoute.bestIndex.origin].longitude,
+					nearestRoute.minRoute.Locations[nearestRoute.bestIndex.origin].latitude,
 				],
-				[dataPoints.origin.longitude, dataPoints.origin.latitude]
+				[dataPoints.origin.longitude!, dataPoints.origin.latitude!]
 			)) > 500
 		) {
 			// Find the nearest route from the nearest route destination to the actual destination
 			let currentNearestRoute = await findNearestRoute(routes, {
-				origin: nearestRoute.minRoute.Locations[
-					nearestRoute.bestIndex.dest
-				],
+				origin: nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest],
 				dest: dataPoints.dest,
 			});
 
 			// If the nearest route is the same as the previous route, break the loop
-			if (
-				currentNearestRoute.minRoute.route_id ===
-				nearestRoute.minRoute.route_id
-			) {
+			if (currentNearestRoute.minRoute.route_id === nearestRoute.minRoute.route_id) {
 				break;
 			}
 
 			await drawRoute(
-				"driving",
-				"straight",
+				'driving',
+				'straight',
 				currentNearestRoute.minRoute,
 				map,
 				colors[colorIndex % colors.length],
 				colors[colorIndex++ % colors.length]
 			);
 			await drawTwoPoints(
-				"walking",
-				"routed",
+				'walking',
+				'routed',
 				[
-					nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest]
-						.longitude,
-					nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest]
-						.latitude,
+					nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest].longitude,
+					nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest].latitude,
 				],
 				[
-					currentNearestRoute.minRoute.Locations[
-						currentNearestRoute.bestIndex.origin
-					].longitude,
-					currentNearestRoute.minRoute.Locations[
-						currentNearestRoute.bestIndex.origin
-					].latitude,
+					currentNearestRoute.minRoute.Locations[currentNearestRoute.bestIndex.origin].longitude,
+					currentNearestRoute.minRoute.Locations[currentNearestRoute.bestIndex.origin].latitude,
 				],
 				map,
-				"#f53636"
+				'#f53636'
 			);
 
 			// Update the nearest route
@@ -421,19 +364,17 @@ export const recursiveDrawRoute = async (
 		}
 
 		await drawTwoPoints(
-			"walking",
-			"routed",
-			[dataPoints.dest.longitude, dataPoints.dest.latitude],
+			'walking',
+			'routed',
+			[dataPoints.dest.longitude ?? 0, dataPoints.dest.latitude ?? 0],
 			[
-				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest]
-					.longitude,
-				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest]
-					.latitude,
+				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest].longitude,
+				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest].latitude,
 			],
 			map,
-			"#f53636"
+			'#f53636'
 		);
-		console.log("FINAL Route List:", routeList);
+		console.log('FINAL Route List:', routeList);
 
 		return routeList;
 	}
