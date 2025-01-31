@@ -22,6 +22,13 @@ export default {
 				primary: ['Poppins', 'sans-serif'],
 				secondary: ['Open Sans', 'sans-serif'],
 			},
+			fontSize: {
+				'hero-title': '6rem',
+				'hero-subtitle': '2rem',
+				'regular-title': '2rem',
+				'regular-text': '1.25rem',
+				'input-label': '1rem',
+			},
 		},
 	},
 	plugins: [],
