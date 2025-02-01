@@ -288,8 +288,8 @@ function LocationList() {
 							<td className="w-[2.5%] border-r border-[#E4E4E4] py-2">{index + 1}</td>
 							<td className="w-[10%] py-2">{location.location_id}</td>
 							<td className="py-2">{location.location_name}</td>
-							<td className="w-[10%] py-2">{location.longitude}</td>
-							<td className="w-[10%] py-2">{location.latitude}</td>
+							<td className="w-[10%] truncate py-2">{location.longitude}</td>
+							<td className="w-[10%] truncate py-2">{location.latitude}</td>
 							<td className="w-[15%] py-2">{convertDate(location.created_at)}</td>
 							<td className="w-[15%] py-2">{convertDate(location.updated_at)}</td>
 							<td className="w-[5%]">

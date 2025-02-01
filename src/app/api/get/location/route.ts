@@ -21,7 +21,11 @@ export async function GET(req: NextApiRequest) {
 	}
 
 	try {
-		const locations = await prisma.locations.findMany();
+		const locations = await prisma.locations.findMany({
+			include: {
+				Routes: true,
+			},
+		});
 
 		return new Response(JSON.stringify(locations), {
 			status: 200,

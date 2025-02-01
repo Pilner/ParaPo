@@ -95,6 +95,32 @@ export function MapNavbar() {
 	);
 }
 
+export function MapAdminNavbar() {
+	return (
+		<nav className="h-[5rem] w-full bg-accent">
+			<div className="flex h-full justify-between px-4 py-2">
+				<div className="h-full">
+					<Link href="/">
+						<Image
+							src="/images/ParaPo-Logo-Light.png"
+							alt="logo"
+							width={100}
+							height={100}
+							className="duration-20 h-full w-auto rounded-lg transition hover:backdrop-brightness-[.90]"
+							unoptimized={true}
+						/>
+					</Link>
+				</div>
+				<div className="flex items-center gap-8 font-secondary text-[1rem] font-semibold text-gray">
+					<Link href="/admin" className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">
+						Dashboard
+					</Link>
+				</div>
+			</div>
+		</nav>
+	);
+}
+
 export function AuthNavbar() {
 	const { data: session } = useSession();
 	const [user, setUser] = useState<User | null>(null);

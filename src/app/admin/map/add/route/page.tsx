@@ -15,7 +15,7 @@ import { fetchLocationName } from '@/_utils/map';
 import Button from '@/_components/Button';
 import Marker from '@/_components/Marker';
 import { TextInput, DropdownInput } from '@/_components/Input';
-import { MapNavbar } from '@/_components/semantics/Navbar';
+import { MapAdminNavbar } from '@/_components/semantics/Navbar';
 
 import { routeCategoryOptions } from '@/_data/data';
 
@@ -187,7 +187,7 @@ export default function AddRouteMap() {
 	return (
 		<main className="relative h-screen w-full">
 			<div className="absolute z-10 flex max-h-[40rem] w-[25rem] translate-x-5 translate-y-5 flex-col overflow-hidden rounded-lg border border-black/25 bg-white">
-				<MapNavbar />
+				<MapAdminNavbar />
 				<form onSubmit={handleSubmit} className="flex h-full flex-grow flex-col gap-4 overflow-y-hidden p-4 text-black">
 					<div id="formSubmit" className="flex flex-col gap-2 text-regular-text">
 						<TextInput label="Route Name" name="route_name" placeholder="Enter Route Name" onChange={() => {}} />

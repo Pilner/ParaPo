@@ -99,7 +99,14 @@ export function QuickEditUserPopup({ user, onCancel }: QuickEditUserPopupProps) 
 						</button>
 					</div>
 					<div className="flex w-full flex-col gap-4">
-						<TextInput label="User ID" name="user_id" readOnly={true} value={user.user_id} onChange={() => {}} />
+						<TextInput
+							label="User ID"
+							name="user_id"
+							readOnly={true}
+							disabled={true}
+							value={user.user_id}
+							onChange={() => {}}
+						/>
 						<TextInput label="Username" name="username" defaultValue={user.username} onChange={() => {}} />
 						<TextInput
 							type="password"
@@ -218,7 +225,14 @@ export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupPr
 						</button>
 					</div>
 					<div className="flex w-full flex-col gap-4">
-						<TextInput label="Route ID" name="route_id" readOnly={true} value={route.route_id} onChange={() => {}} />
+						<TextInput
+							label="Route ID"
+							name="route_id"
+							readOnly={true}
+							disabled={true}
+							value={route.route_id}
+							onChange={() => {}}
+						/>
 						<TextInput label="Route Name" name="route_name" defaultValue={route.route_name} onChange={() => {}} />
 						<DropdownInput
 							label="Category"
@@ -228,6 +242,13 @@ export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupPr
 							onChange={() => {}}
 						/>
 						<TextInput label="Minimum Fare" name="min_fare" defaultValue={route.min_fare} onChange={() => {}} />
+						<TextInput
+							type="number"
+							label="Station Count"
+							defaultValue={route.Locations.length}
+							disabled={true}
+							onChange={() => {}}
+						/>
 					</div>
 					<div className="mt-auto flex justify-between">
 						<div className="flex gap-8">
@@ -317,6 +338,7 @@ export function QuickEditLocationsPopup({ location, onCancel }: QuickEditLocatio
 							label="Location ID"
 							name="location_id"
 							readOnly={true}
+							disabled={true}
 							value={location.location_id}
 							onChange={() => {}}
 						/>
@@ -328,6 +350,13 @@ export function QuickEditLocationsPopup({ location, onCancel }: QuickEditLocatio
 						/>
 						<TextInput label="Longitude" name="longitude" defaultValue={location.longitude} onChange={() => {}} />
 						<TextInput label="Latitude" name="latitude" defaultValue={location.latitude} onChange={() => {}} />
+						<TextInput
+							type="number"
+							label="Route ID"
+							defaultValue={location.Routes[0].route_id}
+							disabled={true}
+							onChange={() => {}}
+						/>
 					</div>
 					<div className="mt-auto flex justify-between">
 						<div className="flex gap-8"></div>

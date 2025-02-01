@@ -20,6 +20,7 @@ export interface Location {
 	location_name: string;
 	longitude: number;
 	latitude: number;
+	Routes: Route[];
 	created_at: string;
 	updated_at: string;
 }
