@@ -9,7 +9,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import locationProps from '@/_types/Location';
-import { fetchLocationName } from '@/app/_utils/map';
+import { fetchLocationName } from '@/_utils/map';
 
 import Button from '@/_components/Button';
 import Marker from '@/_components/Marker';

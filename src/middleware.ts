@@ -5,5 +5,6 @@ export const config = {
 		// This is where you can add which routes to be protected
 		// '/sampleRoute',
 		// '/sampleRoute/:path*', // This is an example of a dynamic route
+		'/admin',
 	],
 };

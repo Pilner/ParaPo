@@ -1,5 +1,23 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
+
+import { User } from '@/_types/Models';
+declare module 'next-auth' {
+	interface Session {
+		user: {
+			id: string;
+			name?: string | null;
+			email?: string | null;
+			image?: string | null;
+		};
+	}
+}
+
+import { useGetUser } from '@/_hooks/useUser';
 
 import Button from '@/_components/Button';
 
@@ -71,6 +89,72 @@ export function MapNavbar() {
 					<Link href="/map" className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">
 						Map
 					</Link>
+				</div>
+			</div>
+		</nav>
+	);
+}
+
+export function AuthNavbar() {
+	const { data: session } = useSession();
+	const [user, setUser] = useState<User | null>(null);
+
+	const user_id = session?.user?.id;
+
+	const { data, error } = useGetUser(user_id!);
+
+	useEffect(() => {
+		if (error) {
+			console.error(error);
+		}
+		if (data) {
+			console.log(data);
+			setUser(data);
+		}
+	}, [data, error]);
+
+	return (
+		<nav className="item-center flex h-[6rem] w-full bg-white">
+			<div className="m-auto flex h-full w-3/4 items-center justify-between">
+				<div className="flex h-full">
+					<div className="flex h-full items-center gap-4">
+						<Link href="/" className="h-full">
+							<Image
+								src="/images/ParaPo-Logo-Light.png"
+								alt="logo"
+								width={100}
+								height={100}
+								className="duration-20 h-full w-auto rounded-lg transition hover:backdrop-brightness-[.90]"
+								unoptimized={true}
+							/>
+						</Link>
+						<Link href="/">
+							<h1 className="font-primary text-regular-title font-bold text-black">ParaPo</h1>
+						</Link>
+					</div>
+				</div>
+				<div className="flex">
+					<ul className="flex items-center gap-16 font-secondary text-regular-text font-semibold text-black">
+						<li className={`duration-20 transition ${user ? 'opacity-100' : 'opacity-0'}`}>
+							<p className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">
+								{user && user.username}
+							</p>
+						</li>
+						<li>
+							<Button
+								variant="solid"
+								type="button"
+								onClick={() =>
+									signOut({
+										callbackUrl: '/',
+										redirect: true,
+									})
+								}
+							>
+								Sign Out
+							</Button>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</nav>

@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import RouteProps from '@/_types/Route';
 import locationProps from '@/_types/Location';
-import { recursiveDrawRoute, fetchLocationName } from '@/app/_utils/map';
+import { recursiveDrawRoute, fetchLocationName } from '@/_utils/map';
 
 import { MapNavbar } from '@/_components/semantics/Navbar';
 import { MapboxSearchBox } from '@mapbox/search-js-web';

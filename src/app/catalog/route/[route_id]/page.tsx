@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
 import RouteProps from '@/_types/Route';
-import { drawRoute } from '@/app/_utils/map';
+import { drawRoute } from '@/_utils/map';
 
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -133,7 +133,7 @@ export default function RoutePage() {
 						<h3 className="text-center text-regular-text font-bold">Stations List</h3>
 						<ul className="list-outside list-decimal pl-7 text-[1rem]">
 							{route.Locations.map((location, index) => (
-								<li key={index} className="">
+								<li key={index}>
 									<p>{location.location_name}</p>
 								</li>
 							))}
