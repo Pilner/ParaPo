@@ -1,87 +1,57 @@
 'use client';
-import { mapboxAccessToken } from '@/_data/data';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
-import RouteProps from '@/_types/Route';
-import locationProps from '@/_types/Location';
-import { recursiveDrawRoute, fetchLocationName } from '@/_utils/map';
-
-import { MapNavbar } from '@/_components/semantics/Navbar';
-import { MapboxSearchBox } from '@mapbox/search-js-web';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { MapboxSearchBox } from '@mapbox/search-js-web';
 
-import { useParams } from 'next/navigation';
+import { MapNavbar } from '@/_components/semantics/Navbar';
+import { useGetRoutes } from '@/_hooks/useRoute';
+import { fetchLocationName, recursiveDrawRoute } from '@/_utils/map';
+import { mapboxAccessToken } from '@/_data/data';
+
+import { Route } from '@/_types/Models';
+import locationProps from '@/_types/Location';
+import DataPoints from '@/_types/DataPoints';
+import RouteList from '@/_types/RouteList';
+
+import { toast } from 'react-toastify';
 
 let map: any;
 
 export default function MapPage() {
-	let markerOrigin: any, markerDest: any;
+	const tabs = ['Route List', 'Instructions'];
+	const [activeTab, setActiveTab] = useState('Route List');
+	const [location, setLocation] = useState<locationProps | null>(null);
+	const [routes, setRoutes] = useState<Route[] | null>(null);
+	const [routeList, setRouteList] = useState<RouteList[]>([]);
 
-	const { data } = useParams();
-
-	const [location, setLocation] = useState<locationProps>({
-		origin: {
-			location_name: '',
-			latitude: null,
-			longitude: null,
-		},
-		destination: {
-			location_name: '',
-			latitude: null,
-			longitude: null,
-		},
-	});
-	const [routes, setRoutes] = useState<RouteProps[]>([] as RouteProps[]);
-	const [routeList, setRouteList] = useState(
-		[] as {
-			minRoute: RouteProps;
-			bestIndex: { origin: number; dest: number };
-		}[]
-	);
+	const { data: dataUrl } = useParams();
+	const { data, error } = useGetRoutes();
 
 	useEffect(() => {
 		// Decode the data from the URL
-		const decodedData = decodeURIComponent(data as string).split(' ');
+		const decodedData = decodeURIComponent(dataUrl as string).split(' ');
 		const origin = decodedData[0].split(',');
 		const dest = decodedData[1].split(',');
 
-		setLocation((previousLocation) => ({
-			origin: {
-				...previousLocation.origin,
-				latitude: parseFloat(origin[0]),
-				longitude: parseFloat(origin[1]),
-			},
-			destination: {
-				...previousLocation.destination,
-				latitude: parseFloat(dest[0]),
-				longitude: parseFloat(dest[1]),
-			},
-		}));
-
-		// Fetch routes from the Backend using API Endpoints
 		(async () => {
-			const res = await fetch(`http://localhost:3000/api/get/route`);
-			const data = await res.json();
+			const originLocation = await fetchLocationName(parseFloat(origin[0]), parseFloat(origin[1]));
+			const destLocation = await fetchLocationName(parseFloat(dest[0]), parseFloat(dest[1]));
 
-			setRoutes(data);
-		})();
-
-		// Fetch the location names
-		(async () => {
-			const originName = await fetchLocationName(parseFloat(origin[0]), parseFloat(origin[1]));
-			const destName = await fetchLocationName(parseFloat(dest[0]), parseFloat(dest[1]));
-
-			setLocation((previousLocation) => ({
+			setLocation(() => ({
 				origin: {
-					...previousLocation.origin,
-					location_name: originName,
+					location_name: originLocation,
+					latitude: parseFloat(origin[0]),
+					longitude: parseFloat(origin[1]),
 				},
 				destination: {
-					...previousLocation.destination,
-					location_name: destName,
+					location_name: destLocation,
+					latitude: parseFloat(dest[0]),
+					longitude: parseFloat(dest[1]),
 				},
 			}));
 		})();
@@ -98,12 +68,7 @@ export default function MapPage() {
 		if (map) {
 			const searchBox = new MapboxSearchBox();
 
-			if (mapboxAccessToken != '' || mapboxAccessToken != null) {
-				searchBox.accessToken = mapboxAccessToken;
-			} else {
-				console.error('Mapbox Access Token is not set');
-				alert('Mapbox Access Token is not set');
-			}
+			searchBox.accessToken = mapboxAccessToken;
 			map.addControl(searchBox);
 
 			const geolocateControl = new mapboxgl.GeolocateControl({
@@ -128,38 +93,53 @@ export default function MapPage() {
 	}, []);
 
 	useEffect(() => {
-		console.log(location);
-		if (map && location.origin && location.destination) {
-			// Add the origin marker
-			markerOrigin = new mapboxgl.Marker({
+		if (error) {
+			console.error(error);
+			toast.error('An error occurred while fetching the data');
+		}
+		if (data) {
+			setRoutes(data);
+		}
+	}, [data, error]);
+
+	useEffect(() => {
+		if (location) {
+			// Origin Marker
+			new mapboxgl.Marker({
 				color: '#f53636',
 				draggable: false,
 			})
 				.setLngLat([location.origin.longitude!, location.origin.latitude!])
 				.addTo(map);
 
-			// Add the destination marker
-			markerDest = new mapboxgl.Marker({
+			// Destination Marker
+			new mapboxgl.Marker({
 				color: '#46a3ff',
 				draggable: false,
 			})
 				.setLngLat([location.destination.longitude!, location.destination.latitude!])
 				.addTo(map);
 		}
-	}, [location]);
+	}, [location, map]);
 
 	useEffect(() => {
-		if (routes && location && location.origin && location.destination) {
-			(async () => {
-				const dataPoints = {
-					origin: { latitude: location.origin.latitude, longitude: location.origin.longitude },
-					dest: { latitude: location.destination.latitude, longitude: location.destination.longitude },
-				};
+		if (routes && location) {
+			const dataPoints: DataPoints = {
+				origin: {
+					latitude: location.origin.latitude!,
+					longitude: location.origin.longitude!,
+				},
+				destination: {
+					latitude: location.destination.latitude!,
+					longitude: location.destination.longitude!,
+				},
+			};
 
+			(async () => {
 				const routeListData = await recursiveDrawRoute(routes, dataPoints, map);
+				console.log('Route List:', routeListData);
 				if (routeListData) {
-					setRouteList(routeListData);
-					console.log(routeList);
+					setRouteList(routeListData as RouteList[]);
 				}
 			})();
 		}
@@ -173,63 +153,91 @@ export default function MapPage() {
 					<div className="flex flex-col gap-2">
 						<div>
 							<h3 className="text-regular-text font-bold">Origin Location</h3>
-							<p className="text-regular-text font-normal">{location.origin.location_name}</p>
+							<p className="text-regular-text font-normal">{location && location.origin.location_name}</p>
 						</div>
 						<div>
 							<h3 className="text-regular-text font-bold">Destination Location</h3>
-							<p className="text-regular-text font-normal">{location.destination.location_name}</p>
+							<p className="text-regular-text font-normal">{location && location.destination.location_name}</p>
 						</div>
 					</div>
 					<div className="mt-4 w-full border border-black/25" />
-					<div className="overflow-y-scroll">
-						<div className="flex h-full flex-col gap-2">
-							<h3 className="text-center text-regular-text font-bold">Route List</h3>
-							<ul className="list-outside list-decimal pl-6 text-[1rem]">
-								{routeList.map((route, index) => (
-									<>
-										<li key={`route-list-1-${index}`} className="mb-2">
-											<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
-												<Link href={`/catalog/route/${route.minRoute.route_id}`}>{route.minRoute.route_name}</Link>
-											</p>
-										</li>
-									</>
-								))}
-							</ul>
-						</div>
-						<div className="w-full border border-black/25" />
-						<div className="flex h-full flex-col gap-2">
-							<h3 className="text-center text-regular-text font-bold">Instructions</h3>
-							<ul className="list-outside list-decimal pl-6 text-[1rem]">
-								{routeList.map((route, index) => (
-									<>
-										{index === 0 && (
-											<li
-												key={`route-instructions-2-${index}`}
-												className="mb-2"
-											>{`First walk to ${routeList[index].minRoute.route_name} Route`}</li>
-										)}
-										<li key={`route-instructions-1-${index}`} className="mb-2">
-											<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
-												<Link href={`/catalog/route/${route.minRoute.route_id}`}>{route.minRoute.route_name}</Link>
-											</p>
-											<ul className="list-outside list-disc pl-8 text-[1rem]">
-												<li>{`Enter at ${route.minRoute.Locations[route.bestIndex.origin].location_name}`}</li>
-												<li>{`Exit at ${route.minRoute.Locations[route.bestIndex.dest].location_name}`}</li>
-											</ul>
-										</li>
-										{index === routeList.length - 1 ? (
-											<li>{`Now walk/commute to ${location.destination.location_name}`}</li>
-										) : (
-											<li
-												key={`route-instructions-2-${index}`}
-												className="mb-2"
-											>{`Now walk to ${routeList[index + 1].minRoute.route_name} Route`}</li>
-										)}
-									</>
-								))}
-							</ul>
-						</div>
+					<div className="flex w-full justify-between">
+						{tabs.map((tab, index) => (
+							<button
+								key={`tab-${index}`}
+								className={`duration-20 duration-20 flex-1 border-b-2 py-2 text-center font-secondary text-[1rem] font-semibold transition ${
+									activeTab === tab ? 'border-black bg-dark-gray' : 'border-transparent hover:bg-dark-gray'
+								}`}
+								onClick={() => setActiveTab(tab)}
+							>
+								{tab}
+							</button>
+						))}
 					</div>
+
+					{/* Route List */}
+					{activeTab === 'Route List' && (
+						<div className="flex h-full flex-col gap-2 overflow-y-hidden">
+							<div className="flex h-full w-full overflow-y-scroll rounded-b-lg bg-dark-gray p-2">
+								<ol className="w-full list-outside list-decimal pl-7 text-[1rem]">
+									{routeList.map((route, index) => (
+										<li key={`route-list-${index}`} className="w-full">
+											<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
+												<Link href={`/catalog/route/${route.minRoute.route_id}`}>{route.minRoute.route_name}</Link>
+											</p>
+										</li>
+									))}
+								</ol>
+							</div>
+						</div>
+					)}
+
+					{/* Instructions */}
+					{activeTab === 'Instructions' && (
+						<div className="flex h-full flex-col gap-2 overflow-y-hidden">
+							<div className="flex h-full w-full overflow-y-scroll rounded-b-lg bg-dark-gray p-2">
+								<ol className="w-full list-outside list-decimal pl-7 text-[1rem]">
+									{routeList.map((route, index) => (
+										<Fragment key={`route-fragment-${index}`}>
+											{index === 0 && (
+												<li key={`first-walk-${index}`} className="w-full">
+													<div className="flex w-full items-center justify-between">
+														<p className="font-normal">{`First walk to ${routeList[index].minRoute.route_name} Route`}</p>
+													</div>
+												</li>
+											)}
+											<li key={`route-${index}`} className="w-full">
+												<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
+													<Link href={`/catalog/route/${route.minRoute.route_id}`}>{route.minRoute.route_name}</Link>
+												</p>
+												<ul className="list-outside list-disc pl-8 text-[1rem]">
+													<li>{`Enter at ${route.minRoute.Locations[route.bestIndex.origin].location_name}`}</li>
+													<li>{`Exit at ${route.minRoute.Locations[route.bestIndex.dest].location_name}`}</li>
+												</ul>
+											</li>
+											{index === routeList.length - 1 ? (
+												<li key={`instructions-last-${index}`} className="w-full">
+													<div className="flex w-full items-center justify-between">
+														<p className="font-normal">
+															{`Now walk/commute to ${location && location.destination.location_name}`}
+														</p>
+													</div>
+												</li>
+											) : (
+												<li key={`instructions-${index}`} className="w-full">
+													<div className="flex w-full items-center justify-between">
+														<p className="font-normal">
+															{`Now walk to ${routeList[index + 1].minRoute.route_name} Route`}
+														</p>
+													</div>
+												</li>
+											)}
+										</Fragment>
+									))}
+								</ol>
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 			<div id="map" className="z-0 h-full w-full" />

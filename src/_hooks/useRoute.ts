@@ -16,6 +16,12 @@ const fetchAllRoutes = async () => {
 	return data;
 };
 
+const searchRoutes = async (searchInput: string) => {
+	const response = await fetch(`/api/get/route/search/${searchInput}`);
+	const data: any[] = await response.json();
+	return data;
+};
+
 const createRoute = async (route: any) => {
 	const response = await fetch(`/api/post/route`, {
 		method: 'POST',
@@ -73,6 +79,14 @@ export const useGetRoutes = () => {
 	return useQuery({
 		queryKey: ['routes'],
 		queryFn: fetchAllRoutes,
+	});
+};
+
+export const useSearchRoutes = (searchInput: string) => {
+	return useQuery({
+		queryKey: ['search', searchInput],
+		queryFn: () => searchRoutes(searchInput),
+		enabled: !!searchInput,
 	});
 };
 

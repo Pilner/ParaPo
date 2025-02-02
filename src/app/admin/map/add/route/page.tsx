@@ -159,13 +159,8 @@ export default function AddRouteMap() {
 
 		try {
 			addRoute(payload, {
-				onSuccess: (data) => {
-					toast.success('Route added successfully', {
-						onClose: () => {
-							router.push('/admin');
-						},
-					});
-					console.log(data);
+				onSuccess: () => {
+					router.push('/admin');
 				},
 				onError: (error) => {
 					console.error('Error adding route:', error);

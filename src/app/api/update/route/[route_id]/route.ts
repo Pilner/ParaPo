@@ -1,7 +1,9 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
+import { Prisma, PrismaClient } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
+import { Location } from '@/_types/Models';
 
 interface params {
 	params: {
@@ -28,9 +30,9 @@ export async function PUT(req: Request, params: params) {
 		);
 	}
 
-	const { route_id, route_name, category, min_fare } = await req.json();
+	const { route_id, route_name, category, min_fare, Locations } = await req.json();
 
-	if (!route_id || !route_name || !category || !min_fare) {
+	if (!route_id || !route_name || !category || !min_fare || !Locations) {
 		return new Response(JSON.stringify({ message: 'Missing parameter' }), {
 			status: 400,
 			headers,
@@ -45,33 +47,90 @@ export async function PUT(req: Request, params: params) {
 	}
 
 	try {
-		const route = await prisma.routes.update({
+		// count the number of locations in the Locations table
+		const locationsCountDB = await prisma.locations.count({
 			where: {
 				route_id: parseInt(route_id_params),
 			},
-			data: {
-				route_name,
-				category,
-				min_fare: parseFloat(min_fare),
-			},
 		});
 
-		return new Response(
-			JSON.stringify({
-				route,
-				message: 'Route updated successfully',
-			}),
-			{
-				status: 200,
-				headers,
-			}
-		);
+		if (locationsCountDB !== Locations.length) {
+			// Delete all locations associated with the route
+			await prisma.locations.deleteMany({
+				where: {
+					route_id: parseInt(route_id_params),
+				},
+			});
+
+			// Update the route and add the locations
+			const route = await prisma.routes.update({
+				where: {
+					route_id: parseInt(route_id_params),
+				},
+				data: {
+					route_name,
+					category,
+					min_fare,
+					Locations: {
+						createMany: {
+							data: Locations,
+						},
+					},
+				},
+			});
+			return new Response(
+				JSON.stringify({
+					route,
+					message: 'Route updated successfully',
+				}),
+				{
+					status: 200,
+					headers,
+				}
+			);
+		} else {
+			// Update the route
+			const route = await prisma.routes.update({
+				where: {
+					route_id: parseInt(route_id_params),
+				},
+				data: {
+					route_name,
+					category,
+					min_fare,
+					Locations: {
+						updateMany: Locations.map((location: Location) => {
+							return {
+								where: {
+									location_id: location.location_id,
+								},
+								data: {
+									location_name: location.location_name,
+									longitude: location.longitude,
+									latitude: location.latitude,
+								},
+							};
+						}),
+					},
+				},
+			});
+			return new Response(
+				JSON.stringify({
+					route,
+					message: 'Route updated successfully',
+				}),
+				{
+					status: 200,
+					headers,
+				}
+			);
+		}
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.name, error.message);
 		}
 
-		if ((error as any).code === 'P2025') {
+		if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
 			return new Response(JSON.stringify({ message: 'Item not found' }), {
 				status: 404,
 				headers,

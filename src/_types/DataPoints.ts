@@ -1,6 +1,10 @@
-import Coordinates from './Coordinates';
-
-export default interface dataPointsProps {
-	origin: Coordinates;
-	dest: Coordinates;
+export default interface DataPoints {
+	origin: {
+		latitude: number;
+		longitude: number;
+	};
+	destination: {
+		latitude: number;
+		longitude: number;
+	};
 }

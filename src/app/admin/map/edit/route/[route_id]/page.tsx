@@ -20,7 +20,7 @@ import { MapAdminNavbar } from '@/_components/semantics/Navbar';
 
 import { routeCategoryOptions } from '@/_data/data';
 
-import { useGetRoute, usePostRoute } from '@/_hooks/useRoute';
+import { useGetRoute, usePutRoute } from '@/_hooks/useRoute';
 import { toast } from 'react-toastify';
 
 let map: any;
@@ -30,15 +30,15 @@ interface LocationList {
 	marker: any;
 }
 
-export default function AddRouteMap() {
+export default function EditRouteMap() {
 	const router = useRouter();
 	const { route_id } = useParams();
 	const [locationsList, setLocationsList] = useState<LocationList[]>([]);
 
-	const [route, setRoute] = useState({} as Route);
+	const [route, setRoute] = useState({} as any);
 
 	const { data, error } = useGetRoute(Array.isArray(route_id) ? route_id[0] : route_id);
-	const { mutate: addRoute } = usePostRoute();
+	const { mutate: editRoute } = usePutRoute(Array.isArray(route_id) ? route_id[0] : route_id);
 
 	useEffect(() => {
 		// Initialize the map from Mapbox
@@ -160,7 +160,7 @@ export default function AddRouteMap() {
 					color: '#FF9270',
 					draggable: true,
 				})
-					.setLngLat([location.longitude, location.latitude])
+					.setLngLat([location.longitude!, location.latitude!])
 					.addTo(map);
 
 				const newLocationIndex = locationsList.length + 1;
@@ -218,7 +218,8 @@ export default function AddRouteMap() {
 		const data = new FormData(e.currentTarget);
 		const Locations = locationsList.map((location) => location.location);
 
-		const payload: Route = {
+		const payload: any = {
+			route_id: route.route_id,
 			route_name: data.get('route_name') as string,
 			category: data.get('category') as string,
 			min_fare: Number(data.get('min_fare')),
@@ -228,14 +229,9 @@ export default function AddRouteMap() {
 		console.log(payload);
 
 		try {
-			addRoute(payload, {
-				onSuccess: (data) => {
-					toast.success('Route added successfully', {
-						onClose: () => {
-							router.push('/admin');
-						},
-					});
-					console.log(data);
+			editRoute(payload, {
+				onSuccess: () => {
+					router.push('/admin');
 				},
 				onError: (error) => {
 					console.error('Error adding route:', error);
@@ -293,7 +289,7 @@ export default function AddRouteMap() {
 										<li key={index} className="w-full">
 											<div className="flex w-full items-center justify-between">
 												<p>{location.location.location_name}</p>
-												<button onClick={() => deleteLocation(index)}>
+												<button type="button" onClick={() => deleteLocation(index)}>
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														fill="none"

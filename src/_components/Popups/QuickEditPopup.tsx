@@ -160,7 +160,7 @@ export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupPr
 			route_id: route.route_id,
 			route_name: data.get('route_name'),
 			category: data.get('category'),
-			min_fare: data.get('min_fare'),
+			min_fare: Number(data.get('min_fare')),
 			Locations: route.Locations,
 		};
 		console.log(payload);
@@ -241,7 +241,13 @@ export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupPr
 							defaultValue={route.category}
 							onChange={() => {}}
 						/>
-						<TextInput label="Minimum Fare" name="min_fare" defaultValue={route.min_fare} onChange={() => {}} />
+						<TextInput
+							type="number"
+							label="Minimum Fare"
+							name="min_fare"
+							defaultValue={route.min_fare}
+							onChange={() => {}}
+						/>
 						<TextInput
 							type="number"
 							label="Station Count"
@@ -353,7 +359,8 @@ export function QuickEditLocationsPopup({ location, onCancel }: QuickEditLocatio
 						<TextInput
 							type="number"
 							label="Route ID"
-							defaultValue={location.Routes[0].route_id}
+							value={location.route_id}
+							readOnly={true}
 							disabled={true}
 							onChange={() => {}}
 						/>
