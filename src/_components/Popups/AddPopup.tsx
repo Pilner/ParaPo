@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { User, Route, Location } from '@/_types/Models';
 import { TextInput, DropdownInput } from '@/_components/Input';
 import Button from '@/_components/Button';
+
+import { validateUserSchema } from '@/_validation/userSchema';
 
 import { usePostUser } from '@/_hooks/useUser';
 import { toast } from 'react-toastify';
@@ -11,6 +13,8 @@ interface PopupProps {
 }
 
 export function AddUserPopup({ onCancel }: PopupProps) {
+	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
+
 	const { mutate: updateUser } = usePostUser();
 
 	const handleCancel = () => {
@@ -25,8 +29,16 @@ export function AddUserPopup({ onCancel }: PopupProps) {
 			password: data.get('password'),
 			confirmPassword: data.get('confirmPassword'),
 		};
-
 		console.log(payload);
+
+		const errors = await validateUserSchema(payload);
+		if (errors) {
+			setInputError(errors);
+			console.error(errors);
+			return;
+		} else {
+			setInputError(null);
+		}
 
 		try {
 			updateUser(payload, {
@@ -69,12 +81,19 @@ export function AddUserPopup({ onCancel }: PopupProps) {
 						</button>
 					</div>
 					<div className="flex w-full flex-col gap-4">
-						<TextInput label="Username" name="username" placeholder="Enter Username" onChange={() => {}} />
+						<TextInput
+							label="Username"
+							name="username"
+							placeholder="Enter Username"
+							error={inputError?.username || undefined}
+							onChange={() => {}}
+						/>
 						<TextInput
 							type="password"
 							name="password"
 							label="Password"
 							placeholder="Enter Password"
+							error={inputError?.password || undefined}
 							onChange={() => {}}
 						/>
 						<TextInput
@@ -82,6 +101,7 @@ export function AddUserPopup({ onCancel }: PopupProps) {
 							name="confirmPassword"
 							label="Confirm Password"
 							placeholder="Confirm Password"
+							error={inputError?.confirmPassword || undefined}
 							onChange={() => {}}
 						/>
 					</div>

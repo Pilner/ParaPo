@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { User, Route, Location } from '@/_types/Models';
 import { TextInput, DropdownInput } from '@/_components/Input';
@@ -7,6 +7,10 @@ import Button from '@/_components/Button';
 import { usePutUser, useDeleteUser } from '@/_hooks/useUser';
 import { usePutRoute, useDeleteRoute } from '@/_hooks/useRoute';
 import { usePutLocation } from '@/_hooks/useLocation';
+import { validateUserSchema } from '@/_validation/userSchema';
+import { validateRouteSchema } from '@/_validation/routeSchema';
+import { validateLocationSchema } from '@/_validation/locationSchema';
+
 import { toast } from 'react-toastify';
 
 import { routeCategoryOptions } from '@/_data/data';
@@ -20,6 +24,8 @@ interface QuickEditUserPopupProps extends PopupProps {
 }
 
 export function QuickEditUserPopup({ user, onCancel }: QuickEditUserPopupProps) {
+	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
+
 	const { mutate: updateUser } = usePutUser(user.user_id);
 	const { mutate: deleteUser } = useDeleteUser();
 
@@ -55,8 +61,16 @@ export function QuickEditUserPopup({ user, onCancel }: QuickEditUserPopupProps) 
 			password: data.get('password'),
 			confirmPassword: data.get('confirmPassword'),
 		};
-
 		console.log(payload);
+
+		const errors = await validateUserSchema(payload);
+		if (errors) {
+			setInputError(errors);
+			console.error(errors);
+			return;
+		} else {
+			setInputError(null);
+		}
 
 		try {
 			updateUser(payload, {
@@ -107,12 +121,20 @@ export function QuickEditUserPopup({ user, onCancel }: QuickEditUserPopupProps) 
 							value={user.user_id}
 							onChange={() => {}}
 						/>
-						<TextInput label="Username" name="username" defaultValue={user.username} onChange={() => {}} />
+						<TextInput
+							label="Username"
+							name="username"
+							defaultValue={user.username}
+							placeholder="Enter Username"
+							error={inputError?.username || undefined}
+							onChange={() => {}}
+						/>
 						<TextInput
 							type="password"
 							name="password"
 							label="Password"
 							placeholder="Enter Password"
+							error={inputError?.password || undefined}
 							onChange={() => {}}
 						/>
 						<TextInput
@@ -120,6 +142,7 @@ export function QuickEditUserPopup({ user, onCancel }: QuickEditUserPopupProps) 
 							name="confirmPassword"
 							label="Confirm Password"
 							placeholder="Confirm Password"
+							error={inputError?.confirmPassword || undefined}
 							onChange={() => {}}
 						/>
 					</div>
@@ -146,6 +169,8 @@ interface QuickEditRoutesPopupProps extends PopupProps {
 }
 
 export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupProps) {
+	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
+
 	const { mutate: updateRoute } = usePutRoute(route.route_id);
 	const { mutate: deleteRoute } = useDeleteRoute();
 
@@ -160,10 +185,19 @@ export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupPr
 			route_id: route.route_id,
 			route_name: data.get('route_name'),
 			category: data.get('category'),
-			min_fare: Number(data.get('min_fare')),
+			min_fare: Number(data.get('min_fare')) || undefined,
 			Locations: route.Locations,
 		};
 		console.log(payload);
+
+		const errors = await validateRouteSchema(payload);
+		if (errors) {
+			setInputError(errors);
+			console.error(errors);
+			return;
+		} else {
+			setInputError(null);
+		}
 
 		try {
 			updateRoute(payload, {
@@ -233,12 +267,21 @@ export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupPr
 							value={route.route_id}
 							onChange={() => {}}
 						/>
-						<TextInput label="Route Name" name="route_name" defaultValue={route.route_name} onChange={() => {}} />
+						<TextInput
+							label="Route Name"
+							name="route_name"
+							defaultValue={route.route_name}
+							placeholder="Enter Route Name"
+							error={inputError?.route_name || undefined}
+							onChange={() => {}}
+						/>
 						<DropdownInput
 							label="Category"
 							name="category"
 							options={routeCategoryOptions}
+							placeholder="Enter Category"
 							defaultValue={route.category}
+							error={inputError?.category || undefined}
 							onChange={() => {}}
 						/>
 						<TextInput
@@ -246,6 +289,9 @@ export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupPr
 							label="Minimum Fare"
 							name="min_fare"
 							defaultValue={route.min_fare}
+							min={0}
+							placeholder="Enter Minimum Fare (PHP)"
+							error={inputError?.min_fare || undefined}
 							onChange={() => {}}
 						/>
 						<TextInput
@@ -282,6 +328,8 @@ interface QuickEditLocationsPopupProps extends PopupProps {
 }
 
 export function QuickEditLocationsPopup({ location, onCancel }: QuickEditLocationsPopupProps) {
+	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
+
 	const { mutate: updateLocation } = usePutLocation(location.location_id);
 
 	const handleCancel = () => {
@@ -294,10 +342,19 @@ export function QuickEditLocationsPopup({ location, onCancel }: QuickEditLocatio
 		let payload = {
 			location_id: location.location_id,
 			location_name: data.get('location_name'),
-			longitude: data.get('longitude'),
-			latitude: data.get('latitude'),
+			longitude: Number(data.get('longitude')) || undefined,
+			latitude: Number(data.get('latitude')) || undefined,
 		};
 		console.log(payload);
+
+		const errors = await validateLocationSchema(payload);
+		if (errors) {
+			setInputError(errors);
+			console.error(errors);
+			return;
+		} else {
+			setInputError(null);
+		}
 
 		try {
 			updateLocation(payload, {
@@ -352,10 +409,30 @@ export function QuickEditLocationsPopup({ location, onCancel }: QuickEditLocatio
 							label="Location Name"
 							name="location_name"
 							defaultValue={location.location_name}
+							placeholder="Enter Location Name"
+							error={inputError?.location_name || undefined}
 							onChange={() => {}}
 						/>
-						<TextInput label="Longitude" name="longitude" defaultValue={location.longitude} onChange={() => {}} />
-						<TextInput label="Latitude" name="latitude" defaultValue={location.latitude} onChange={() => {}} />
+						<TextInput
+							type="number"
+							step="any"
+							label="Longitude"
+							name="longitude"
+							defaultValue={location.longitude}
+							placeholder="Enter Longitude"
+							error={inputError?.longitude || undefined}
+							onChange={() => {}}
+						/>
+						<TextInput
+							type="number"
+							step="any"
+							label="Latitude"
+							name="latitude"
+							defaultValue={location.latitude}
+							placeholder="Enter Latitude"
+							error={inputError?.latitude || undefined}
+							onChange={() => {}}
+						/>
 						<TextInput
 							type="number"
 							label="Route ID"

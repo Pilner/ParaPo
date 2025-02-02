@@ -18,6 +18,7 @@ import { TextInput, DropdownInput } from '@/_components/Input';
 import { MapAdminNavbar } from '@/_components/semantics/Navbar';
 
 import { routeCategoryOptions } from '@/_data/data';
+import { validateRouteSchema } from '@/_validation/routeSchema';
 
 import { usePostRoute } from '@/_hooks/useRoute';
 import { toast } from 'react-toastify';
@@ -32,6 +33,7 @@ interface LocationList {
 export default function AddRouteMap() {
 	const router = useRouter();
 	const [locationsList, setLocationsList] = useState<LocationList[]>([]);
+	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
 
 	const { mutate: addRoute } = usePostRoute();
 
@@ -148,19 +150,30 @@ export default function AddRouteMap() {
 		const data = new FormData(e.currentTarget);
 		const Locations = locationsList.map((location) => location.location);
 
-		const payload: Route = {
+		const payload: any = {
 			route_name: data.get('route_name') as string,
 			category: data.get('category') as string,
-			min_fare: Number(data.get('min_fare')),
+			min_fare: Number(data.get('min_fare')) || undefined,
 			Locations: Locations,
 		};
-
 		console.log(payload);
+
+		const errors = await validateRouteSchema(payload);
+		if (errors) {
+			setInputError(errors);
+			console.error(errors);
+			return;
+		} else {
+			setInputError(null);
+		}
 
 		try {
 			addRoute(payload, {
 				onSuccess: () => {
-					router.push('/admin');
+					toast.success('Route created successfully', {
+						onClose: () => router.push('/admin'),
+						autoClose: 1000,
+					});
 				},
 				onError: (error) => {
 					console.error('Error adding route:', error);
@@ -185,15 +198,28 @@ export default function AddRouteMap() {
 				<MapAdminNavbar />
 				<form onSubmit={handleSubmit} className="flex h-full flex-grow flex-col gap-4 overflow-y-hidden p-4 text-black">
 					<div id="formSubmit" className="flex flex-col gap-2 text-regular-text">
-						<TextInput label="Route Name" name="route_name" placeholder="Enter Route Name" onChange={() => {}} />
+						<TextInput
+							label="Route Name"
+							name="route_name"
+							placeholder="Enter Route Name"
+							error={inputError?.route_name || undefined}
+							onChange={() => {}}
+						/>
 						<DropdownInput
 							label="Category"
 							name="category"
 							placeholder="Enter Category"
 							options={routeCategoryOptions}
+							error={inputError?.category || undefined}
 							onChange={() => {}}
 						/>
-						<TextInput label="Minimum Fare" name="min_fare" placeholder="Enter Minimum Fare" onChange={() => {}} />
+						<TextInput
+							label="Minimum Fare"
+							name="min_fare"
+							placeholder="Enter Minimum Fare"
+							error={inputError?.min_fare || undefined}
+							onChange={() => {}}
+						/>
 					</div>
 					<div className="w-full border border-black/25" />
 					<div className="flex h-full flex-col gap-2 overflow-y-hidden">
