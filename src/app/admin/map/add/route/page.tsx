@@ -171,7 +171,10 @@ export default function AddRouteMap() {
 			addRoute(payload, {
 				onSuccess: () => {
 					toast.success('Route created successfully', {
-						onClose: () => router.push('/admin'),
+						onClose: () => {
+							// router.push('/admin');
+							window.location.href = '/admin';
+						},
 						autoClose: 1000,
 					});
 				},

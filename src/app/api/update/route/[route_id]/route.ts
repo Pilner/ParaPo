@@ -54,6 +54,8 @@ export async function PUT(req: Request, params: params) {
 			},
 		});
 
+		console.log(locationsCountDB, Locations.length);
+
 		if (locationsCountDB !== Locations.length) {
 			// Delete all locations associated with the route
 			await prisma.locations.deleteMany({
@@ -89,31 +91,23 @@ export async function PUT(req: Request, params: params) {
 				}
 			);
 		} else {
-			// Update the route
-			const route = await prisma.routes.update({
-				where: {
-					route_id: parseInt(route_id_params),
-				},
-				data: {
-					route_name,
-					category,
-					min_fare,
-					Locations: {
-						updateMany: Locations.map((location: Location) => {
-							return {
-								where: {
-									location_id: location.location_id,
-								},
-								data: {
-									location_name: location.location_name,
-									longitude: location.longitude,
-									latitude: location.latitude,
-								},
-							};
-						}),
-					},
-				},
-			});
+			const route = await prisma.$transaction([
+				prisma.routes.update({
+					where: { route_id: parseInt(route_id_params) },
+					data: { route_name, category, min_fare },
+				}),
+				...Locations.map((location: Location) =>
+					prisma.locations.update({
+						where: { location_id: location.location_id },
+						data: {
+							location_name: location.location_name,
+							longitude: location.longitude,
+							latitude: location.latitude,
+						},
+					})
+				),
+			]);
+
 			return new Response(
 				JSON.stringify({
 					route,

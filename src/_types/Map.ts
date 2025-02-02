@@ -6,6 +6,7 @@ export interface Route {
 }
 
 export interface Location {
+	location_id?: number;
 	location_name: string;
 	longitude: number;
 	latitude: number;
