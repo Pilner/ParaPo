@@ -19,6 +19,7 @@ import { TextInput, DropdownInput } from '@/_components/Input';
 import { MapAdminNavbar } from '@/_components/semantics/Navbar';
 
 import { routeCategoryOptions } from '@/_data/data';
+import { validateRouteSchema } from '@/_validation/routeSchema';
 
 import { useGetRoute, usePutRoute } from '@/_hooks/useRoute';
 import { toast } from 'react-toastify';
@@ -34,6 +35,7 @@ export default function EditRouteMap() {
 	const router = useRouter();
 	const { route_id } = useParams();
 	const [locationsList, setLocationsList] = useState<LocationList[]>([]);
+	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
 
 	const [route, setRoute] = useState({} as any);
 
@@ -222,16 +224,27 @@ export default function EditRouteMap() {
 			route_id: route.route_id,
 			route_name: data.get('route_name') as string,
 			category: data.get('category') as string,
-			min_fare: Number(data.get('min_fare')),
+			min_fare: Number(data.get('min_fare')) || undefined,
 			Locations: Locations,
 		};
-
 		console.log(payload);
+
+		const errors = await validateRouteSchema(payload);
+		if (errors) {
+			setInputError(errors);
+			console.error(errors);
+			return;
+		} else {
+			setInputError(null);
+		}
 
 		try {
 			editRoute(payload, {
 				onSuccess: () => {
-					router.push('/admin');
+					toast.success('Route edited successfully', {
+						onClose: () => router.push('/admin'),
+						autoClose: 1000,
+					});
 				},
 				onError: (error) => {
 					console.error('Error adding route:', error);
@@ -261,14 +274,16 @@ export default function EditRouteMap() {
 							name="route_name"
 							defaultValue={route.route_name}
 							placeholder="Enter Route Name"
+							error={inputError?.route_name || undefined}
 							onChange={() => {}}
 						/>
 						<DropdownInput
 							label="Category"
 							name="category"
-							placeholder="Enter Category"
-							defaultValue={route.category}
 							options={routeCategoryOptions}
+							defaultValue={route.category}
+							placeholder="Enter Category"
+							error={inputError?.category || undefined}
 							onChange={() => {}}
 						/>
 						<TextInput
@@ -276,6 +291,7 @@ export default function EditRouteMap() {
 							name="min_fare"
 							defaultValue={route.min_fare}
 							placeholder="Enter Minimum Fare"
+							error={inputError?.min_fare || undefined}
 							onChange={() => {}}
 						/>
 					</div>

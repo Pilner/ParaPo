@@ -5,6 +5,7 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	children?: React.ReactNode;
 	placeholder?: string;
+	error?: string;
 	name?: string;
 	value?: any;
 	onChange?: (value: any) => void;
@@ -15,6 +16,7 @@ export function TextInput({
 	name,
 	value,
 	placeholder,
+	error,
 	label,
 	children,
 	onChange,
@@ -29,16 +31,23 @@ export function TextInput({
 
 	return (
 		<div className="relative w-full">
-			<label className="text-input-label font-semibold" htmlFor={inputId}>
-				{children ?? label}
-			</label>
-			<div className="w-full overflow-clip drop-shadow-lg">
+			<div className="flex">
+				<label className="text-input-label font-semibold" htmlFor={inputId}>
+					{children ?? label}
+				</label>
+				{(error || error === '') && (
+					<p className="duration-20 ml-auto text-input-label font-semibold text-red-500 transition">{error}</p>
+				)}
+			</div>
+			<div
+				className={`duration-20 w-full overflow-clip rounded-2xl border drop-shadow-sm transition ${error || error === '' ? 'border-red-500' : 'border-dark-gray'}`}
+			>
 				<input
 					type={type}
 					placeholder={placeholder}
 					id={inputId}
 					name={name}
-					className="w-full rounded-2xl border border-dark-gray px-4 py-2"
+					className={`w-full rounded-2xl border px-4 py-2 ${error || error === '' ? 'border-transparent focus:outline-none' : 'border-dark-gray focus:border-dark-gray focus:outline-black/25'}`}
 					value={value}
 					onChange={handleChange}
 					{...otherProps}
@@ -52,6 +61,7 @@ interface DropdownInputProps extends React.InputHTMLAttributes<HTMLSelectElement
 	label?: string;
 	children?: React.ReactNode;
 	placeholder?: string;
+	error?: string;
 	name?: string;
 	options?: { label: string; value: any }[];
 	value?: any;
@@ -62,6 +72,7 @@ export function DropdownInput({
 	label,
 	children,
 	placeholder,
+	error,
 	name,
 	options,
 	value,
@@ -77,16 +88,23 @@ export function DropdownInput({
 
 	return (
 		<div className="relative w-full">
-			<label className="text-input-label font-semibold" htmlFor={inputId}>
-				{children ?? label}
-			</label>
-			<div className="w-full overflow-clip drop-shadow-lg">
+			<div className="flex">
+				<label className="text-input-label font-semibold" htmlFor={inputId}>
+					{children ?? label}
+				</label>
+				{(error || error === '') && (
+					<p className="duration-20 ml-auto text-input-label font-semibold text-red-500 transition">{error}</p>
+				)}
+			</div>
+			<div
+				className={`duration-20 w-full overflow-clip rounded-2xl border drop-shadow-sm transition ${error || error === '' ? 'border-red-500' : 'border-dark-gray'}`}
+			>
 				<select
 					id={inputId}
 					name={name}
 					defaultValue={value ?? 'disabled'}
 					onChange={handleChange}
-					className={`w-full rounded-2xl border border-dark-gray px-4 py-2`}
+					className={`w-full rounded-2xl border px-4 py-2 ${error || error === '' ? 'border-transparent focus:outline-none' : 'border-dark-gray focus:border-dark-gray focus:outline-black/25'}`}
 					{...otherProps}
 				>
 					{placeholder && (
