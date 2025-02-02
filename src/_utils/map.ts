@@ -1,11 +1,12 @@
 import mapboxgl from 'mapbox-gl';
-
 import { mapboxAccessToken } from '@/_data/data';
+import { Route } from '@/_types/Models';
 
-import dataPointsProps from '@/_types/DataPoints';
-import RouteProps from '@/_types/Route';
+import { useEffect } from 'react';
 
-// roygbiv
+import DataPoints from '@/_types/DataPoints';
+// import Route from '@/_types/Route';
+
 const colors = ['#FF7F00', '#FFCC00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 let colorIndex = 0;
 
@@ -58,14 +59,14 @@ export const fetchLocationName = async (latitude: number, longitude: number) => 
 };
 
 // Find the nearest route from the origin and destination points
-export const findNearestRoute = async (routes: RouteProps[], dataPoints: dataPointsProps) => {
+export const findNearestRoute = async (routes: Route[], dataPoints: DataPoints) => {
 	// get the origin and destination points
 	const origin = dataPoints.origin;
-	const dest = dataPoints.dest;
+	const destination = dataPoints.destination;
 
 	// states
 	let minDistance = Infinity;
-	let minRoute = {} as RouteProps;
+	let minRoute = {} as Route;
 	let bestIndex = {
 		origin: 0,
 		dest: 0,
@@ -91,7 +92,8 @@ export const findNearestRoute = async (routes: RouteProps[], dataPoints: dataPoi
 
 			// Get the distance between the destination and the location
 			const distanceDest = Math.sqrt(
-				Math.pow(location.latitude - (dest.latitude ?? 0), 2) + Math.pow(location.longitude - (dest.longitude ?? 0), 2)
+				Math.pow(location.latitude - (destination.latitude ?? 0), 2) +
+					Math.pow(location.longitude - (destination.longitude ?? 0), 2)
 			);
 
 			// Get the nearest point of the route from the origin
@@ -134,7 +136,7 @@ const getRoutedLine = async (mode: 'driving' | 'walking' | 'cycling', origin: nu
 export async function drawRoute(
 	mode: 'driving' | 'walking' | 'cycling',
 	type: 'straight' | 'routed',
-	route: RouteProps,
+	route: Route,
 	map: mapboxgl.Map,
 	color?: string,
 	markerColor?: string
@@ -284,22 +286,16 @@ const fetchDistance = async (mode: 'driving' | 'walking' | 'cycling', origin: nu
 	return minDistance;
 };
 
-export const recursiveDrawRoute = async (routes: RouteProps[], dataPoints: dataPointsProps, map: mapboxgl.Map) => {
+export const recursiveDrawRoute = async (routes: Route[], dataPoints: DataPoints, map: mapboxgl.Map) => {
 	let routeList = [] as {
-		minRoute: RouteProps;
+		minRoute: Route;
 		bestIndex: { origin: number; dest: number };
 	}[];
 	let nearestRoute = await findNearestRoute(routes, dataPoints);
 
 	routeList.push(nearestRoute);
 
-	if (
-		nearestRoute &&
-		nearestRoute.minRoute &&
-		nearestRoute.bestIndex &&
-		nearestRoute.bestIndex.origin &&
-		nearestRoute.bestIndex.dest
-	) {
+	if (nearestRoute) {
 		await drawTwoPoints(
 			'walking',
 			'routed',
@@ -327,7 +323,7 @@ export const recursiveDrawRoute = async (routes: RouteProps[], dataPoints: dataP
 			// Find the nearest route from the nearest route destination to the actual destination
 			let currentNearestRoute = await findNearestRoute(routes, {
 				origin: nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest],
-				dest: dataPoints.dest,
+				destination: dataPoints.destination,
 			});
 
 			// If the nearest route is the same as the previous route, break the loop
@@ -336,8 +332,8 @@ export const recursiveDrawRoute = async (routes: RouteProps[], dataPoints: dataP
 			}
 
 			await drawRoute(
-				'driving',
-				'straight',
+				'walking',
+				currentNearestRoute.minRoute.category === 'Train' ? 'straight' : 'routed',
 				currentNearestRoute.minRoute,
 				map,
 				colors[colorIndex % colors.length],
@@ -366,7 +362,7 @@ export const recursiveDrawRoute = async (routes: RouteProps[], dataPoints: dataP
 		await drawTwoPoints(
 			'walking',
 			'routed',
-			[dataPoints.dest.longitude ?? 0, dataPoints.dest.latitude ?? 0],
+			[dataPoints.destination.longitude ?? 0, dataPoints.destination.latitude ?? 0],
 			[
 				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest].longitude,
 				nearestRoute.minRoute.Locations[nearestRoute.bestIndex.dest].latitude,
@@ -374,8 +370,6 @@ export const recursiveDrawRoute = async (routes: RouteProps[], dataPoints: dataP
 			map,
 			'#f53636'
 		);
-		console.log('FINAL Route List:', routeList);
-
 		return routeList;
 	}
 };

@@ -3,47 +3,53 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Route } from '@/_types/Models';
 
-import Route from '@/_types/Route';
+import { useGetRoutes, useSearchRoutes } from '@/_hooks/useRoute';
 
 import Navbar from '@/_components/semantics/Navbar';
 import Footer from '@/_components/semantics/Footer';
 import { TextInput } from '@/_components/Input';
 
+import { toast } from 'react-toastify';
+
 export default function Catalog() {
 	// Initialize the state of routes
-	const [routes, setRoutes] = useState([] as Route[]);
+	const [routes, setRoutes] = useState<Route[]>([]);
+
+	const { data, error } = useGetRoutes();
 
 	useEffect(() => {
-		(async () => {
-			// Fetch routes from the Backend using API Endpoints
-			const res = await fetch(`http://localhost:3000/api/get/route`);
-			const data = await res.json();
-			console.log(data);
-
+		if (error) {
+			console.error(error);
+			toast.error('An error occurred while fetching the routes');
+		}
+		if (data) {
 			setRoutes(data);
-		})();
-	}, []);
-
-	async function handleSearch(searchInput: string) {
-		let searchLinkAPI;
-
-		if (searchInput === '') {
-			searchLinkAPI = `http://localhost:3000/api/get/route`;
-		} else {
-			searchLinkAPI = `http://localhost:3000/api/get/route/search/${searchInput}`;
 		}
+	}, [data, error]);
 
-		const res = await fetch(searchLinkAPI);
-		const data = await res.json();
+	const [searchInput, setSearchInput] = useState<string>('');
+	const { data: searchData, error: searchError } = useSearchRoutes(searchInput);
 
-		// If no routes are found, set the routes to an empty array
-		if (data.message) {
-			setRoutes([]);
-			return;
+	useEffect(() => {
+		if (searchError) {
+			console.error(searchError);
+			toast.error('An error occurred while fetching the routes');
 		}
+		if (searchData) {
+			setRoutes(searchData);
+		}
+	}, [searchData, searchError]);
 
-		setRoutes(data);
+	function handleSearch(input: string) {
+		if (data) {
+			if (input === '' || input === null) {
+				setRoutes(data);
+			} else {
+				setSearchInput(input);
+			}
+		}
 	}
 
 	return (

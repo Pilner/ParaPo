@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from '@/lib/prisma';
 
-import { NextApiRequest } from "next";
+import { NextApiRequest } from 'next';
 
 interface params {
 	params: {
@@ -13,7 +13,7 @@ export async function GET(req: NextApiRequest, params: params) {
 	const route_id = params.params.route_id;
 
 	let headers = {
-		"Content-Type": "application/json",
+		'Content-Type': 'application/json',
 	};
 
 	try {
@@ -37,7 +37,7 @@ export async function GET(req: NextApiRequest, params: params) {
 		}
 
 		// Return an error message with status code 500 if an error occurs
-		return new Response(JSON.stringify({ message: "An error occurred" }), {
+		return new Response(JSON.stringify({ message: 'An error occurred' }), {
 			status: 500,
 			headers,
 		});

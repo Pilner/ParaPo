@@ -11,15 +11,21 @@
 	},
 	"dependencies": {
 		"@mapbox/search-js-web": "^1.0.0-beta.21",
-		"@prisma/client": "^5.20.0",
+		"@prisma/client": "^6.3.0",
+		"@tanstack/react-query": "^5.66.0",
+		"bcrypt": "^5.1.1",
 		"mapbox-gl": "^3.3.0",
 		"next": "^14.2.14",
+		"next-auth": "^4.24.11",
 		"react": "^18",
 		"react-dom": "^18",
 		"react-icons": "^5.2.1",
-		"react-map-gl": "^7.1.7"
+		"react-map-gl": "^7.1.7",
+		"react-toastify": "^11.0.3"
 	},
 	"devDependencies": {
+		"@tanstack/react-query-devtools": "^5.66.0",
+		"@types/bcrypt": "^5.0.2",
 		"@types/node": "^20",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
@@ -29,7 +35,7 @@
 		"postcss": "^8.5.1",
 		"prettier": "^3.4.2",
 		"prettier-plugin-tailwindcss": "^0.6.11",
-		"prisma": "^5.20.0",
+		"prisma": "^6.3.0",
 		"tailwindcss": "^3.4.17",
 		"tsx": "^4.19.1",
 		"typescript": "^5"

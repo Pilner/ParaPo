@@ -24,6 +24,8 @@ npm install
 ```env
 NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=<replace_with_mapbox_api_token>
 DATABASE_URL=<replace_with_database_url>
+NEXTAUTH_SECRET=<replace_with_your_secret>
+NEXTAUTH_URL=<replace_with_your_url>
 ```
 
 4. Migrate the Database using Prisma
@@ -52,25 +54,25 @@ http://localhost:3000
 
 ## Routes
 
--   `/` - is the Home Page
--   `/catalog` - is the Catalog Page
--   `/catalog/route/[id]` - is the Catalog Route Map Page
--   `/map` - is the Route Map Page
+- `/` - is the Home Page
+- `/catalog` - is the Catalog Page
+- `/catalog/route/[id]` - is the Catalog Route Map Page
+- `/map` - is the Route Map Page
 
 ## API Routes
 
--   `/api/get/route` - gets all routes
--   `/api/get/route/[route_id]` - gets the route for the route_id specified
--   `/api/get/route/search/[keyword]` - gets all the routes containing the keyword
+- `/api/get/route` - gets all routes
+- `/api/get/route/[route_id]` - gets the route for the route_id specified
+- `/api/get/route/search/[keyword]` - gets all the routes containing the keyword
 
 ## Collaborators
 
--   Cerna, Raymond Miguel
--   Enrico, Carl Andrei E.
--   Mabaet, Dave
--   Mesina, Venice Fae R.
--   Pabroquez, Jethro S.
--   Victuelles, Fabian Railey A.
+- Cerna, Raymond Miguel
+- Enrico, Carl Andrei E.
+- Mabaet, Dave
+- Mesina, Venice Fae R.
+- Pabroquez, Jethro S.
+- Victuelles, Fabian Railey A.
 
 ## Licenses
 

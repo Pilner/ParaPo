@@ -1,12 +1,16 @@
 import type { Metadata } from 'next';
+import { Providers } from '@/app/providers';
+import { ToastContainer } from 'react-toastify';
 import './globals.css';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
 	title: 'ParaPo',
 	description: 'A Navigation App Tailored for Public Utility Vehicles and Commuters.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
@@ -22,7 +26,10 @@ export default function RootLayout({
 					rel="stylesheet"
 				/>
 			</head>
-			<body>{children}</body>
+			<body>
+				<Providers>{children}</Providers>
+				<ToastContainer />
+			</body>
 		</html>
 	);
 }

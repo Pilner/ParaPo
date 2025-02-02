@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	type?: string;
@@ -11,7 +11,7 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function TextInput({
-	type,
+	type = 'text',
 	name,
 	value,
 	placeholder,
@@ -20,7 +20,7 @@ export function TextInput({
 	onChange,
 	...otherProps
 }: TextInputProps) {
-	const inputId = `input_${Math.random().toString(36).substr(2, 9)}`;
+	const inputId = `input_${name}`;
 
 	const handleChange = async (e: any) => {
 		e.preventDefault();
@@ -48,7 +48,60 @@ export function TextInput({
 	);
 }
 
-// Define default props
-TextInput.defaultProps = {
-	type: 'text',
-};
+interface DropdownInputProps extends React.InputHTMLAttributes<HTMLSelectElement> {
+	label?: string;
+	children?: React.ReactNode;
+	placeholder?: string;
+	name?: string;
+	options?: { label: string; value: any }[];
+	value?: any;
+	onChange?: (value: any) => void;
+}
+
+export function DropdownInput({
+	label,
+	children,
+	placeholder,
+	name,
+	options,
+	value,
+	onChange,
+	...otherProps
+}: DropdownInputProps) {
+	const inputId = `input_${Math.random().toString(36).substr(2, 9)}`;
+
+	const handleChange = async (e: any) => {
+		e.preventDefault();
+		onChange && onChange(e.target.value);
+	};
+
+	return (
+		<div className="relative w-full">
+			<label className="text-input-label font-semibold" htmlFor={inputId}>
+				{children ?? label}
+			</label>
+			<div className="w-full overflow-clip drop-shadow-lg">
+				<select
+					id={inputId}
+					name={name}
+					defaultValue={value ?? 'disabled'}
+					onChange={handleChange}
+					className={`w-full rounded-2xl border border-dark-gray px-4 py-2`}
+					{...otherProps}
+				>
+					{placeholder && (
+						<option value="disabled" disabled>
+							{placeholder}
+						</option>
+					)}
+					{options &&
+						options.map((option, index) => (
+							<option key={index} value={option.value}>
+								{option.label}
+							</option>
+						))}
+				</select>
+			</div>
+		</div>
+	);
+}

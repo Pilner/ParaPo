@@ -10,6 +10,14 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Users {
+    user_id    Int      @id @default(autoincrement())
+    username   String   @unique
+    password   String
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
 model Locations {
     location_id   Int    @id @default(autoincrement())
     location_name String
@@ -20,7 +28,8 @@ model Locations {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 
-    Routes Routes[]
+    route_id Int    @map("route_id") // Foreign key reference
+    Routes   Routes @relation(fields: [route_id], references: [route_id], onDelete: Cascade)
 }
 
 model Routes {
