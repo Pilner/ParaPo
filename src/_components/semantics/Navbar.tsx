@@ -112,9 +112,12 @@ export function MapAdminNavbar() {
 					</Link>
 				</div>
 				<div className="flex items-center gap-8 font-secondary text-[1rem] font-semibold text-gray">
-					<Link href="/admin" className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">
+					<button
+						onClick={() => (window.location.href = '/admin')}
+						className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]"
+					>
 						Dashboard
-					</Link>
+					</button>
 				</div>
 			</div>
 		</nav>

@@ -2,10 +2,9 @@
 import { mapboxAccessToken } from '@/_data/data';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
-import { Route, Location } from '@/_types/Map';
+import { Location } from '@/_types/Map';
 
 import { MapboxSearchBox } from '@mapbox/search-js-web';
 import mapboxgl from 'mapbox-gl';
@@ -14,7 +13,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { fetchLocationName } from '@/_utils/map';
 
 import Button from '@/_components/Button';
-import Marker from '@/_components/Marker';
 import { TextInput, DropdownInput } from '@/_components/Input';
 import { MapAdminNavbar } from '@/_components/semantics/Navbar';
 
@@ -143,6 +141,11 @@ export default function EditRouteMap() {
 				});
 			});
 		}
+
+		// cleanup
+		return () => {
+			map.remove();
+		};
 	}, []);
 
 	useEffect(() => {
@@ -157,7 +160,7 @@ export default function EditRouteMap() {
 		if (data) {
 			setRoute(data);
 
-			data.Locations.forEach((location: Location) => {
+			data.Locations.forEach((location: Location, index: number) => {
 				const marker = new mapboxgl.Marker({
 					color: '#FF9270',
 					draggable: true,
@@ -165,12 +168,12 @@ export default function EditRouteMap() {
 					.setLngLat([location.longitude!, location.latitude!])
 					.addTo(map);
 
-				const newLocationIndex = locationsList.length + 1;
+				// const newLocationIndex = locationsList.length + 1;
 
 				const popup = new mapboxgl.Popup({
 					offset: 25,
 					closeOnClick: true,
-				}).setText(`Location ${newLocationIndex}: ${location.location_name}`);
+				}).setText(`Location ${index + 1}: ${location.location_name}`);
 
 				marker.on('dragend', async () => {
 					const newLngLat = marker.getLngLat();
@@ -194,7 +197,7 @@ export default function EditRouteMap() {
 					);
 
 					// Update the popup text
-					popup.setText(`Location ${newLocationIndex}: ${newLocationName}`);
+					// popup.setText(`Location ${newLocationIndex}: ${newLocationName}`);
 				});
 
 				marker.setPopup(popup);
@@ -203,6 +206,7 @@ export default function EditRouteMap() {
 					...prevLocationsList,
 					{
 						location: {
+							location_id: location.location_id,
 							location_name: location.location_name,
 							longitude: location.longitude,
 							latitude: location.latitude,
@@ -211,6 +215,16 @@ export default function EditRouteMap() {
 					},
 				]);
 			});
+
+			// if (data.Locations.length > 0), jump to the middle of the route
+			if (data.Locations.length > 0) {
+				map.flyTo({
+					center: [
+						(data.Locations[0].longitude + data.Locations[data.Locations.length - 1].longitude) / 2,
+						(data.Locations[0].latitude + data.Locations[data.Locations.length - 1].latitude) / 2,
+					],
+				});
+			}
 		}
 	}, [data, error]);
 
@@ -242,7 +256,10 @@ export default function EditRouteMap() {
 			editRoute(payload, {
 				onSuccess: () => {
 					toast.success('Route edited successfully', {
-						onClose: () => router.push('/admin'),
+						onClose: () => {
+							// router.push('/admin');
+							window.location.href = '/admin';
+						},
 						autoClose: 1000,
 					});
 				},

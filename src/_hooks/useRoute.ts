@@ -108,7 +108,7 @@ export const usePutRoute = (route_id: string | number) => {
 	return useMutation({
 		mutationFn: updateRoute,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['route', route_id] });
+			// queryClient.invalidateQueries({ queryKey: ['route', route_id] });
 			queryClient.invalidateQueries({ queryKey: ['routes'] });
 		},
 	});
