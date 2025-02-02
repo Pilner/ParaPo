@@ -28,7 +28,8 @@ model Locations {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 
-    Routes Routes[]
+    route_id Int    @map("route_id") // Foreign key reference
+    Routes   Routes @relation(fields: [route_id], references: [route_id], onDelete: Cascade)
 }
 
 model Routes {
