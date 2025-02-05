@@ -2,9 +2,8 @@
 import { mapboxAccessToken } from '@/_data/data';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
-import { Route, Location } from '@/_types/Map';
+import { Location } from '@/_types/Map';
 
 import { MapboxSearchBox } from '@mapbox/search-js-web';
 import mapboxgl from 'mapbox-gl';
@@ -13,7 +12,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { fetchLocationName } from '@/_utils/map';
 
 import Button from '@/_components/Button';
-import Marker from '@/_components/Marker';
 import { TextInput, DropdownInput } from '@/_components/Input';
 import { MapAdminNavbar } from '@/_components/semantics/Navbar';
 
@@ -31,7 +29,6 @@ interface LocationList {
 }
 
 export default function AddRouteMap() {
-	const router = useRouter();
 	const [locationsList, setLocationsList] = useState<LocationList[]>([]);
 	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
 

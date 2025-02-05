@@ -2,7 +2,7 @@
 import { mapboxAccessToken } from '@/_data/data';
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 import { Location } from '@/_types/Map';
 
@@ -30,7 +30,6 @@ interface LocationList {
 }
 
 export default function EditRouteMap() {
-	const router = useRouter();
 	const { route_id } = useParams();
 	const [locationsList, setLocationsList] = useState<LocationList[]>([]);
 	const [inputError, setInputError] = useState<Record<string, string> | null>(null);

@@ -30,7 +30,7 @@ export default function MapPage() {
 	const [routeList, setRouteList] = useState<RouteList[]>([]);
 
 	const { data: dataUrl } = useParams();
-	const { data, error } = useGetRoutes();
+	const { data, error } = useGetRoutes(1, true);
 
 	useEffect(() => {
 		// Decode the data from the URL
@@ -98,7 +98,8 @@ export default function MapPage() {
 			toast.error('An error occurred while fetching the data');
 		}
 		if (data) {
-			setRoutes(data);
+			console.log(data);
+			setRoutes(data.routes);
 		}
 	}, [data, error]);
 
