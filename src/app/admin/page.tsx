@@ -90,6 +90,14 @@ function UsersTab() {
 		}
 	}, [searchData, searchError]);
 
+	useEffect(() => {
+		if (showAddPopup || showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showAddPopup, showQuickEditPopup]);
+
 	function handleSearch(input: string) {
 		if (data) {
 			if (input === '' || input === null) {
@@ -213,6 +221,14 @@ function RouteList() {
 		}
 	}, [searchData, searchError]);
 
+	useEffect(() => {
+		if (showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showQuickEditPopup]);
+
 	function handleSearch(input: string) {
 		if (data) {
 			if (input === '' || input === null) {
@@ -310,6 +326,14 @@ function LocationList() {
 			setLocations(searchData);
 		}
 	}, [searchData, searchError]);
+
+	useEffect(() => {
+		if (showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showQuickEditPopup]);
 
 	function handleSearch(input: string) {
 		if (data) {
