@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useGetUsers } from '@/_hooks/useUser';
-import { useGetRoutes } from '@/_hooks/useRoute';
-import { useGetLocations } from '@/_hooks/useLocation';
+import { useGetUsers, useSearchUsers } from '@/_hooks/useUser';
+import { useGetRoutes, useSearchRoutes } from '@/_hooks/useRoute';
+import { useGetLocations, useSearchLocations } from '@/_hooks/useLocation';
 import { AuthNavbar } from '@/_components/semantics/Navbar';
 import Button from '@/_components/Button';
 import { TextInput } from '@/_components/Input';
@@ -64,8 +64,11 @@ function UsersTab() {
 	const [currentClickedUser, setCurrentClickedUser] = useState<User | null>(null);
 	const [showAddPopup, setShowAddPopup] = useState(false);
 	const [showQuickEditPopup, setShowQuickEditPopup] = useState(false);
+	const [searchInput, setSearchInput] = useState<string>('');
 
 	const { data, error } = useGetUsers();
+	const { data: searchData, error: searchError } = useSearchUsers(searchInput);
+
 	useEffect(() => {
 		if (error) {
 			toast.error('Failed to fetch data');
@@ -77,12 +80,32 @@ function UsersTab() {
 		}
 	}, [data, error]);
 
+	useEffect(() => {
+		if (searchError) {
+			console.error(searchError);
+			toast.error('An error occurred while fetching the users');
+		}
+		if (searchData) {
+			setUsers(searchData);
+		}
+	}, [searchData, searchError]);
+
+	function handleSearch(input: string) {
+		if (data) {
+			if (input === '' || input === null) {
+				setUsers(data);
+			} else {
+				setSearchInput(input);
+			}
+		}
+	}
+
 	return (
 		<>
 			<div className="my-4 flex flex-col gap-4">
 				<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
 					<div className="w-[20rem]">
-						<TextInput placeholder="Search User" onChange={() => console.log('click')} />
+						<TextInput placeholder="Search User" onChange={handleSearch} />
 					</div>
 					<div>
 						<Button onClick={() => setShowAddPopup(true)}>+ Add User</Button>
@@ -164,8 +187,10 @@ function RouteList() {
 	const [routes, setRoutes] = useState<Route[]>([] as Route[]);
 	const [currentClickedRoute, setCurrentClickedRoute] = useState<Route | null>(null);
 	const [showQuickEditPopup, setShowQuickEditPopup] = useState(false);
+	const [searchInput, setSearchInput] = useState<string>('');
 
 	const { data, error } = useGetRoutes();
+	const { data: searchData, error: searchError } = useSearchRoutes(searchInput);
 
 	useEffect(() => {
 		if (error) {
@@ -178,11 +203,31 @@ function RouteList() {
 		}
 	}, [data, error]);
 
+	useEffect(() => {
+		if (searchError) {
+			console.error(searchError);
+			toast.error('An error occurred while fetching the routes');
+		}
+		if (searchData) {
+			setRoutes(searchData);
+		}
+	}, [searchData, searchError]);
+
+	function handleSearch(input: string) {
+		if (data) {
+			if (input === '' || input === null) {
+				setRoutes(data);
+			} else {
+				setSearchInput(input);
+			}
+		}
+	}
+
 	return (
 		<>
 			<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
 				<div className="w-[20rem]">
-					<TextInput placeholder="Search Routes" onChange={() => console.log('click')} />
+					<TextInput placeholder="Search Routes" onChange={handleSearch} />
 				</div>
 				<div>
 					<Button>
@@ -240,8 +285,10 @@ function LocationList() {
 	const [locations, setLocations] = useState<Location[]>([] as Location[]);
 	const [currentClickedLocation, setCurrentClickedLocation] = useState<Location | null>(null);
 	const [showQuickEditPopup, setShowQuickEditPopup] = useState(false);
+	const [searchInput, setSearchInput] = useState<string>('');
 
 	const { data, error } = useGetLocations();
+	const { data: searchData, error: searchError } = useSearchLocations(searchInput);
 
 	useEffect(() => {
 		if (error) {
@@ -254,11 +301,31 @@ function LocationList() {
 		}
 	}, [data, error]);
 
+	useEffect(() => {
+		if (searchError) {
+			console.error(searchError);
+			toast.error('An error occurred while fetching the locations');
+		}
+		if (searchData) {
+			setLocations(searchData);
+		}
+	}, [searchData, searchError]);
+
+	function handleSearch(input: string) {
+		if (data) {
+			if (input === '' || input === null) {
+				setLocations(data);
+			} else {
+				setSearchInput(input);
+			}
+		}
+	}
+
 	return (
 		<>
 			<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
 				<div className="w-[20rem]">
-					<TextInput placeholder="Search Locations" onChange={() => console.log('click')} />
+					<TextInput placeholder="Search Locations" onChange={handleSearch} />
 				</div>
 				<div>
 					<Button>

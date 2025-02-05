@@ -17,41 +17,24 @@ export async function GET(req: NextApiRequest, params: params) {
 	};
 
 	try {
-		// Get all routes with route_name, category, and Location.location_name containing the keyword
-		const routes = await prisma.routes.findMany({
+		// Get all users containing the keyword
+		const users = await prisma.users.findMany({
 			where: {
 				OR: [
 					{
-						route_name: {
+						username: {
 							contains: keyword,
-						},
-					},
-					{
-						category: {
-							contains: keyword,
-						},
-					},
-					{
-						Locations: {
-							some: {
-								location_name: {
-									contains: keyword,
-								},
-							},
 						},
 					},
 				],
 			},
-			include: {
-				Locations: true,
-			},
 			// sort
 			orderBy: {
-				route_id: 'asc',
+				user_id: 'asc',
 			},
 		});
 
-		return new Response(JSON.stringify(routes), {
+		return new Response(JSON.stringify(users), {
 			status: 200,
 			headers,
 		});

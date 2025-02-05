@@ -16,6 +16,12 @@ const fetchAllUsers = async () => {
 	return data;
 };
 
+const searchUsers = async (searchInput: string) => {
+	const response = await fetch(`/api/get/user/search/${searchInput}`);
+	const data: any[] = await response.json();
+	return data;
+};
+
 const createUser = async (user: any) => {
 	const response = await fetch(`/api/post/user`, {
 		method: 'POST',
@@ -77,6 +83,14 @@ export const useGetUsers = () => {
 	return useQuery({
 		queryKey: ['users'],
 		queryFn: fetchAllUsers,
+	});
+};
+
+export const useSearchUsers = (searchInput: string) => {
+	return useQuery({
+		queryKey: ['search', 'users', searchInput],
+		queryFn: () => searchUsers(searchInput),
+		enabled: !!searchInput,
 	});
 };
 
