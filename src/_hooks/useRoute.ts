@@ -84,7 +84,7 @@ export const useGetRoutes = () => {
 
 export const useSearchRoutes = (searchInput: string) => {
 	return useQuery({
-		queryKey: ['search', searchInput],
+		queryKey: ['search', 'routes', searchInput],
 		queryFn: () => searchRoutes(searchInput),
 		enabled: !!searchInput,
 	});
