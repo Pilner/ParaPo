@@ -217,10 +217,26 @@ export default function MapPage() {
 
 	return (
 		<main className="relative h-screen w-full">
-			<div className="absolute z-10 flex max-h-[40rem] w-[25rem] translate-x-5 translate-y-5 flex-col overflow-hidden rounded-lg border border-black/25 bg-white">
+			<div className="
+			absolute z-10 flex flex-col overflow-hidden rounded-lg border border-black/25 bg-white
+			
+			transform
+			-translate-x-1/2 lg:translate-x-5
+			-translate-y-10 lg:translate-y-5
+
+			left-1/2 lg:left-0
+			bottom-5 lg:bottom-auto
+
+			max-h-[25rem] sm:max-h-[30rem] lg:max-h-[40rem]
+			w-[20rem] sm:w-[35rem] lg:w-[25rem]
+			">
 				<MapNavbar />
 				<div className="flex h-full flex-grow flex-col gap-4 overflow-y-hidden p-4 text-black">
-					<form onSubmit={handleSubmit} className="flex flex-col gap-2 text-regular-text">
+					<form onSubmit={handleSubmit} className="flex flex-col gap-2
+					
+					text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+					lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+					">
 						<div className="flex gap-4">
 							<TextInput
 								name="originCoords"
@@ -291,12 +307,32 @@ export default function MapPage() {
 							<div className="w-full border border-black/25" />
 							<div className="flex flex-col gap-2">
 								<div>
-									<h3 className="text-regular-text font-bold">Origin Location</h3>
-									<p className="text-regular-text font-normal">{location.origin.location_name}</p>
+									<h3 className="
+									font-bold
+
+									text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+									lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+									">Origin Location</h3>
+									<p className="
+									font-normal
+
+									text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+									lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+									">{location.origin.location_name}</p>
 								</div>
 								<div>
-									<h3 className="text-regular-text font-bold">Destination Location</h3>
-									<p className="text-regular-text font-normal">{location.destination.location_name}</p>
+									<h3 className="
+									font-bold
+
+									text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+									lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+									">Destination Location</h3>
+									<p className="
+									font-normal
+
+									text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+									lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+									">{location.destination.location_name}</p>
 								</div>
 							</div>
 						</>

@@ -147,17 +147,49 @@ export default function MapPage() {
 
 	return (
 		<main className="relative h-screen w-full">
-			<div className="absolute z-10 flex max-h-[40rem] w-[25rem] translate-x-5 translate-y-5 flex-col overflow-hidden rounded-lg border border-black/25 bg-white">
+			<div className="
+			absolute z-10 flex flex-col overflow-hidden rounded-lg border border-black/25 bg-white
+			
+			transform
+			-translate-x-1/2 lg:translate-x-5
+			-translate-y-10 lg:translate-y-5
+
+			left-1/2 lg:left-0
+			bottom-5 lg:bottom-auto
+
+			max-h-[25rem] sm:max-h-[30rem] lg:max-h-[40rem]
+			w-[20rem] sm:w-[35rem] lg:w-[25rem]
+			">
 				<MapNavbar />
 				<div className="flex h-full flex-grow flex-col overflow-y-hidden p-4 text-black">
 					<div className="flex flex-col gap-2">
 						<div>
-							<h3 className="text-regular-text font-bold">Origin Location</h3>
-							<p className="text-regular-text font-normal">{location && location.origin.location_name}</p>
+							<h3 className="
+							font-bold
+
+							text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+							lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+							">Origin Location</h3>
+							<p className="
+							font-normal
+							
+							text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+							lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+							">{location && location.origin.location_name}</p>
 						</div>
 						<div>
-							<h3 className="text-regular-text font-bold">Destination Location</h3>
-							<p className="text-regular-text font-normal">{location && location.destination.location_name}</p>
+							<h3 className="
+							font-bold
+							
+							text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+							lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+							">Destination Location</h3>
+							<p className="
+							font-normal
+							
+							text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
+							lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
+							">{location && location.destination.location_name}</p>
 						</div>
 					</div>
 					<div className="mt-4 w-full border border-black/25" />
@@ -165,7 +197,9 @@ export default function MapPage() {
 						{tabs.map((tab, index) => (
 							<button
 								key={`tab-${index}`}
-								className={`duration-20 duration-20 flex-1 border-b-2 py-2 text-center font-secondary text-[1rem] font-semibold transition ${
+								className={`
+									duration-20 duration-20 flex-1 border-b-2 py-2 text-center font-secondary font-semibold transition 
+									text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem] ${
 									activeTab === tab ? 'border-black bg-dark-gray' : 'border-transparent hover:bg-dark-gray'
 								}`}
 								onClick={() => setActiveTab(tab)}
@@ -179,7 +213,10 @@ export default function MapPage() {
 					{activeTab === 'Route List' && (
 						<div className="flex h-full flex-col gap-2 overflow-y-hidden">
 							<div className="flex h-full w-full overflow-y-scroll rounded-b-lg bg-dark-gray p-2">
-								<ol className="w-full list-outside list-decimal pl-7 text-[1rem]">
+								<ol className="
+								w-full list-outside list-decimal pl-7
+								text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]
+								">
 									{routeList.map((route, index) => (
 										<li key={`route-list-${index}`} className="w-full">
 											<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
@@ -196,7 +233,9 @@ export default function MapPage() {
 					{activeTab === 'Instructions' && (
 						<div className="flex h-full flex-col gap-2 overflow-y-hidden">
 							<div className="flex h-full w-full overflow-y-scroll rounded-b-lg bg-dark-gray p-2">
-								<ol className="w-full list-outside list-decimal pl-7 text-[1rem]">
+								<ol className="
+								w-full list-outside list-decimal pl-7
+								text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
 									{routeList.map((route, index) => (
 										<Fragment key={`route-fragment-${index}`}>
 											{index === 0 && (
@@ -210,7 +249,9 @@ export default function MapPage() {
 												<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
 													<Link href={`/catalog/route/${route.minRoute.route_id}`}>{route.minRoute.route_name}</Link>
 												</p>
-												<ul className="list-outside list-disc pl-8 text-[1rem]">
+												<ul className="
+												list-outside list-disc pl-8
+												text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
 													<li>{`Enter at ${route.minRoute.Locations[route.bestIndex.origin].location_name}`}</li>
 													<li>{`Exit at ${route.minRoute.Locations[route.bestIndex.dest].location_name}`}</li>
 												</ul>

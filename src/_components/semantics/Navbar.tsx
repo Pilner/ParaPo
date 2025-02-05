@@ -24,10 +24,13 @@ import Button from '@/_components/Button';
 export default function Navbar() {
 	return (
 		<nav className="item-center flex h-[6rem] w-full bg-white">
-			<div className="m-auto flex h-full w-3/4 items-center justify-between">
+			<div className="
+			flex h-full items-center justify-between m-auto
+			w-[90%] sm:w-[85%] lg:w-[80%] xl:w-[75%]
+			">
 				<div className="flex h-full">
-					<div className="flex h-full items-center gap-4">
-						<Link href="/" className="h-full">
+					<div className="flex h-full items-center gap-8">
+						<Link href="/" className="h-[80%] sm:h-full">
 							<Image
 								src="/images/ParaPo-Logo-Light.png"
 								alt="logo"
@@ -38,20 +41,35 @@ export default function Navbar() {
 							/>
 						</Link>
 						<Link href="/">
-							<h1 className="font-primary text-regular-title font-bold text-black">ParaPo</h1>
+							<h1 className="
+							font-primary font-bold text-black
+							hidden lg:block
+							
+							text-base-regular-text sm:text-sm-regular-text
+							lg:text-lg-regular-text xl:text-regular-text">ParaPo</h1>
 						</Link>
 					</div>
 				</div>
 				<div className="flex">
-					<ul className="flex items-center gap-16 font-secondary text-regular-text font-semibold text-black">
+					<ul className="
+					flex items-center font-secondary font-semibold text-black
+					gap-6 lg:gap-16
+
+					text-base-regular-text sm:text-sm-regular-text
+					lg:text-lg-regular-text xl:text-regular-text
+					">
 						<li>
 							<Link href="/">
-								<p className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">Home</p>
+								<p className="
+								duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]
+								hidden lg:flex
+								">Home</p>
 							</Link>
 						</li>
 						<li>
 							<Link href="/catalog">
-								<p className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">Catalog</p>
+								<p className="
+								duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">Catalog</p>
 							</Link>
 						</li>
 						<li>
@@ -68,8 +86,11 @@ export default function Navbar() {
 
 export function MapNavbar() {
 	return (
-		<nav className="h-[5rem] w-full bg-accent">
-			<div className="flex h-full justify-between px-4 py-2">
+		<nav className="w-full bg-accent
+		h-[3rem] sm:h-[4rem] lg:h-[5rem]
+		">
+			<div className="flex h-full justify-between px-4
+			py-1 lg:py-2">
 				<div className="h-full">
 					<Link href="/">
 						<Image
@@ -82,7 +103,9 @@ export function MapNavbar() {
 						/>
 					</Link>
 				</div>
-				<div className="flex items-center gap-8 font-secondary text-[1rem] font-semibold text-gray">
+				<div className="flex items-center gap-8 font-secondary font-semibold text-gray
+				text-[0.75rem] sm:text-[0.9rem] md:text-[1rem]
+				">
 					<Link href="/catalog" className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">
 						Catalog
 					</Link>
