@@ -92,6 +92,14 @@ function UsersTab() {
 		}
 	}, [searchData, searchError, currentPage]);
 
+	useEffect(() => {
+		if (showAddPopup || showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showAddPopup, showQuickEditPopup]);
+
 	function handleSearch(input: string) {
 		if (userData) {
 			setSearchInput(input);
@@ -231,6 +239,14 @@ function RouteList() {
 		}
 	}, [searchData, searchError, currentPage]);
 
+	useEffect(() => {
+		if (showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showQuickEditPopup]);
+
 	function handleSearch(input: string) {
 		if (routeData) {
 			setSearchInput(input);
@@ -344,6 +360,14 @@ function LocationList() {
 			setData(searchData);
 		}
 	}, [searchData, searchError, currentPage]);
+
+	useEffect(() => {
+		if (showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showQuickEditPopup]);
 
 	function handleSearch(input: string) {
 		if (locationData) {
