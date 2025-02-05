@@ -2,9 +2,9 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 import { prisma } from '@/lib/prisma';
-import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
 	let headers = {
 		'Content-Type': 'application/json',
 	};
@@ -20,17 +20,50 @@ export async function GET(req: NextApiRequest) {
 		);
 	}
 
-	try {
-		const locations = await prisma.locations.findMany({
-			include: {
-				Routes: true,
-			},
-		});
+	const { searchParams } = new URL(req.url);
+	const all = searchParams.get('all') === 'true';
+	const page = parseInt(searchParams.get('page') || '1', 10);
+	const limit = parseInt(searchParams.get('limit') || '10', 10);
+	const skip = (page - 1) * limit;
 
-		return new Response(JSON.stringify(locations), {
-			status: 200,
-			headers,
-		});
+	try {
+		if (all) {
+			const locations = await prisma.locations.findMany({
+				include: {
+					Routes: true,
+				},
+				orderBy: {
+					location_id: 'asc',
+				},
+			});
+
+			// Get the total count of locations
+			const totalLocations = await prisma.locations.count();
+
+			return new Response(JSON.stringify({ locations, totalLocations, page: 1, limit: totalLocations }), {
+				status: 200,
+				headers,
+			});
+		} else {
+			const locations = await prisma.locations.findMany({
+				skip,
+				take: limit,
+				include: {
+					Routes: true,
+				},
+				orderBy: {
+					location_id: 'asc',
+				},
+			});
+
+			// Get the total count of locations
+			const totalLocations = await prisma.locations.count();
+
+			return new Response(JSON.stringify({ locations, totalLocations, page, limit }), {
+				status: 200,
+				headers,
+			});
+		}
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.name, error.message);

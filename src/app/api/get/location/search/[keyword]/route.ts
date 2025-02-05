@@ -1,6 +1,8 @@
-import { prisma } from '@/lib/prisma';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-import { NextApiRequest } from 'next';
+import { prisma } from '@/lib/prisma';
+import { NextRequest } from 'next/server';
 
 interface params {
 	params: {
@@ -8,7 +10,7 @@ interface params {
 	};
 }
 
-export async function GET(req: NextApiRequest, params: params) {
+export async function GET(req: NextRequest, params: params) {
 	// Get the keyword from the params
 	const keyword = params.params.keyword;
 
@@ -16,44 +18,111 @@ export async function GET(req: NextApiRequest, params: params) {
 		'Content-Type': 'application/json',
 	};
 
-	try {
-		// Get all locations containing the keyword including which route they are in based on route_name
-		const locations = await prisma.locations.findMany({
-			where: {
-				OR: [
-					{
-						location_name: {
-							contains: keyword,
-						},
-					},
-					{
-						Routes: {
-							OR: [
-								{
-									route_name: {
-										contains: keyword,
-									},
-								},
-								{
-									category: {
-										contains: keyword,
-									},
-								},
-							],
-						},
-					},
-				],
-			},
-			// sort
-			orderBy: {
-				location_id: 'asc',
-			},
-		});
+	const session = await getServerSession(authOptions);
+	if (!session) {
+		return new Response(
+			JSON.stringify({
+				status: 401,
+				message: 'Unauthorized',
+			}),
+			{ headers }
+		);
+	}
 
-		return new Response(JSON.stringify(locations), {
-			status: 200,
-			headers,
-		});
+	const { searchParams } = new URL(req.url);
+	const all = searchParams.get('all') === 'true';
+	const page = parseInt(searchParams.get('page') || '1', 10);
+	const limit = parseInt(searchParams.get('limit') || '10', 10);
+	const skip = (page - 1) * limit;
+
+	try {
+		if (all) {
+			const locations = await prisma.locations.findMany({
+				include: {
+					Routes: true,
+				},
+				orderBy: {
+					location_id: 'asc',
+				},
+			});
+
+			// Get the total count of locations
+			const totalLocations = await prisma.locations.count();
+
+			return new Response(JSON.stringify({ locations, totalLocations, page: 1, limit: totalLocations }), {
+				status: 200,
+				headers,
+			});
+		} else {
+			// Get all locations containing the keyword including which route they are in based on route_name
+			const locations = await prisma.locations.findMany({
+				skip,
+				take: limit,
+				where: {
+					OR: [
+						{
+							location_name: {
+								contains: keyword,
+							},
+						},
+						{
+							Routes: {
+								OR: [
+									{
+										route_name: {
+											contains: keyword,
+										},
+									},
+									{
+										category: {
+											contains: keyword,
+										},
+									},
+								],
+							},
+						},
+					],
+				},
+				// sort
+				orderBy: {
+					location_id: 'asc',
+				},
+			});
+
+			// Get the total count of locations
+			const totalLocations = await prisma.locations.count({
+				where: {
+					OR: [
+						{
+							location_name: {
+								contains: keyword,
+							},
+						},
+						{
+							Routes: {
+								OR: [
+									{
+										route_name: {
+											contains: keyword,
+										},
+									},
+									{
+										category: {
+											contains: keyword,
+										},
+									},
+								],
+							},
+						},
+					],
+				},
+			});
+
+			return new Response(JSON.stringify({ locations, totalLocations, page, limit }), {
+				status: 200,
+				headers,
+			});
+		}
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.name, error.message);

@@ -2,9 +2,9 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 import { prisma } from '@/lib/prisma';
-import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
 	let headers = {
 		'Content-Type': 'application/json',
 	};
@@ -20,21 +20,56 @@ export async function GET(req: NextApiRequest) {
 		);
 	}
 
-	try {
-		const users = await prisma.users.findMany({
-			select: {
-				user_id: true,
-				username: true,
-				created_at: true,
-				updated_at: true,
-				password: false,
-			},
-		});
+	const { searchParams } = new URL(req.url);
+	const all = searchParams.get('all') === 'true';
+	const page = parseInt(searchParams.get('page') || '1', 10);
+	const limit = parseInt(searchParams.get('limit') || '10', 10);
+	const skip = (page - 1) * limit;
 
-		return new Response(JSON.stringify(users), {
-			status: 200,
-			headers,
-		});
+	try {
+		if (all) {
+			const users = await prisma.users.findMany({
+				select: {
+					user_id: true,
+					username: true,
+					created_at: true,
+					updated_at: true,
+					password: false,
+				},
+				orderBy: {
+					user_id: 'asc',
+				},
+			});
+
+			const totalUsers = await prisma.users.count();
+
+			return new Response(JSON.stringify({ users, totalUsers, page: 1, limit: totalUsers }), {
+				status: 200,
+				headers,
+			});
+		} else {
+			const users = await prisma.users.findMany({
+				skip,
+				take: limit,
+				select: {
+					user_id: true,
+					username: true,
+					created_at: true,
+					updated_at: true,
+					password: false,
+				},
+				orderBy: {
+					user_id: 'asc',
+				},
+			});
+
+			const totalUsers = await prisma.users.count();
+
+			return new Response(JSON.stringify({ users, totalUsers, page, limit }), {
+				status: 200,
+				headers,
+			});
+		}
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.name, error.message);
