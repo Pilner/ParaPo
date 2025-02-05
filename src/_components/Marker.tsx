@@ -20,10 +20,7 @@ export default function Marker({ point, color, className, getDataFromChild }: Ma
 				height="46"
 				viewBox="0 0 36 46"
 				fill="none"
-				className={`float-right cursor-pointer rounded-lg border border-[rgba(0,0,0,0.2)] ${className ?? className}
-				w-10 lg:w-12
-				h-10 lg:h-12
-				`}
+				className={`float-right cursor-pointer rounded-lg border border-[rgba(0,0,0,0.2)] ${className ?? className} h-10 w-10 lg:h-12 lg:w-12`}
 				data-index={point}
 				data-selected="false"
 				onClick={handleClick}

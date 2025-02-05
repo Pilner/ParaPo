@@ -15,14 +15,14 @@ export default function Home() {
 					<div className="m-auto h-full w-[90%] sm:w-[85%] lg:w-[80%] xl:w-[75%]">
 						<div className="flex h-full flex-col gap-16 lg:flex-row lg:gap-12 xl:gap-16">
 							<div className="flex h-full flex-1 flex-col justify-center gap-1 text-black md:gap-2 lg:gap-1">
-								<h1 className="text-base-hero-title sm:text-sm-hero-title md:text-md-hero-title lg:text-lg-hero-title xl:text-xl-hero-title text-center font-primary font-bold leading-[90%] lg:text-left 2xl:text-hero-title">
+								<h1 className="text-center font-primary text-base-hero-title font-bold leading-[90%] sm:text-sm-hero-title md:text-md-hero-title lg:text-left lg:text-lg-hero-title xl:text-xl-hero-title 2xl:text-hero-title">
 									NAVIGATE <br />
 									WITH <span className="text-accent">EASE</span>
 								</h1>
-								<h3 className="text-base-hero-subtitle sm:text-sm-hero-subtitle md:text-md-hero-subtitle lg:text-lg-hero-subtitle xl:text-xl-hero-subtitle text-center font-secondary font-normal leading-[100%] lg:text-left 2xl:text-hero-subtitle">
+								<h3 className="text-center font-secondary text-base-hero-subtitle font-normal leading-[100%] sm:text-sm-hero-subtitle md:text-md-hero-subtitle lg:text-left lg:text-lg-hero-subtitle xl:text-xl-hero-subtitle 2xl:text-hero-subtitle">
 									A Navigation App Tailored for Public Utility Vehicles and Commuters.
 								</h3>
-								<div className="text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text mt-2 flex flex-row items-center justify-between gap-16 px-[1.5rem] font-secondary font-medium sm:mt-4 sm:px-[4rem] lg:justify-start lg:px-0 xl:text-regular-text">
+								<div className="mt-2 flex flex-row items-center justify-between gap-16 px-[1.5rem] font-secondary text-base-regular-text font-medium sm:mt-4 sm:px-[4rem] sm:text-sm-regular-text md:text-md-regular-text lg:justify-start lg:px-0 lg:text-lg-regular-text xl:text-regular-text">
 									<Button variant="solid" type="button">
 										<Link href="/map">Try Now</Link>
 									</Button>
@@ -59,12 +59,12 @@ export default function Home() {
 					</div>
 					<div className="flex w-full flex-col items-center justify-center text-center text-black">
 						<h3
-							className="text-base-regular-title sm:text-sm-regular-title md:text-md-regular-title lg:text-lg-regular-title xl:text-xl-regular-title font-primary font-semibold leading-[140%] 2xl:text-regular-title"
+							className="font-primary text-base-regular-title font-semibold leading-[140%] sm:text-sm-regular-title md:text-md-regular-title lg:text-lg-regular-title xl:text-xl-regular-title 2xl:text-regular-title"
 							id="aboutUs"
 						>
 							About Us
 						</h3>
-						<div className="text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-reguler-text flex flex-col gap-4 font-secondary leading-[170%]">
+						<div className="2xl:text-reguler-text flex flex-col gap-4 font-secondary text-base-regular-text leading-[170%] sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text">
 							<p>
 								ParaPo emerges as a solution to address the common challenge faced by visitors and foreigners in
 								unfamiliar cities, where the lack of knowledge about PUV routes can hinder mobility and exploration. By
@@ -81,10 +81,10 @@ export default function Home() {
 					</div>
 					<div className="flex w-full flex-col-reverse gap-4 sm:gap-6 md:gap-8 lg:flex-row lg:gap-12 xl:gap-16">
 						<div className="basis-2/5">
-							<h3 className="text-base-regular-title sm:text-sm-regular-title md:text-md-regular-title lg:text-lg-regular-title xl:text-xl-regular-title text-center font-primary font-semibold leading-[140%] lg:text-left 2xl:text-regular-title">
+							<h3 className="text-center font-primary text-base-regular-title font-semibold leading-[140%] sm:text-sm-regular-title md:text-md-regular-title lg:text-left lg:text-lg-regular-title xl:text-xl-regular-title 2xl:text-regular-title">
 								Our Catalog
 							</h3>
-							<div className="text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text flex flex-col gap-4 text-center font-secondary leading-[170%] lg:text-left 2xl:text-regular-text">
+							<div className="flex flex-col gap-4 text-center font-secondary text-base-regular-text leading-[170%] sm:text-sm-regular-text md:text-md-regular-text lg:text-left lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
 								<p>
 									Beyond just mapping routes, our unique catalog feature lets you explore diverse destinations without
 									needing a set endpoint.
@@ -92,7 +92,7 @@ export default function Home() {
 								<Button
 									variant="solid"
 									type="button"
-									className="text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text m-auto w-max lg:m-0 2xl:text-regular-text"
+									className="m-auto w-max text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:m-0 lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text"
 								>
 									<Link href="/catalog">Try Catalog</Link>
 								</Button>

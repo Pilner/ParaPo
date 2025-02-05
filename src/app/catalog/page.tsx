@@ -63,11 +63,11 @@ export default function Catalog() {
 					<div className="m-auto h-full w-[90%] sm:w-[85%] lg:w-[80%] xl:w-[75%]">
 						<div className="flex h-full flex-col-reverse gap-8 lg:flex-row lg:gap-12 xl:gap-16">
 							<div className="flex h-full flex-1 flex-col justify-center gap-4 text-black">
-								<h1 className="text-base-hero-title sm:text-sm-hero-title md:text-md-hero-title lg:text-lg-hero-title xl:text-xl-hero-title text-center font-primary font-bold leading-[90%] lg:text-left 2xl:text-hero-title">
+								<h1 className="text-center font-primary text-base-hero-title font-bold leading-[90%] sm:text-sm-hero-title md:text-md-hero-title lg:text-left lg:text-lg-hero-title xl:text-xl-hero-title 2xl:text-hero-title">
 									PARA<span className="text-accent">PO</span> <br />
 									CATALOG
 								</h1>
-								<h3 className="text-base-hero-subtitle sm:text-sm-hero-subtitle md:text-md-hero-subtitle lg:text-lg-hero-subtitle xl:text-xl-hero-subtitle text-center font-secondary font-normal leading-[100%] lg:text-left 2xl:text-hero-subtitle">
+								<h3 className="text-center font-secondary text-base-hero-subtitle font-normal leading-[100%] sm:text-sm-hero-subtitle md:text-md-hero-subtitle lg:text-left lg:text-lg-hero-subtitle xl:text-xl-hero-subtitle 2xl:text-hero-subtitle">
 									Our application offers a curated catalog of routes tailored for every mode of transportation.
 								</h3>
 							</div>
@@ -90,7 +90,7 @@ export default function Catalog() {
 					<form className="text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
 						<TextInput placeholder="Search Routes" onChange={handleSearch} />
 					</form>
-					<table className="text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text mt-4 w-full border-separate border-spacing-y-4 gap-4 2xl:text-regular-text">
+					<table className="mt-4 w-full border-separate border-spacing-y-4 gap-4 text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
 						<thead className="hidden bg-accent text-white lg:table-header-group">
 							<tr>
 								<th className="rounded-l-lg py-2">

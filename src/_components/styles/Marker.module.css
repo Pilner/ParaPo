@@ -12,11 +12,11 @@
 	cursor: pointer;
 }
 
-.marker svg[data-selected="true"] {
+.marker svg[data-selected='true'] {
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
-.marker svg[data-selected="true"]:hover {
+.marker svg[data-selected='true']:hover {
 	cursor: default;
 }
 
@@ -24,5 +24,4 @@
 	/* .marker svg {
 		border: none;
 	} */
-	
 }

@@ -39,7 +39,7 @@ export default function Button({
 	return (
 		<button
 			type={type}
-			className={`flex items-center justify-center rounded-lg border px-2 sm:px-4 py-1 sm:py-2 transition duration-200 ${
+			className={`flex items-center justify-center rounded-lg border px-2 py-1 transition duration-200 sm:px-4 sm:py-2 ${
 				variant === 'solid'
 					? `hover:border-opacity-100 hover:bg-transparent ${themeVariants.solid[theme]}`
 					: `bg-transparent hover:border-opacity-0 ${themeVariants.outline[theme]}`

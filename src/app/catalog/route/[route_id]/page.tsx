@@ -88,56 +88,26 @@ export default function CatalogRoutePage() {
 	return (
 		<main className="relative h-screen w-full">
 			{route && (
-				<div className="
-				absolute z-10 flex flex-col overflow-hidden rounded-lg border border-black/25 bg-white
-				
-				transform
-				-translate-x-1/2 lg:translate-x-5
-				-translate-y-10 lg:translate-y-5
-
-				left-1/2 lg:left-0
-				bottom-5 lg:bottom-auto
-
-				max-h-[20rem] sm:max-h-[25rem] lg:max-h-[40rem]
-				w-[20rem] sm:w-[35rem] lg:w-[25rem]
-				">
+				<div className="absolute bottom-5 left-1/2 z-10 flex max-h-[20rem] w-[20rem] -translate-x-1/2 -translate-y-10 transform flex-col overflow-hidden rounded-lg border border-black/25 bg-white sm:max-h-[25rem] sm:w-[35rem] lg:bottom-auto lg:left-0 lg:max-h-[40rem] lg:w-[25rem] lg:translate-x-5 lg:translate-y-5">
 					<MapNavbar />
-					<div className="flex h-full flex-grow flex-col overflow-y-hidden text-black
-					px-4 lg:px-4 
-					py-2 lg:py-4
-					gap-1 2xl:gap-4
-					">
-						<div className="flex flex-col
-						gap-1 lg:gap-2
-						">
+					<div className="flex h-full flex-grow flex-col gap-1 overflow-y-hidden px-4 py-2 text-black lg:px-4 lg:py-4 2xl:gap-4">
+						<div className="flex flex-col gap-1 lg:gap-2">
 							<div>
-								<h3 className="
-								font-bold
-
-								text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
-								lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
-								">Route Name</h3>
-								<p className="
-								font-normal
-
-								text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
-								lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
-								">{route.route_name}</p>
+								<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									Route Name
+								</h3>
+								<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									{route.route_name}
+								</p>
 							</div>
 							<div className="flex justify-between">
-								<h3 className="
-								font-bold
-
-								text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
-								lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
-								">Route Category</h3>
+								<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									Route Category
+								</h3>
 								<div className="ml-8 flex items-center gap-2">
-									<p className="
-									font-normal
-									
-									text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
-									lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
-									">{route.category}</p>
+									<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+										{route.category}
+									</p>
 									<Image
 										className="fa-xl h-[1.5rem] w-auto"
 										src={
@@ -154,36 +124,22 @@ export default function CatalogRoutePage() {
 								</div>
 							</div>
 							<div className="flex justify-between">
-								<h3 className="
-								font-bold
-
-								text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
-								lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
-								">Route Minimum Fare</h3>
-								<p className="
-								font-normal
-								
-								text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
-								lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
-								">₱{route.min_fare.toFixed(2)}</p>
+								<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									Route Minimum Fare
+								</h3>
+								<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									₱{route.min_fare.toFixed(2)}
+								</p>
 							</div>
 						</div>
 						<div className="w-full border border-black/25" />
-						<div className="
-						flex h-full flex-col overflow-y-hidden
-
-						gap-1 lg:gap-2
-						">
-							<h3 className="text-center font-bold
-							
-							text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text
-							lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text
-							">Stations List</h3>
+						<div className="flex h-full flex-col gap-1 overflow-y-hidden lg:gap-2">
+							<h3 className="text-center text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+								Stations List
+							</h3>
 							<div className="flex h-full w-full overflow-y-scroll rounded-lg bg-dark-gray p-2">
 								{route.Locations.length > 0 ? (
-									<ol className="w-full list-outside list-decimal pl-7
-									text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]
-									">
+									<ol className="w-full list-outside list-decimal pl-7 text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
 										{route.Locations.map((location, index) => (
 											<li key={index} className="w-full">
 												<div className="flex w-full items-center justify-between">
