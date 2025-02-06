@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 let map: any;
 
 export default function MapPage() {
+	const [showModal, setShowModal] = useState<boolean>(true);
 	const tabs = ['Route List', 'Instructions'];
 	const [activeTab, setActiveTab] = useState('Route List');
 	const [location, setLocation] = useState<locationProps | null>(null);
@@ -148,106 +149,112 @@ export default function MapPage() {
 
 	return (
 		<main className="relative h-screen w-full">
-			<div className="absolute bottom-5 left-1/2 z-10 flex max-h-[25rem] w-[20rem] -translate-x-1/2 -translate-y-10 transform flex-col overflow-hidden rounded-lg border border-black/25 bg-white sm:max-h-[30rem] sm:w-[35rem] lg:bottom-auto lg:left-0 lg:max-h-[40rem] lg:w-[25rem] lg:translate-x-5 lg:translate-y-5">
-				<MapNavbar />
-				<div className="flex h-full flex-grow flex-col overflow-y-hidden p-4 text-black">
-					<div className="flex flex-col gap-2">
-						<div>
-							<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
-								Origin Location
-							</h3>
-							<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
-								{location && location.origin.location_name}
-							</p>
-						</div>
-						<div>
-							<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
-								Destination Location
-							</h3>
-							<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
-								{location && location.destination.location_name}
-							</p>
-						</div>
-					</div>
-					<div className="mt-4 w-full border border-black/25" />
-					<div className="flex w-full justify-between">
-						{tabs.map((tab, index) => (
-							<button
-								key={`tab-${index}`}
-								className={`duration-20 duration-20 flex-1 border-b-2 py-2 text-center font-secondary text-[0.75rem] font-semibold transition sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem] ${
-									activeTab === tab ? 'border-black bg-dark-gray' : 'border-transparent hover:bg-dark-gray'
-								}`}
-								onClick={() => setActiveTab(tab)}
-							>
-								{tab}
-							</button>
-						))}
-					</div>
-
-					{/* Route List */}
-					{activeTab === 'Route List' && (
-						<div className="flex h-full flex-col gap-2 overflow-y-hidden">
-							<div className="flex h-full w-full overflow-y-scroll rounded-b-lg bg-dark-gray p-2">
-								<ol className="w-full list-outside list-decimal pl-7 text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
-									{routeList.map((route, index) => (
-										<li key={`route-list-${index}`} className="w-full">
-											<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
-												<Link href={`/catalog/route/${route.minRoute.route_id}`}>{route.minRoute.route_name}</Link>
-											</p>
-										</li>
-									))}
-								</ol>
+			<div
+				className={`absolute bottom-0 left-1/2 z-10 flex max-h-[20rem] w-full -translate-x-1/2 transform flex-col overflow-hidden rounded-lg border border-black/25 bg-white transition duration-500 sm:max-h-[25rem] sm:w-[35rem] md:max-h-[20rem] lg:bottom-auto lg:left-0 lg:max-h-[40rem] lg:w-[25rem] lg:translate-x-5 lg:translate-y-5 ${
+					showModal ? 'opacity-100' : 'opacity-75 hover:opacity-100'
+				}`}
+			>
+				<MapNavbar onClick={() => setShowModal(!showModal)} />
+				{showModal && (
+					<div className="flex h-full flex-grow flex-col overflow-y-hidden p-4 text-black">
+						<div className="flex flex-col gap-2">
+							<div>
+								<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									Origin Location
+								</h3>
+								<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									{location && location.origin.location_name}
+								</p>
+							</div>
+							<div>
+								<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									Destination Location
+								</h3>
+								<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+									{location && location.destination.location_name}
+								</p>
 							</div>
 						</div>
-					)}
+						<div className="mt-4 w-full border border-black/25" />
+						<div className="flex w-full justify-between">
+							{tabs.map((tab, index) => (
+								<button
+									key={`tab-${index}`}
+									className={`duration-20 duration-20 flex-1 border-b-2 py-2 text-center font-secondary text-[0.75rem] font-semibold transition sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem] ${
+										activeTab === tab ? 'border-black bg-dark-gray' : 'border-transparent hover:bg-dark-gray'
+									}`}
+									onClick={() => setActiveTab(tab)}
+								>
+									{tab}
+								</button>
+							))}
+						</div>
 
-					{/* Instructions */}
-					{activeTab === 'Instructions' && (
-						<div className="flex h-full flex-col gap-2 overflow-y-hidden">
-							<div className="flex h-full w-full overflow-y-scroll rounded-b-lg bg-dark-gray p-2">
-								<ol className="w-full list-outside list-decimal pl-7 text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
-									{routeList.map((route, index) => (
-										<Fragment key={`route-fragment-${index}`}>
-											{index === 0 && (
-												<li key={`first-walk-${index}`} className="w-full">
-													<div className="flex w-full items-center justify-between">
-														<p className="font-normal">{`First walk to ${routeList[index].minRoute.route_name} Route`}</p>
-													</div>
-												</li>
-											)}
-											<li key={`route-${index}`} className="w-full">
+						{/* Route List */}
+						{activeTab === 'Route List' && (
+							<div className="flex h-full flex-col gap-2 overflow-y-hidden">
+								<div className="flex h-full w-full overflow-y-scroll rounded-b-lg bg-dark-gray p-2">
+									<ol className="w-full list-outside list-decimal pl-7 text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
+										{routeList.map((route, index) => (
+											<li key={`route-list-${index}`} className="w-full">
 												<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
 													<Link href={`/catalog/route/${route.minRoute.route_id}`}>{route.minRoute.route_name}</Link>
 												</p>
-												<ul className="list-outside list-disc pl-8 text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
-													<li>{`Enter at ${route.minRoute.Locations[route.bestIndex.origin].location_name}`}</li>
-													<li>{`Exit at ${route.minRoute.Locations[route.bestIndex.dest].location_name}`}</li>
-												</ul>
 											</li>
-											{index === routeList.length - 1 ? (
-												<li key={`instructions-last-${index}`} className="w-full">
-													<div className="flex w-full items-center justify-between">
-														<p className="font-normal">
-															{`Now walk/commute to ${location && location.destination.location_name}`}
-														</p>
-													</div>
-												</li>
-											) : (
-												<li key={`instructions-${index}`} className="w-full">
-													<div className="flex w-full items-center justify-between">
-														<p className="font-normal">
-															{`Now walk to ${routeList[index + 1].minRoute.route_name} Route`}
-														</p>
-													</div>
-												</li>
-											)}
-										</Fragment>
-									))}
-								</ol>
+										))}
+									</ol>
+								</div>
 							</div>
-						</div>
-					)}
-				</div>
+						)}
+
+						{/* Instructions */}
+						{activeTab === 'Instructions' && (
+							<div className="flex h-full flex-col gap-2 overflow-y-hidden">
+								<div className="flex h-full w-full overflow-y-scroll rounded-b-lg bg-dark-gray p-2">
+									<ol className="w-full list-outside list-decimal pl-7 text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
+										{routeList.map((route, index) => (
+											<Fragment key={`route-fragment-${index}`}>
+												{index === 0 && (
+													<li key={`first-walk-${index}`} className="w-full">
+														<div className="flex w-full items-center justify-between">
+															<p className="font-normal">{`First walk to ${routeList[index].minRoute.route_name} Route`}</p>
+														</div>
+													</li>
+												)}
+												<li key={`route-${index}`} className="w-full">
+													<p className="duration-20 font-semibold underline decoration-transparent transition hover:decoration-black">
+														<Link href={`/catalog/route/${route.minRoute.route_id}`}>{route.minRoute.route_name}</Link>
+													</p>
+													<ul className="list-outside list-disc pl-8 text-[0.75rem] sm:text-[0.85rem] md:text-[0.95rem] lg:text-[0.95rem] xl:text-[1rem]">
+														<li>{`Enter at ${route.minRoute.Locations[route.bestIndex.origin].location_name}`}</li>
+														<li>{`Exit at ${route.minRoute.Locations[route.bestIndex.dest].location_name}`}</li>
+													</ul>
+												</li>
+												{index === routeList.length - 1 ? (
+													<li key={`instructions-last-${index}`} className="w-full">
+														<div className="flex w-full items-center justify-between">
+															<p className="font-normal">
+																{`Now walk/commute to ${location && location.destination.location_name}`}
+															</p>
+														</div>
+													</li>
+												) : (
+													<li key={`instructions-${index}`} className="w-full">
+														<div className="flex w-full items-center justify-between">
+															<p className="font-normal">
+																{`Now walk to ${routeList[index + 1].minRoute.route_name} Route`}
+															</p>
+														</div>
+													</li>
+												)}
+											</Fragment>
+										))}
+									</ol>
+								</div>
+							</div>
+						)}
+					</div>
+				)}
 			</div>
 			<div id="map" className="z-0 h-full w-full" />
 		</main>

@@ -21,6 +21,10 @@ import { useGetUser } from '@/_hooks/useUser';
 
 import Button from '@/_components/Button';
 
+interface NavbarProps {
+	onClick?: () => void;
+}
+
 export default function Navbar() {
 	return (
 		<nav className="item-center flex h-[6rem] w-full bg-white">
@@ -70,10 +74,19 @@ export default function Navbar() {
 	);
 }
 
-export function MapNavbar() {
+export function MapNavbar({ onClick }: NavbarProps) {
 	return (
-		<nav className="h-[3rem] w-full bg-accent sm:h-[4rem] lg:h-[5rem]">
-			<div className="flex h-full justify-between px-4 py-1 lg:py-2">
+		<nav
+			className={`h-[3rem] w-full bg-accent transition duration-500 sm:h-[4rem] lg:h-[5rem] ${onClick && 'cursor-pointer hover:bg-[#e98364]'}`}
+		>
+			<div
+				className="flex h-full justify-between px-4 py-1 lg:py-2"
+				onClick={(e: React.MouseEvent<HTMLElement>) => {
+					if (e.target === e.currentTarget) {
+						onClick && onClick();
+					}
+				}}
+			>
 				<div className="h-full">
 					<Link href="/">
 						<Image
@@ -99,10 +112,19 @@ export function MapNavbar() {
 	);
 }
 
-export function MapAdminNavbar() {
+export function MapAdminNavbar({ onClick }: NavbarProps) {
 	return (
-		<nav className="h-[5rem] w-full bg-accent">
-			<div className="flex h-full justify-between px-4 py-2">
+		<nav
+			className={`h-[3rem] w-full bg-accent transition duration-500 sm:h-[4rem] lg:h-[5rem] ${onClick && 'cursor-pointer hover:bg-[#e98364]'}`}
+		>
+			<div
+				className="flex h-full justify-between px-4 py-1 lg:py-2"
+				onClick={(e: React.MouseEvent<HTMLElement>) => {
+					if (e.target === e.currentTarget) {
+						onClick && onClick();
+					}
+				}}
+			>
 				<div className="h-full">
 					<Link href="/">
 						<Image
@@ -115,7 +137,7 @@ export function MapAdminNavbar() {
 						/>
 					</Link>
 				</div>
-				<div className="flex items-center gap-8 font-secondary text-[1rem] font-semibold text-gray">
+				<div className="flex items-center gap-8 font-secondary text-[0.75rem] font-semibold text-gray sm:text-[0.9rem] md:text-[1rem]">
 					<button
 						onClick={() => (window.location.href = '/admin')}
 						className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]"
@@ -125,6 +147,38 @@ export function MapAdminNavbar() {
 				</div>
 			</div>
 		</nav>
+
+		// <nav className="h-[5rem] w-full bg-accent">
+		// 	<div
+		// 		className="flex h-full justify-between px-4 py-2"
+		// 		onClick={(e: React.MouseEvent<HTMLElement>) => {
+		// 			if (e.target === e.currentTarget) {
+		// 				onClick && onClick();
+		// 			}
+		// 		}}
+		// 	>
+		// 		<div className="h-full">
+		// 			<Link href="/">
+		// 				<Image
+		// 					src="/images/ParaPo-Logo-Light.png"
+		// 					alt="logo"
+		// 					width={100}
+		// 					height={100}
+		// 					className="duration-20 h-full w-auto rounded-lg transition hover:backdrop-brightness-[.90]"
+		// 					unoptimized={true}
+		// 				/>
+		// 			</Link>
+		// 		</div>
+		// 		<div className="flex items-center gap-8 font-secondary text-[1rem] font-semibold text-gray">
+		// 			<button
+		// 				onClick={() => (window.location.href = '/admin')}
+		// 				className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]"
+		// 			>
+		// 				Dashboard
+		// 			</button>
+		// 		</div>
+		// 	</div>
+		// </nav>
 	);
 }
 

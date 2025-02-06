@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { GetRouteData } from '@/_types/GetData';
@@ -15,6 +16,7 @@ import { TextInput } from '@/_components/Input';
 import { toast } from 'react-toastify';
 
 export default function Catalog() {
+	const router = useRouter();
 	// Initialize the state of routes
 	const [data, setData] = useState<GetRouteData | null>(null);
 	const [searchInput, setSearchInput] = useState<string>('');
@@ -104,42 +106,43 @@ export default function Catalog() {
 						<tbody className="text-center">
 							{data?.routes && data?.totalRoutes > 0 ? (
 								data?.routes.map((route, index) => (
-									<Link href={`/catalog/route/${route.route_id}`} className="contents">
-										<tr
-											key={`routeList-row-${index}`}
-											className="duration-20 bg-dark-gray transition hover:bg-[#CCCCCC]"
-										>
-											<td className="rounded-l-lg py-2 pl-[1rem] align-middle lg:pl-[0rem]">
-												<div className="flex flex-col items-center justify-center">
-													{route.category === 'Jeep' ? (
-														<Image
-															className="fa-sm h-[1.5rem] w-auto"
-															src="/images/jeepney-icon.svg"
-															alt="Jeep Icon"
-															width={100}
-															height={100}
-														/>
-													) : (
-														<i
-															className={`fa-solid fa-sm p-2 ${route.category == 'Bus' ? 'fa-bus' : route.category == 'Train' ? 'fa-train' : 'fa-question'}`}
-														></i>
-													)}
-													<p>{route.category ?? 'Unknown'}</p>
-												</div>
-											</td>
-											<td className="hidden py-2 align-middle lg:table-cell">{route.route_name}</td>
-											<td className="hidden py-2 align-middle lg:table-cell">₱{route.min_fare.toFixed(2)}</td>
-											<td className="hidden rounded-r-lg py-2 align-middle lg:table-cell">
-												{route.Locations.length} Stations
-											</td>
+									// <Link href={`/catalog/route/${route.route_id}`} className="contents">
+									<tr
+										key={`routeList-row-${index}`}
+										className="duration-20 cursor-pointer bg-dark-gray transition hover:bg-[#CCCCCC]"
+										onClick={() => router.push(`/catalog/route/${route.route_id}`)}
+									>
+										<td className="rounded-l-lg py-2 pl-[1rem] align-middle lg:pl-[0rem]">
+											<div className="flex flex-col items-center justify-center">
+												{route.category === 'Jeep' ? (
+													<Image
+														className="fa-sm h-[1.5rem] w-auto"
+														src="/images/jeepney-icon.svg"
+														alt="Jeep Icon"
+														width={100}
+														height={100}
+													/>
+												) : (
+													<i
+														className={`fa-solid fa-sm p-2 ${route.category == 'Bus' ? 'fa-bus' : route.category == 'Train' ? 'fa-train' : 'fa-question'}`}
+													></i>
+												)}
+												<p>{route.category ?? 'Unknown'}</p>
+											</div>
+										</td>
+										<td className="hidden py-2 align-middle lg:table-cell">{route.route_name}</td>
+										<td className="hidden py-2 align-middle lg:table-cell">₱{route.min_fare.toFixed(2)}</td>
+										<td className="hidden rounded-r-lg py-2 align-middle lg:table-cell">
+											{route.Locations.length} Stations
+										</td>
 
-											<td className="flex flex-col gap-1 py-2 pl-[1rem] pr-[2rem] text-left align-middle lg:hidden">
-												<span>{route.route_name}</span>
-												<span>₱{route.min_fare.toFixed(2)}</span>
-												<span>{route.Locations.length} Stations</span>
-											</td>
-										</tr>
-									</Link>
+										<td className="flex flex-col gap-1 py-2 pl-[1rem] pr-[2rem] text-left align-middle lg:hidden">
+											<span>{route.route_name}</span>
+											<span>₱{route.min_fare.toFixed(2)}</span>
+											<span>{route.Locations.length} Stations</span>
+										</td>
+									</tr>
+									// </Link>
 								))
 							) : (
 								<tr className="bg-dark-gray">

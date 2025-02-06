@@ -14,7 +14,7 @@ export default function Home() {
 				<section className="h-full flex-grow bg-gray pt-12 sm:pt-20 md:pt-24 lg:pt-0">
 					<div className="m-auto h-full w-[90%] sm:w-[85%] lg:w-[80%] xl:w-[75%]">
 						<div className="flex h-full flex-col gap-16 lg:flex-row lg:gap-12 xl:gap-16">
-							<div className="flex h-full flex-1 flex-col justify-center gap-1 text-black md:gap-2 lg:gap-1">
+							<div className="flex h-full flex-1 flex-col justify-center gap-2 text-black md:gap-2 lg:gap-4">
 								<h1 className="text-center font-primary text-base-hero-title font-bold leading-[90%] sm:text-sm-hero-title md:text-md-hero-title lg:text-left lg:text-lg-hero-title xl:text-xl-hero-title 2xl:text-hero-title">
 									NAVIGATE <br />
 									WITH <span className="text-accent">EASE</span>
@@ -22,7 +22,7 @@ export default function Home() {
 								<h3 className="text-center font-secondary text-base-hero-subtitle font-normal leading-[100%] sm:text-sm-hero-subtitle md:text-md-hero-subtitle lg:text-left lg:text-lg-hero-subtitle xl:text-xl-hero-subtitle 2xl:text-hero-subtitle">
 									A Navigation App Tailored for Public Utility Vehicles and Commuters.
 								</h3>
-								<div className="mt-2 flex flex-row items-center justify-between gap-16 px-[1.5rem] font-secondary text-base-regular-text font-medium sm:mt-4 sm:px-[4rem] sm:text-sm-regular-text md:text-md-regular-text lg:justify-start lg:px-0 lg:text-lg-regular-text xl:text-regular-text">
+								<div className="mt-2 flex flex-row items-center justify-center gap-16 px-[1.5rem] font-secondary text-base-regular-text font-medium sm:mt-4 sm:px-[4rem] sm:text-sm-regular-text md:text-md-regular-text lg:justify-start lg:px-0 lg:text-lg-regular-text xl:text-regular-text">
 									<Button variant="solid" type="button">
 										<Link href="/map">Try Now</Link>
 									</Button>
