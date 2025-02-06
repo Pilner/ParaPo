@@ -13,7 +13,7 @@ const fetchOneUser = async (user_id: string | number) => {
 
 const fetchAllUsers = async (page?: number, all?: boolean) => {
 	const response = await fetch(
-		`/api/get/user${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${all && `all=${all}`}`
+		`/api/get/user${page || all ? '?' : ''}${page ? `page=${page}` : ''}${page && all ? '&' : ''}${all ? `all=${all}` : ''}`
 	);
 	const data: GetUserData = await response.json();
 	return data;
@@ -21,8 +21,8 @@ const fetchAllUsers = async (page?: number, all?: boolean) => {
 
 const searchUsers = async (searchInput: string, page?: number, all?: boolean) => {
 	const response = await fetch(
-		`/api/get/user/search/${searchInput}${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${
-			all && `all=${all}`
+		`/api/get/user/search/${searchInput}${page || all ? '?' : ''}${page ? `page=${page}` : ''}${page && all ? '&' : ''}${
+			all ? `all=${all}` : ''
 		}`
 	);
 	const data: GetUserData = await response.json();

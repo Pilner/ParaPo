@@ -23,7 +23,7 @@ export default function Catalog() {
 	const [currentPage, setCurrentPage] = useState<number>(1);
 
 	const { data: routeData, error: routeError } = useGetRoutes(currentPage);
-	const { data: searchData, error: searchError } = useSearchRoutes(searchInput);
+	const { data: searchData, error: searchError } = useSearchRoutes(searchInput, currentPage);
 
 	useEffect(() => {
 		if (routeError) {

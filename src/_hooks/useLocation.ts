@@ -13,7 +13,7 @@ const fetchOneLocation = async (location_id: string | number) => {
 
 const fetchAllLocations = async (page?: number, all?: boolean) => {
 	const response = await fetch(
-		`/api/get/location${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${all && `all=${all}`}`
+		`/api/get/location${page || all ? '?' : ''}${page ? `page=${page}` : ''}${page && all ? '&' : ''}${all ? `all=${all}` : ''}`
 	);
 	const data: GetLocationData = await response.json();
 	return data;
@@ -21,8 +21,8 @@ const fetchAllLocations = async (page?: number, all?: boolean) => {
 
 const searchLocations = async (keyword: string, page?: number, all?: boolean) => {
 	const response = await fetch(
-		`/api/get/location/search/${keyword}${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${
-			all && `all=${all}`
+		`/api/get/location/search/${keyword}${page || all ? '?' : ''}${page ? `page=${page}` : ''}${page && all ? '&' : ''}${
+			all ? `all=${all}` : ''
 		}`
 	);
 	const data: GetLocationData = await response.json();

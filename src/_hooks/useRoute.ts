@@ -13,7 +13,7 @@ const fetchOneRoute = async (route_id: string | number) => {
 
 const fetchAllRoutes = async (page?: number, all?: boolean) => {
 	const response = await fetch(
-		`/api/get/route${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${all && `all=${all}`}`
+		`/api/get/route${page || all ? '?' : ''}${page ? `page=${page}` : ''}${page && all ? '&' : ''}${all ? `all=${all}` : ''}`
 	);
 	const data: GetRouteData = await response.json();
 	return data;
@@ -21,8 +21,8 @@ const fetchAllRoutes = async (page?: number, all?: boolean) => {
 
 const searchRoutes = async (searchInput: string, page?: number, all?: boolean) => {
 	const response = await fetch(
-		`/api/get/route/search/${searchInput}${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${
-			all && `all=${all}`
+		`/api/get/route/search/${searchInput}${page || all ? '?' : ''}${page ? `page=${page}` : ''}${page && all ? '&' : ''}${
+			all ? `all=${all}` : ''
 		}`
 	);
 	const data: GetRouteData = await response.json();
