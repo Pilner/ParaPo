@@ -29,12 +29,6 @@ const searchUsers = async (searchInput: string, page?: number, all?: boolean) =>
 	return data;
 };
 
-const searchUsers = async (searchInput: string) => {
-	const response = await fetch(`/api/get/user/search/${searchInput}`);
-	const data: any[] = await response.json();
-	return data;
-};
-
 const createUser = async (user: any) => {
 	const response = await fetch(`/api/post/user`, {
 		method: 'POST',
@@ -103,14 +97,6 @@ export const useSearchUsers = (searchInput: string, page?: number, all?: boolean
 	return useQuery({
 		queryKey: ['search', 'users', searchInput, `page-${page}`],
 		queryFn: () => searchUsers(searchInput, page, all),
-		enabled: !!searchInput,
-	});
-};
-
-export const useSearchUsers = (searchInput: string) => {
-	return useQuery({
-		queryKey: ['search', 'users', searchInput],
-		queryFn: () => searchUsers(searchInput),
 		enabled: !!searchInput,
 	});
 };
