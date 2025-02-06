@@ -147,38 +147,6 @@ export function MapAdminNavbar({ onClick }: NavbarProps) {
 				</div>
 			</div>
 		</nav>
-
-		// <nav className="h-[5rem] w-full bg-accent">
-		// 	<div
-		// 		className="flex h-full justify-between px-4 py-2"
-		// 		onClick={(e: React.MouseEvent<HTMLElement>) => {
-		// 			if (e.target === e.currentTarget) {
-		// 				onClick && onClick();
-		// 			}
-		// 		}}
-		// 	>
-		// 		<div className="h-full">
-		// 			<Link href="/">
-		// 				<Image
-		// 					src="/images/ParaPo-Logo-Light.png"
-		// 					alt="logo"
-		// 					width={100}
-		// 					height={100}
-		// 					className="duration-20 h-full w-auto rounded-lg transition hover:backdrop-brightness-[.90]"
-		// 					unoptimized={true}
-		// 				/>
-		// 			</Link>
-		// 		</div>
-		// 		<div className="flex items-center gap-8 font-secondary text-[1rem] font-semibold text-gray">
-		// 			<button
-		// 				onClick={() => (window.location.href = '/admin')}
-		// 				className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]"
-		// 			>
-		// 				Dashboard
-		// 			</button>
-		// 		</div>
-		// 	</div>
-		// </nav>
 	);
 }
 
@@ -202,10 +170,10 @@ export function AuthNavbar() {
 
 	return (
 		<nav className="item-center flex h-[6rem] w-full bg-white">
-			<div className="m-auto flex h-full w-3/4 items-center justify-between">
+			<div className="m-auto flex h-full w-[90%] items-center justify-between sm:w-[85%] lg:w-[80%] xl:w-[75%]">
 				<div className="flex h-full">
-					<div className="flex h-full items-center gap-4">
-						<Link href="/" className="h-full">
+					<div className="flex h-full items-center gap-8">
+						<Link href="/" className="h-[80%] sm:h-full">
 							<Image
 								src="/images/ParaPo-Logo-Light.png"
 								alt="logo"
@@ -216,17 +184,20 @@ export function AuthNavbar() {
 							/>
 						</Link>
 						<Link href="/">
-							<h1 className="font-primary text-regular-title font-bold text-black">ParaPo</h1>
+							<h1 className="hidden font-primary text-base-regular-text font-bold text-black sm:text-sm-regular-text lg:block lg:text-lg-regular-text xl:text-regular-text">
+								ParaPo
+							</h1>
 						</Link>
 					</div>
 				</div>
 				<div className="flex">
-					<ul className="flex items-center gap-16 font-secondary text-regular-text font-semibold text-black">
+					<ul className="flex items-center gap-6 font-secondary text-base-regular-text font-semibold text-black sm:text-sm-regular-text lg:gap-16 lg:text-lg-regular-text xl:text-regular-text">
 						<li className={`duration-20 transition ${user ? 'opacity-100' : 'opacity-0'}`}>
 							<p className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">
 								{user && user.username}
 							</p>
 						</li>
+
 						<li>
 							<Button
 								variant="solid"

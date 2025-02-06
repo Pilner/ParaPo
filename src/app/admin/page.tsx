@@ -30,7 +30,7 @@ export default function AdminPage() {
 		<section className="flex min-h-screen flex-col">
 			<AuthNavbar />
 			<div className="flex-grow py-4">
-				<div className="m-auto flex h-full w-3/4 flex-col">
+				<div className="m-auto flex h-full w-[90%] flex-col sm:w-[85%] lg:w-[80%] xl:w-[75%]">
 					<div className="flex h-[3rem] w-full justify-between border border-[#E4E4E4] bg-[#E4E4E4]">
 						<div className="flex">
 							{mainTabList.map((tab) => (
@@ -47,7 +47,7 @@ export default function AdminPage() {
 								</button>
 							))}
 						</div>
-						<div className="self-center px-4">
+						<div className="hidden self-center px-4 sm:inline">
 							<h3 className="font-secondary text-[1rem] font-bold text-black">Admin Dashboard</h3>
 						</div>
 					</div>
@@ -115,11 +115,11 @@ function UsersTab() {
 	return (
 		<>
 			<div className="my-4 flex flex-col gap-4">
-				<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
-					<div className="w-[20rem]">
+				<div className="font-regular flex flex-col justify-between px-2 font-secondary text-[1rem] text-black md:flex-row">
+					<div className="w-full md:w-[20rem]">
 						<TextInput placeholder="Search User" onChange={handleSearch} />
 					</div>
-					<div>
+					<div className="ml-auto mt-4 md:ml-0 md:mt-0">
 						<Button onClick={() => setShowAddPopup(true)}>+ Add User</Button>
 					</div>
 				</div>
@@ -129,25 +129,29 @@ function UsersTab() {
 				<table className="w-full table-fixed border-separate border-spacing-0 border border-[#E4E4E4] font-secondary text-[1rem]">
 					<thead className="bg-[#E4E4E4] text-center">
 						<tr>
-							<th className="w-[2.5%] border-r border-[#E4E4E4] py-2">#</th>
-							<th className="w-[10%] py-2">User ID</th>
-							<th className="py-2">Username</th>
-							<th className="py-2">Password</th>
-							<th className="w-[15%] py-2">Date Created</th>
-							<th className="w-[15%] py-2">Last Modified</th>
-							<th className="w-[5%] py-2"></th>
+							<th className="w-[10%] border-r border-[#E4E4E4] py-2 md:table-cell md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">
+								#
+							</th>
+							<th className="py-2 md:table-cell lg:w-[10%]">User ID</th>
+							<th className="py-2 md:table-cell">Username</th>
+							<th className="hidden py-2 sm:table-cell">Password</th>
+							<th className="hidden w-[15%] py-2 md:table-cell">Date Created</th>
+							<th className="hidden w-[15%] py-2 lg:table-cell">Last Modified</th>
+							<th className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]"></th>
 						</tr>
 					</thead>
 					<tbody className="text-center">
 						{data?.users.map((user, index) => (
 							<tr className="even:bg-dark-gray" key={index}>
-								<td className="w-[2.5%] border-r border-[#E4E4E4] py-2">{index + 1 + (currentPage - 1) * 10}</td>
-								<td className="w-[10%] py-2">{user.user_id}</td>
+								<td className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">
+									{index + 1 + (currentPage - 1) * 10}
+								</td>
+								<td className="py-2 md:table-cell lg:w-[10%]">{user.user_id}</td>
 								<td className="py-2">{user.username}</td>
-								<td className="py-2">•••••••••••••</td>
-								<td className="w-[15%] py-2">{convertDate(user.created_at)}</td>
-								<td className="w-[15%] py-2">{convertDate(user.updated_at)}</td>
-								<td className="w-[5%]">
+								<td className="hidden py-2 sm:table-cell">•••••••••••••</td>
+								<td className="hidden w-[15%] py-2 md:table-cell">{convertDate(user.created_at)}</td>
+								<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(user.updated_at)}</td>
+								<td className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]">
 									<i
 										className="fa-solid fa-ellipsis-vertical fa-lg duration-20 h-full cursor-pointer rounded-lg p-4 text-black transition hover:backdrop-brightness-[.90]"
 										onClick={() => {
@@ -261,11 +265,11 @@ function RouteList() {
 
 	return (
 		<>
-			<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
-				<div className="w-[20rem]">
+			<div className="font-regular flex flex-col justify-between px-2 font-secondary text-[1rem] text-black md:flex-row">
+				<div className="w-full md:w-[20rem]">
 					<TextInput placeholder="Search Routes" onChange={handleSearch} />
 				</div>
-				<div>
+				<div className="ml-auto mt-4 md:ml-0 md:mt-0">
 					<Button>
 						<Link href="/admin/map/add/route">+ Add Route</Link>
 					</Button>
@@ -279,27 +283,29 @@ function RouteList() {
 			<table className="w-full table-fixed border-separate border-spacing-x-0 border border-[#E4E4E4] font-secondary text-[1rem]">
 				<thead className="bg-[#E4E4E4] text-center">
 					<tr>
-						<th className="w-[2.5%] border-r border-[#E4E4E4] py-2">#</th>
-						<th className="w-[10%] py-2">Route ID</th>
+						<th className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">#</th>
+						<th className="w-[22.5%] py-2 lg:w-[10%]">Route ID</th>
 						<th className="py-2">Route Name</th>
-						<th className="w-[10%] py-2">Category</th>
-						<th className="w-[10%] py-2">Minimum Fare</th>
-						<th className="w-[15%] py-2">Date Created</th>
-						<th className="w-[15%] py-2">Last Modified</th>
-						<th className="w-[5%] py-2"></th>
+						<th className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">Category</th>
+						<th className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">Minimum Fare</th>
+						<th className="hidden w-[15%] py-2 lg:table-cell">Date Created</th>
+						<th className="hidden w-[15%] py-2 lg:table-cell">Last Modified</th>
+						<th className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]"></th>
 					</tr>
 				</thead>
 				<tbody className="text-center">
 					{data?.routes.map((route, index) => (
 						<tr className="even:bg-dark-gray" key={index}>
-							<td className="w-[2.5%] border-r border-[#E4E4E4] py-2">{index + 1 + (currentPage - 1) * 10}</td>
-							<td className="w-[10%] py-2">{route.route_id}</td>
+							<td className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">
+								{index + 1 + (currentPage - 1) * 10}
+							</td>
+							<td className="w-[22.5%] py-2 lg:w-[10%]">{route.route_id}</td>
 							<td className="py-2">{route.route_name}</td>
-							<td className="w-[10%] py-2">{route.category}</td>
-							<td className="w-[10%] py-2">₱{route.min_fare.toFixed(2)}</td>
-							<td className="w-[15%] py-2">{convertDate(route.created_at)}</td>
-							<td className="w-[15%] py-2">{convertDate(route.updated_at)}</td>
-							<td className="w-[5%]">
+							<td className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">{route.category}</td>
+							<td className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">₱{route.min_fare.toFixed(2)}</td>
+							<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(route.created_at)}</td>
+							<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(route.updated_at)}</td>
+							<td className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]">
 								<i
 									className="fa-solid fa-ellipsis-vertical fa-lg duration-20 h-full cursor-pointer rounded-lg p-4 text-black transition hover:backdrop-brightness-[.90]"
 									onClick={() => {
@@ -383,11 +389,11 @@ function LocationList() {
 
 	return (
 		<>
-			<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
-				<div className="w-[20rem]">
+			<div className="font-regular flex flex-col justify-between px-2 font-secondary text-[1rem] text-black md:flex-row">
+				<div className="w-full md:w-[20rem]">
 					<TextInput placeholder="Search Locations" onChange={handleSearch} />
 				</div>
-				<div>
+				<div className="ml-auto mt-4 md:ml-0 md:mt-0">
 					<Button>
 						<Link href="/admin/map/add/route">+ Add Route</Link>
 					</Button>
@@ -401,27 +407,29 @@ function LocationList() {
 			<table className="w-full table-fixed border-separate border-spacing-x-0 border border-[#E4E4E4] font-secondary text-[1rem]">
 				<thead className="bg-[#E4E4E4] text-center">
 					<tr>
-						<th className="w-[2.5%] border-r border-[#E4E4E4] py-2">#</th>
-						<th className="w-[10%] py-2">Location ID</th>
+						<th className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">#</th>
+						<th className="w-[22.5%] py-2 lg:w-[10%]">Location ID</th>
 						<th className="py-2">Location Name</th>
-						<th className="w-[10%] py-2">Longitude</th>
-						<th className="w-[10%] py-2">Latitude</th>
-						<th className="w-[15%] py-2">Date Created</th>
-						<th className="w-[15%] py-2">Last Modified</th>
-						<th className="w-[5%] py-2"></th>
+						<th className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">Longitude</th>
+						<th className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">Latitude</th>
+						<th className="hidden w-[15%] py-2 lg:table-cell">Date Created</th>
+						<th className="hidden w-[15%] py-2 lg:table-cell">Last Modified</th>
+						<th className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]"></th>
 					</tr>
 				</thead>
 				<tbody className="text-center">
 					{data?.locations.map((location, index) => (
 						<tr className="even:bg-dark-gray" key={index}>
-							<td className="w-[2.5%] border-r border-[#E4E4E4] py-2">{index + 1 + (currentPage - 1) * 10}</td>
-							<td className="w-[10%] py-2">{location.location_id}</td>
+							<td className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">
+								{index + 1 + (currentPage - 1) * 10}
+							</td>
+							<td className="w-[22.5%] py-2 lg:w-[10%]">{location.location_id}</td>
 							<td className="py-2">{location.location_name}</td>
-							<td className="w-[10%] truncate py-2">{location.longitude}</td>
-							<td className="w-[10%] truncate py-2">{location.latitude}</td>
-							<td className="w-[15%] py-2">{convertDate(location.created_at)}</td>
-							<td className="w-[15%] py-2">{convertDate(location.updated_at)}</td>
-							<td className="w-[5%]">
+							<td className="hidden w-[15%] truncate py-2 md:table-cell lg:w-[10%]">{location.longitude}</td>
+							<td className="hidden w-[15%] truncate py-2 md:table-cell lg:w-[10%]">{location.latitude}</td>
+							<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(location.created_at)}</td>
+							<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(location.updated_at)}</td>
+							<td className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]">
 								<i
 									className="fa-solid fa-ellipsis-vertical fa-lg duration-20 h-full cursor-pointer rounded-lg p-4 text-black transition hover:backdrop-brightness-[.90]"
 									onClick={() => {
