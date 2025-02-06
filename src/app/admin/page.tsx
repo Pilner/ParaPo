@@ -10,6 +10,7 @@ import Button from '@/_components/Button';
 import { TextInput } from '@/_components/Input';
 import Footer from '@/_components/semantics/Footer';
 import { User, Route, Location } from '@/_types/Models';
+import { GetRouteData, GetUserData, GetLocationData } from '@/_types/GetData';
 
 import { toast } from 'react-toastify';
 
@@ -29,7 +30,7 @@ export default function AdminPage() {
 		<section className="flex min-h-screen flex-col">
 			<AuthNavbar />
 			<div className="flex-grow py-4">
-				<div className="m-auto flex h-full w-3/4 flex-col">
+				<div className="m-auto flex h-full w-[90%] flex-col sm:w-[85%] lg:w-[80%] xl:w-[75%]">
 					<div className="flex h-[3rem] w-full justify-between border border-[#E4E4E4] bg-[#E4E4E4]">
 						<div className="flex">
 							{mainTabList.map((tab) => (
@@ -46,7 +47,7 @@ export default function AdminPage() {
 								</button>
 							))}
 						</div>
-						<div className="self-center px-4">
+						<div className="hidden self-center px-4 sm:inline">
 							<h3 className="font-secondary text-[1rem] font-bold text-black">Admin Dashboard</h3>
 						</div>
 					</div>
@@ -60,25 +61,26 @@ export default function AdminPage() {
 }
 
 function UsersTab() {
-	const [users, setUsers] = useState<User[]>([] as User[]);
+	const [data, setData] = useState<GetUserData | null>(null);
 	const [currentClickedUser, setCurrentClickedUser] = useState<User | null>(null);
 	const [showAddPopup, setShowAddPopup] = useState(false);
 	const [showQuickEditPopup, setShowQuickEditPopup] = useState(false);
 	const [searchInput, setSearchInput] = useState<string>('');
+	const [currentPage, setCurrentPage] = useState<number>(1);
 
-	const { data, error } = useGetUsers();
-	const { data: searchData, error: searchError } = useSearchUsers(searchInput);
+	const { data: userData, error: userError } = useGetUsers(currentPage);
+	const { data: searchData, error: searchError } = useSearchUsers(searchInput, currentPage);
 
 	useEffect(() => {
-		if (error) {
+		if (userError) {
 			toast.error('Failed to fetch data');
 		}
 
-		if (data) {
-			setUsers(data);
-			console.log(data);
+		if (userData) {
+			setData(userData);
+			console.log(userData);
 		}
-	}, [data, error]);
+	}, [userData, userError, currentPage]);
 
 	useEffect(() => {
 		if (searchError) {
@@ -86,9 +88,9 @@ function UsersTab() {
 			toast.error('An error occurred while fetching the users');
 		}
 		if (searchData) {
-			setUsers(searchData);
+			setData(searchData);
 		}
-	}, [searchData, searchError]);
+	}, [searchData, searchError, currentPage]);
 
 	useEffect(() => {
 		if (showAddPopup || showQuickEditPopup) {
@@ -99,11 +101,13 @@ function UsersTab() {
 	}, [showAddPopup, showQuickEditPopup]);
 
 	function handleSearch(input: string) {
-		if (data) {
-			if (input === '' || input === null) {
-				setUsers(data);
+		if (userData) {
+			setSearchInput(input);
+			if (input === '') {
+				setCurrentPage(1);
+				setData(userData);
 			} else {
-				setSearchInput(input);
+				setCurrentPage(1);
 			}
 		}
 	}
@@ -111,37 +115,43 @@ function UsersTab() {
 	return (
 		<>
 			<div className="my-4 flex flex-col gap-4">
-				<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
-					<div className="w-[20rem]">
+				<div className="font-regular flex flex-col justify-between px-2 font-secondary text-[1rem] text-black md:flex-row">
+					<div className="w-full md:w-[20rem]">
 						<TextInput placeholder="Search User" onChange={handleSearch} />
 					</div>
-					<div>
+					<div className="ml-auto mt-4 md:ml-0 md:mt-0">
 						<Button onClick={() => setShowAddPopup(true)}>+ Add User</Button>
 					</div>
 				</div>
-				<h3 className="px-2 font-secondary text-[1.25rem] font-normal text-black">Total Users: {users.length}</h3>
+				<h3 className="px-2 font-secondary text-[1.25rem] font-normal text-black">
+					Total Users: {data && data.totalUsers}
+				</h3>
 				<table className="w-full table-fixed border-separate border-spacing-0 border border-[#E4E4E4] font-secondary text-[1rem]">
 					<thead className="bg-[#E4E4E4] text-center">
 						<tr>
-							<th className="w-[2.5%] border-r border-[#E4E4E4] py-2">#</th>
-							<th className="w-[10%] py-2">User ID</th>
-							<th className="py-2">Username</th>
-							<th className="py-2">Password</th>
-							<th className="w-[15%] py-2">Date Created</th>
-							<th className="w-[15%] py-2">Last Modified</th>
-							<th className="w-[5%] py-2"></th>
+							<th className="w-[10%] border-r border-[#E4E4E4] py-2 md:table-cell md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">
+								#
+							</th>
+							<th className="py-2 md:table-cell lg:w-[10%]">User ID</th>
+							<th className="py-2 md:table-cell">Username</th>
+							<th className="hidden py-2 sm:table-cell">Password</th>
+							<th className="hidden w-[15%] py-2 md:table-cell">Date Created</th>
+							<th className="hidden w-[15%] py-2 lg:table-cell">Last Modified</th>
+							<th className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]"></th>
 						</tr>
 					</thead>
 					<tbody className="text-center">
-						{users.map((user, index) => (
+						{data?.users.map((user, index) => (
 							<tr className="even:bg-dark-gray" key={index}>
-								<td className="w-[2.5%] border-r border-[#E4E4E4] py-2">{index + 1}</td>
-								<td className="w-[10%] py-2">{user.user_id}</td>
+								<td className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">
+									{index + 1 + (currentPage - 1) * 10}
+								</td>
+								<td className="py-2 md:table-cell lg:w-[10%]">{user.user_id}</td>
 								<td className="py-2">{user.username}</td>
-								<td className="py-2">•••••••••••••</td>
-								<td className="w-[15%] py-2">{convertDate(user.created_at)}</td>
-								<td className="w-[15%] py-2">{convertDate(user.updated_at)}</td>
-								<td className="w-[5%]">
+								<td className="hidden py-2 sm:table-cell">•••••••••••••</td>
+								<td className="hidden w-[15%] py-2 md:table-cell">{convertDate(user.created_at)}</td>
+								<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(user.updated_at)}</td>
+								<td className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]">
 									<i
 										className="fa-solid fa-ellipsis-vertical fa-lg duration-20 h-full cursor-pointer rounded-lg p-4 text-black transition hover:backdrop-brightness-[.90]"
 										onClick={() => {
@@ -154,6 +164,17 @@ function UsersTab() {
 						))}
 					</tbody>
 				</table>
+			</div>
+			<div className="flex w-full justify-center gap-4">
+				<Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+					<i className="fa-solid fa-chevron-left"></i>
+				</Button>
+				<Button
+					onClick={() => setCurrentPage(currentPage + 1)}
+					disabled={!data || data?.totalUsers! <= currentPage * 10}
+				>
+					<i className="fa-solid fa-chevron-right"></i>
+				</Button>
 			</div>
 			{showAddPopup && <AddUserPopup onCancel={() => setShowAddPopup(false)} />}
 			{showQuickEditPopup && (
@@ -192,24 +213,25 @@ function RoutesTab() {
 }
 
 function RouteList() {
-	const [routes, setRoutes] = useState<Route[]>([] as Route[]);
+	const [data, setData] = useState<GetRouteData | null>(null);
 	const [currentClickedRoute, setCurrentClickedRoute] = useState<Route | null>(null);
 	const [showQuickEditPopup, setShowQuickEditPopup] = useState(false);
 	const [searchInput, setSearchInput] = useState<string>('');
+	const [currentPage, setCurrentPage] = useState<number>(1);
 
-	const { data, error } = useGetRoutes();
-	const { data: searchData, error: searchError } = useSearchRoutes(searchInput);
+	const { data: routeData, error: routeError } = useGetRoutes(currentPage);
+	const { data: searchData, error: searchError } = useSearchRoutes(searchInput, currentPage);
 
 	useEffect(() => {
-		if (error) {
+		if (routeError) {
 			toast.error('Failed to fetch data');
 		}
 
-		if (data) {
-			setRoutes(data);
-			console.log(data);
+		if (routeData) {
+			setData(routeData);
+			console.log(routeData);
 		}
-	}, [data, error]);
+	}, [routeData, routeError, currentPage]);
 
 	useEffect(() => {
 		if (searchError) {
@@ -217,9 +239,9 @@ function RouteList() {
 			toast.error('An error occurred while fetching the routes');
 		}
 		if (searchData) {
-			setRoutes(searchData);
+			setData(searchData);
 		}
-	}, [searchData, searchError]);
+	}, [searchData, searchError, currentPage]);
 
 	useEffect(() => {
 		if (showQuickEditPopup) {
@@ -230,54 +252,60 @@ function RouteList() {
 	}, [showQuickEditPopup]);
 
 	function handleSearch(input: string) {
-		if (data) {
-			if (input === '' || input === null) {
-				setRoutes(data);
+		if (routeData) {
+			setSearchInput(input);
+			if (input === '') {
+				setCurrentPage(1);
+				setData(routeData);
 			} else {
-				setSearchInput(input);
+				setCurrentPage(1);
 			}
 		}
 	}
 
 	return (
 		<>
-			<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
-				<div className="w-[20rem]">
+			<div className="font-regular flex flex-col justify-between px-2 font-secondary text-[1rem] text-black md:flex-row">
+				<div className="w-full md:w-[20rem]">
 					<TextInput placeholder="Search Routes" onChange={handleSearch} />
 				</div>
-				<div>
+				<div className="ml-auto mt-4 md:ml-0 md:mt-0">
 					<Button>
 						<Link href="/admin/map/add/route">+ Add Route</Link>
 					</Button>
 				</div>
 			</div>
 
-			<h3 className="px-2 font-secondary text-[1.25rem] font-normal text-black">Total Routes: {routes.length}</h3>
+			<h3 className="px-2 font-secondary text-[1.25rem] font-normal text-black">
+				Total Routes: {data && data.totalRoutes}
+			</h3>
 
 			<table className="w-full table-fixed border-separate border-spacing-x-0 border border-[#E4E4E4] font-secondary text-[1rem]">
 				<thead className="bg-[#E4E4E4] text-center">
 					<tr>
-						<th className="w-[2.5%] border-r border-[#E4E4E4] py-2">#</th>
-						<th className="w-[10%] py-2">Route ID</th>
+						<th className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">#</th>
+						<th className="w-[22.5%] py-2 lg:w-[10%]">Route ID</th>
 						<th className="py-2">Route Name</th>
-						<th className="w-[10%] py-2">Category</th>
-						<th className="w-[10%] py-2">Minimum Fare</th>
-						<th className="w-[15%] py-2">Date Created</th>
-						<th className="w-[15%] py-2">Last Modified</th>
-						<th className="w-[5%] py-2"></th>
+						<th className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">Category</th>
+						<th className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">Minimum Fare</th>
+						<th className="hidden w-[15%] py-2 lg:table-cell">Date Created</th>
+						<th className="hidden w-[15%] py-2 lg:table-cell">Last Modified</th>
+						<th className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]"></th>
 					</tr>
 				</thead>
 				<tbody className="text-center">
-					{routes.map((route, index) => (
+					{data?.routes.map((route, index) => (
 						<tr className="even:bg-dark-gray" key={index}>
-							<td className="w-[2.5%] border-r border-[#E4E4E4] py-2">{index + 1}</td>
-							<td className="w-[10%] py-2">{route.route_id}</td>
+							<td className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">
+								{index + 1 + (currentPage - 1) * 10}
+							</td>
+							<td className="w-[22.5%] py-2 lg:w-[10%]">{route.route_id}</td>
 							<td className="py-2">{route.route_name}</td>
-							<td className="w-[10%] py-2">{route.category}</td>
-							<td className="w-[10%] py-2">₱{route.min_fare.toFixed(2)}</td>
-							<td className="w-[15%] py-2">{convertDate(route.created_at)}</td>
-							<td className="w-[15%] py-2">{convertDate(route.updated_at)}</td>
-							<td className="w-[5%]">
+							<td className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">{route.category}</td>
+							<td className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">₱{route.min_fare.toFixed(2)}</td>
+							<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(route.created_at)}</td>
+							<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(route.updated_at)}</td>
+							<td className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]">
 								<i
 									className="fa-solid fa-ellipsis-vertical fa-lg duration-20 h-full cursor-pointer rounded-lg p-4 text-black transition hover:backdrop-brightness-[.90]"
 									onClick={() => {
@@ -290,6 +318,17 @@ function RouteList() {
 					))}
 				</tbody>
 			</table>
+			<div className="flex w-full justify-center gap-4">
+				<Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+					<i className="fa-solid fa-chevron-left"></i>
+				</Button>
+				<Button
+					onClick={() => setCurrentPage(currentPage + 1)}
+					disabled={!data || data?.totalRoutes! <= currentPage * 10}
+				>
+					<i className="fa-solid fa-chevron-right"></i>
+				</Button>
+			</div>
 			{showQuickEditPopup && (
 				<QuickEditRoutesPopup route={currentClickedRoute!} onCancel={() => setShowQuickEditPopup(false)} />
 			)}
@@ -298,24 +337,25 @@ function RouteList() {
 }
 
 function LocationList() {
-	const [locations, setLocations] = useState<Location[]>([] as Location[]);
+	const [data, setData] = useState<GetLocationData | null>(null);
 	const [currentClickedLocation, setCurrentClickedLocation] = useState<Location | null>(null);
 	const [showQuickEditPopup, setShowQuickEditPopup] = useState(false);
 	const [searchInput, setSearchInput] = useState<string>('');
+	const [currentPage, setCurrentPage] = useState<number>(1);
 
-	const { data, error } = useGetLocations();
-	const { data: searchData, error: searchError } = useSearchLocations(searchInput);
+	const { data: locationData, error: locationError } = useGetLocations(currentPage);
+	const { data: searchData, error: searchError } = useSearchLocations(searchInput, currentPage);
 
 	useEffect(() => {
-		if (error) {
+		if (locationError) {
 			toast.error('Failed to fetch data');
 		}
 
-		if (data) {
-			setLocations(data);
-			console.log(data);
+		if (locationData) {
+			setData(locationData);
+			console.log(locationData);
 		}
-	}, [data, error]);
+	}, [locationData, locationError, currentPage]);
 
 	useEffect(() => {
 		if (searchError) {
@@ -323,9 +363,9 @@ function LocationList() {
 			toast.error('An error occurred while fetching the locations');
 		}
 		if (searchData) {
-			setLocations(searchData);
+			setData(searchData);
 		}
-	}, [searchData, searchError]);
+	}, [searchData, searchError, currentPage]);
 
 	useEffect(() => {
 		if (showQuickEditPopup) {
@@ -336,54 +376,60 @@ function LocationList() {
 	}, [showQuickEditPopup]);
 
 	function handleSearch(input: string) {
-		if (data) {
-			if (input === '' || input === null) {
-				setLocations(data);
+		if (locationData) {
+			setSearchInput(input);
+			if (input === '') {
+				setCurrentPage(1);
+				setData(locationData);
 			} else {
-				setSearchInput(input);
+				setCurrentPage(1);
 			}
 		}
 	}
 
 	return (
 		<>
-			<div className="font-regular flex justify-between px-2 font-secondary text-[1rem] text-black">
-				<div className="w-[20rem]">
+			<div className="font-regular flex flex-col justify-between px-2 font-secondary text-[1rem] text-black md:flex-row">
+				<div className="w-full md:w-[20rem]">
 					<TextInput placeholder="Search Locations" onChange={handleSearch} />
 				</div>
-				<div>
+				<div className="ml-auto mt-4 md:ml-0 md:mt-0">
 					<Button>
 						<Link href="/admin/map/add/route">+ Add Route</Link>
 					</Button>
 				</div>
 			</div>
 
-			<h3 className="px-2 font-secondary text-[1.25rem] font-normal text-black">Total Locations: {locations.length}</h3>
+			<h3 className="px-2 font-secondary text-[1.25rem] font-normal text-black">
+				Total Locations: {data && data.totalLocations}
+			</h3>
 
 			<table className="w-full table-fixed border-separate border-spacing-x-0 border border-[#E4E4E4] font-secondary text-[1rem]">
 				<thead className="bg-[#E4E4E4] text-center">
 					<tr>
-						<th className="w-[2.5%] border-r border-[#E4E4E4] py-2">#</th>
-						<th className="w-[10%] py-2">Location ID</th>
+						<th className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">#</th>
+						<th className="w-[22.5%] py-2 lg:w-[10%]">Location ID</th>
 						<th className="py-2">Location Name</th>
-						<th className="w-[10%] py-2">Longitude</th>
-						<th className="w-[10%] py-2">Latitude</th>
-						<th className="w-[15%] py-2">Date Created</th>
-						<th className="w-[15%] py-2">Last Modified</th>
-						<th className="w-[5%] py-2"></th>
+						<th className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">Longitude</th>
+						<th className="hidden w-[15%] py-2 md:table-cell lg:w-[10%]">Latitude</th>
+						<th className="hidden w-[15%] py-2 lg:table-cell">Date Created</th>
+						<th className="hidden w-[15%] py-2 lg:table-cell">Last Modified</th>
+						<th className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]"></th>
 					</tr>
 				</thead>
 				<tbody className="text-center">
-					{locations.map((location, index) => (
+					{data?.locations.map((location, index) => (
 						<tr className="even:bg-dark-gray" key={index}>
-							<td className="w-[2.5%] border-r border-[#E4E4E4] py-2">{index + 1}</td>
-							<td className="w-[10%] py-2">{location.location_id}</td>
+							<td className="w-[10%] border-r border-[#E4E4E4] py-2 md:w-[7.5%] lg:w-[5%] xl:w-[2.5%]">
+								{index + 1 + (currentPage - 1) * 10}
+							</td>
+							<td className="w-[22.5%] py-2 lg:w-[10%]">{location.location_id}</td>
 							<td className="py-2">{location.location_name}</td>
-							<td className="w-[10%] truncate py-2">{location.longitude}</td>
-							<td className="w-[10%] truncate py-2">{location.latitude}</td>
-							<td className="w-[15%] py-2">{convertDate(location.created_at)}</td>
-							<td className="w-[15%] py-2">{convertDate(location.updated_at)}</td>
-							<td className="w-[5%]">
+							<td className="hidden w-[15%] truncate py-2 md:table-cell lg:w-[10%]">{location.longitude}</td>
+							<td className="hidden w-[15%] truncate py-2 md:table-cell lg:w-[10%]">{location.latitude}</td>
+							<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(location.created_at)}</td>
+							<td className="hidden w-[15%] py-2 lg:table-cell">{convertDate(location.updated_at)}</td>
+							<td className="w-[15%] md:table-cell md:w-[10%] lg:w-[5%]">
 								<i
 									className="fa-solid fa-ellipsis-vertical fa-lg duration-20 h-full cursor-pointer rounded-lg p-4 text-black transition hover:backdrop-brightness-[.90]"
 									onClick={() => {
@@ -396,6 +442,17 @@ function LocationList() {
 					))}
 				</tbody>
 			</table>
+			<div className="flex w-full justify-center gap-4">
+				<Button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+					<i className="fa-solid fa-chevron-left"></i>
+				</Button>
+				<Button
+					onClick={() => setCurrentPage(currentPage + 1)}
+					disabled={!data || data?.totalLocations! <= currentPage * 10}
+				>
+					<i className="fa-solid fa-chevron-right"></i>
+				</Button>
+			</div>
 			{showQuickEditPopup && (
 				<QuickEditLocationsPopup location={currentClickedLocation!} onCancel={() => setShowQuickEditPopup(false)} />
 			)}

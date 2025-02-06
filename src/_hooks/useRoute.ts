@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { GetRouteData } from '@/_types/GetData';
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -10,15 +11,21 @@ const fetchOneRoute = async (route_id: string | number) => {
 	return data;
 };
 
-const fetchAllRoutes = async () => {
-	const response = await fetch('/api/get/route');
-	const data: any[] = await response.json();
+const fetchAllRoutes = async (page?: number, all?: boolean) => {
+	const response = await fetch(
+		`/api/get/route${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${all && `all=${all}`}`
+	);
+	const data: GetRouteData = await response.json();
 	return data;
 };
 
-const searchRoutes = async (searchInput: string) => {
-	const response = await fetch(`/api/get/route/search/${searchInput}`);
-	const data: any[] = await response.json();
+const searchRoutes = async (searchInput: string, page?: number, all?: boolean) => {
+	const response = await fetch(
+		`/api/get/route/search/${searchInput}${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${
+			all && `all=${all}`
+		}`
+	);
+	const data: GetRouteData = await response.json();
 	return data;
 };
 
@@ -75,17 +82,17 @@ export const useGetRoute = (route_id: string | number) => {
 	});
 };
 
-export const useGetRoutes = () => {
+export const useGetRoutes = (page?: number, all?: boolean) => {
 	return useQuery({
-		queryKey: ['routes'],
-		queryFn: fetchAllRoutes,
+		queryKey: ['routes', `page-${page}`],
+		queryFn: () => fetchAllRoutes(page, all),
 	});
 };
 
-export const useSearchRoutes = (searchInput: string) => {
+export const useSearchRoutes = (searchInput: string, page?: number, all?: boolean) => {
 	return useQuery({
-		queryKey: ['search', 'routes', searchInput],
-		queryFn: () => searchRoutes(searchInput),
+		queryKey: ['search', 'routes', searchInput, `page-${page}`],
+		queryFn: () => searchRoutes(searchInput, page, all),
 		enabled: !!searchInput,
 	});
 };

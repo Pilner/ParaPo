@@ -19,6 +19,7 @@ import { MapNavbar } from '@/_components/semantics/Navbar';
 let map: any;
 
 export default function MapPage() {
+	const [showModal, setShowModal] = useState<boolean>(true);
 	let markerOrigin: any, markerDest: any;
 
 	const [mode, setMode] = useState<'origin' | 'destination' | 'none'>('none');
@@ -217,91 +218,108 @@ export default function MapPage() {
 
 	return (
 		<main className="relative h-screen w-full">
-			<div className="absolute z-10 flex max-h-[40rem] w-[25rem] translate-x-5 translate-y-5 flex-col overflow-hidden rounded-lg border border-black/25 bg-white">
-				<MapNavbar />
-				<div className="flex h-full flex-grow flex-col gap-4 overflow-y-hidden p-4 text-black">
-					<form onSubmit={handleSubmit} className="flex flex-col gap-2 text-regular-text">
-						<div className="flex gap-4">
-							<TextInput
-								name="originCoords"
-								value={
-									location.origin.latitude && location.origin.longitude
-										? `${location.origin.latitude},${location.origin.longitude}`
-										: ''
-								}
-								placeholder="Click the Marker!"
-								readOnly={true}
-							>
-								<span>
-									<i className="fa-solid fa-location-dot"></i>
-								</span>{' '}
-								Origin
-							</TextInput>
-							<div className="self-end">
-								<Marker
-									point="origin"
-									color="#f53636"
-									getDataFromChild={getDataFromChild}
-									className={mode === 'origin' ? 'cursor-default bg-[rgba(0,0,0,0.5)]' : ''}
-								/>
-							</div>
-						</div>
-						<div className="flex gap-4">
-							<TextInput
-								name="destCoords"
-								value={
-									location.destination.latitude && location.destination.longitude
-										? `${location.destination.latitude},${location.destination.longitude}`
-										: ''
-								}
-								placeholder="Click the Marker!"
-								readOnly={true}
-							>
-								<span>
-									<i className="fa-solid fa-location-dot"></i>
-								</span>{' '}
-								Destination
-							</TextInput>
-							<div className="self-end">
-								<Marker
-									point="destination"
-									color="#46a3ff"
-									getDataFromChild={getDataFromChild}
-									className={mode === 'destination' ? 'cursor-default bg-[rgba(0,0,0,0.5)]' : ''}
-								/>
-							</div>
-						</div>
-						<div className="mt-4">
-							<Button
-								type="submit"
-								className="w-full"
-								disabled={
-									!location.origin.latitude ||
-									!location.origin.longitude ||
-									!location.destination.latitude ||
-									!location.destination.longitude
-								}
-							>
-								Search
-							</Button>
-						</div>
-					</form>
-					{(location.origin.location_name || location.destination.location_name) && (
-						<>
-							<div className="w-full border border-black/25" />
-							<div className="flex flex-col gap-2">
-								<div>
-									<h3 className="text-regular-text font-bold">Origin Location</h3>
-									<p className="text-regular-text font-normal">{location.origin.location_name}</p>
-								</div>
-								<div>
-									<h3 className="text-regular-text font-bold">Destination Location</h3>
-									<p className="text-regular-text font-normal">{location.destination.location_name}</p>
+			<div
+				className={`absolute bottom-0 left-1/2 z-10 flex max-h-[20rem] w-full -translate-x-1/2 transform flex-col overflow-hidden rounded-lg border border-black/25 bg-white transition duration-500 sm:max-h-[25rem] sm:w-[35rem] md:max-h-[20rem] lg:bottom-auto lg:left-0 lg:max-h-[40rem] lg:w-[25rem] lg:translate-x-5 lg:translate-y-5 ${
+					showModal ? 'opacity-100' : 'opacity-75 hover:opacity-100'
+				}`}
+			>
+				<MapNavbar onClick={() => setShowModal(!showModal)} />
+				{showModal && (
+					<div className="flex h-full flex-grow flex-col gap-4 overflow-y-scroll p-4 text-black">
+						<form
+							onSubmit={handleSubmit}
+							className="flex flex-col gap-2 text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text"
+						>
+							<div className="flex gap-4">
+								<TextInput
+									name="originCoords"
+									value={
+										location.origin.latitude && location.origin.longitude
+											? `${location.origin.latitude},${location.origin.longitude}`
+											: ''
+									}
+									placeholder="Click the Marker!"
+									readOnly={true}
+								>
+									<span>
+										<i className="fa-solid fa-location-dot"></i>
+									</span>{' '}
+									Origin
+								</TextInput>
+								<div className="self-end">
+									<Marker
+										point="origin"
+										color="#f53636"
+										getDataFromChild={getDataFromChild}
+										className={mode === 'origin' ? 'cursor-default bg-[rgba(0,0,0,0.5)]' : ''}
+									/>
 								</div>
 							</div>
-						</>
-					)}
-				</div>
+							<div className="flex gap-4">
+								<TextInput
+									name="destCoords"
+									value={
+										location.destination.latitude && location.destination.longitude
+											? `${location.destination.latitude},${location.destination.longitude}`
+											: ''
+									}
+									placeholder="Click the Marker!"
+									readOnly={true}
+								>
+									<span>
+										<i className="fa-solid fa-location-dot"></i>
+									</span>{' '}
+									Destination
+								</TextInput>
+								<div className="self-end">
+									<Marker
+										point="destination"
+										color="#46a3ff"
+										getDataFromChild={getDataFromChild}
+										className={mode === 'destination' ? 'cursor-default bg-[rgba(0,0,0,0.5)]' : ''}
+									/>
+								</div>
+							</div>
+							<div className="mt-4">
+								<Button
+									type="submit"
+									className="w-full"
+									disabled={
+										!location.origin.latitude ||
+										!location.origin.longitude ||
+										!location.destination.latitude ||
+										!location.destination.longitude
+									}
+								>
+									Search
+								</Button>
+							</div>
+						</form>
+						{(location.origin.location_name || location.destination.location_name) && (
+							<>
+								<div className="w-full border border-black/25" />
+								<div className="flex flex-col gap-2">
+									<div>
+										<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+											Origin Location
+										</h3>
+										<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+											{location.origin.location_name}
+										</p>
+									</div>
+									<div>
+										<h3 className="text-base-regular-text font-bold sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+											Destination Location
+										</h3>
+										<p className="text-base-regular-text font-normal sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text">
+											{location.destination.location_name}
+										</p>
+									</div>
+								</div>
+							</>
+						)}
+					</div>
+				)}
 			</div>
 			<div id="map" className="z-0 h-full w-full" />
 		</main>

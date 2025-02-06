@@ -21,13 +21,17 @@ import { useGetUser } from '@/_hooks/useUser';
 
 import Button from '@/_components/Button';
 
+interface NavbarProps {
+	onClick?: () => void;
+}
+
 export default function Navbar() {
 	return (
 		<nav className="item-center flex h-[6rem] w-full bg-white">
-			<div className="m-auto flex h-full w-3/4 items-center justify-between">
+			<div className="m-auto flex h-full w-[90%] items-center justify-between sm:w-[85%] lg:w-[80%] xl:w-[75%]">
 				<div className="flex h-full">
-					<div className="flex h-full items-center gap-4">
-						<Link href="/" className="h-full">
+					<div className="flex h-full items-center gap-8">
+						<Link href="/" className="h-[80%] sm:h-full">
 							<Image
 								src="/images/ParaPo-Logo-Light.png"
 								alt="logo"
@@ -38,15 +42,19 @@ export default function Navbar() {
 							/>
 						</Link>
 						<Link href="/">
-							<h1 className="font-primary text-regular-title font-bold text-black">ParaPo</h1>
+							<h1 className="hidden font-primary text-base-regular-text font-bold text-black sm:text-sm-regular-text lg:block lg:text-lg-regular-text xl:text-regular-text">
+								ParaPo
+							</h1>
 						</Link>
 					</div>
 				</div>
 				<div className="flex">
-					<ul className="flex items-center gap-16 font-secondary text-regular-text font-semibold text-black">
+					<ul className="flex items-center gap-6 font-secondary text-base-regular-text font-semibold text-black sm:text-sm-regular-text lg:gap-16 lg:text-lg-regular-text xl:text-regular-text">
 						<li>
 							<Link href="/">
-								<p className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">Home</p>
+								<p className="duration-20 hidden rounded-lg p-2 transition hover:backdrop-brightness-[.90] lg:flex">
+									Home
+								</p>
 							</Link>
 						</li>
 						<li>
@@ -66,10 +74,19 @@ export default function Navbar() {
 	);
 }
 
-export function MapNavbar() {
+export function MapNavbar({ onClick }: NavbarProps) {
 	return (
-		<nav className="h-[5rem] w-full bg-accent">
-			<div className="flex h-full justify-between px-4 py-2">
+		<nav
+			className={`h-[3rem] w-full bg-accent transition duration-500 sm:h-[4rem] lg:h-[5rem] ${onClick && 'cursor-pointer hover:bg-[#e98364]'}`}
+		>
+			<div
+				className="flex h-full justify-between px-4 py-1 lg:py-2"
+				onClick={(e: React.MouseEvent<HTMLElement>) => {
+					if (e.target === e.currentTarget) {
+						onClick && onClick();
+					}
+				}}
+			>
 				<div className="h-full">
 					<Link href="/">
 						<Image
@@ -82,7 +99,7 @@ export function MapNavbar() {
 						/>
 					</Link>
 				</div>
-				<div className="flex items-center gap-8 font-secondary text-[1rem] font-semibold text-gray">
+				<div className="flex items-center gap-8 font-secondary text-[0.75rem] font-semibold text-gray sm:text-[0.9rem] md:text-[1rem]">
 					<Link href="/catalog" className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">
 						Catalog
 					</Link>
@@ -95,10 +112,19 @@ export function MapNavbar() {
 	);
 }
 
-export function MapAdminNavbar() {
+export function MapAdminNavbar({ onClick }: NavbarProps) {
 	return (
-		<nav className="h-[5rem] w-full bg-accent">
-			<div className="flex h-full justify-between px-4 py-2">
+		<nav
+			className={`h-[3rem] w-full bg-accent transition duration-500 sm:h-[4rem] lg:h-[5rem] ${onClick && 'cursor-pointer hover:bg-[#e98364]'}`}
+		>
+			<div
+				className="flex h-full justify-between px-4 py-1 lg:py-2"
+				onClick={(e: React.MouseEvent<HTMLElement>) => {
+					if (e.target === e.currentTarget) {
+						onClick && onClick();
+					}
+				}}
+			>
 				<div className="h-full">
 					<Link href="/">
 						<Image
@@ -111,7 +137,7 @@ export function MapAdminNavbar() {
 						/>
 					</Link>
 				</div>
-				<div className="flex items-center gap-8 font-secondary text-[1rem] font-semibold text-gray">
+				<div className="flex items-center gap-8 font-secondary text-[0.75rem] font-semibold text-gray sm:text-[0.9rem] md:text-[1rem]">
 					<button
 						onClick={() => (window.location.href = '/admin')}
 						className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]"
@@ -144,10 +170,10 @@ export function AuthNavbar() {
 
 	return (
 		<nav className="item-center flex h-[6rem] w-full bg-white">
-			<div className="m-auto flex h-full w-3/4 items-center justify-between">
+			<div className="m-auto flex h-full w-[90%] items-center justify-between sm:w-[85%] lg:w-[80%] xl:w-[75%]">
 				<div className="flex h-full">
-					<div className="flex h-full items-center gap-4">
-						<Link href="/" className="h-full">
+					<div className="flex h-full items-center gap-8">
+						<Link href="/" className="h-[80%] sm:h-full">
 							<Image
 								src="/images/ParaPo-Logo-Light.png"
 								alt="logo"
@@ -158,17 +184,20 @@ export function AuthNavbar() {
 							/>
 						</Link>
 						<Link href="/">
-							<h1 className="font-primary text-regular-title font-bold text-black">ParaPo</h1>
+							<h1 className="hidden font-primary text-base-regular-text font-bold text-black sm:text-sm-regular-text lg:block lg:text-lg-regular-text xl:text-regular-text">
+								ParaPo
+							</h1>
 						</Link>
 					</div>
 				</div>
 				<div className="flex">
-					<ul className="flex items-center gap-16 font-secondary text-regular-text font-semibold text-black">
+					<ul className="flex items-center gap-6 font-secondary text-base-regular-text font-semibold text-black sm:text-sm-regular-text lg:gap-16 lg:text-lg-regular-text xl:text-regular-text">
 						<li className={`duration-20 transition ${user ? 'opacity-100' : 'opacity-0'}`}>
 							<p className="duration-20 rounded-lg p-2 transition hover:backdrop-brightness-[.90]">
 								{user && user.username}
 							</p>
 						</li>
+
 						<li>
 							<Button
 								variant="solid"

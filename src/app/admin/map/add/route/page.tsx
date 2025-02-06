@@ -2,9 +2,8 @@
 import { mapboxAccessToken } from '@/_data/data';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
-import { Route, Location } from '@/_types/Map';
+import { Location } from '@/_types/Map';
 
 import { MapboxSearchBox } from '@mapbox/search-js-web';
 import mapboxgl from 'mapbox-gl';
@@ -13,7 +12,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { fetchLocationName } from '@/_utils/map';
 
 import Button from '@/_components/Button';
-import Marker from '@/_components/Marker';
 import { TextInput, DropdownInput } from '@/_components/Input';
 import { MapAdminNavbar } from '@/_components/semantics/Navbar';
 
@@ -31,7 +29,7 @@ interface LocationList {
 }
 
 export default function AddRouteMap() {
-	const router = useRouter();
+	const [showModal, setShowModal] = useState<boolean>(true);
 	const [locationsList, setLocationsList] = useState<LocationList[]>([]);
 	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
 
@@ -197,68 +195,80 @@ export default function AddRouteMap() {
 
 	return (
 		<main className="relative h-screen w-full">
-			<div className="absolute z-10 flex max-h-[40rem] w-[25rem] translate-x-5 translate-y-5 flex-col overflow-hidden rounded-lg border border-black/25 bg-white">
-				<MapAdminNavbar />
-				<form onSubmit={handleSubmit} className="flex h-full flex-grow flex-col gap-4 overflow-y-hidden p-4 text-black">
-					<div id="formSubmit" className="flex flex-col gap-2 text-regular-text">
-						<TextInput
-							label="Route Name"
-							name="route_name"
-							placeholder="Enter Route Name"
-							error={inputError?.route_name || undefined}
-							onChange={() => {}}
-						/>
-						<DropdownInput
-							label="Category"
-							name="category"
-							placeholder="Enter Category"
-							options={routeCategoryOptions}
-							error={inputError?.category || undefined}
-							onChange={() => {}}
-						/>
-						<TextInput
-							label="Minimum Fare"
-							name="min_fare"
-							placeholder="Enter Minimum Fare"
-							error={inputError?.min_fare || undefined}
-							onChange={() => {}}
-						/>
-					</div>
-					<div className="w-full border border-black/25" />
-					<div className="flex h-full flex-col gap-2 overflow-y-hidden">
-						<h3 className="text-center text-regular-text font-bold">Stations List</h3>
-						<div className="flex h-full w-full overflow-y-scroll bg-dark-gray p-2">
-							{locationsList.length > 0 ? (
-								<ol className="w-full list-outside list-decimal pl-7 text-[1rem]">
-									{locationsList.map((location, index) => (
-										<li key={index} className="w-full">
-											<div className="flex w-full items-center justify-between">
-												<p>{location.location.location_name}</p>
-												<button onClick={() => deleteLocation(index)}>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														fill="none"
-														viewBox="0 0 24 24"
-														strokeWidth={2}
-														stroke="currentColor"
-														className="size-6 opacity-50 hover:opacity-100"
-													>
-														<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-													</svg>
-												</button>
-											</div>
-										</li>
-									))}
-								</ol>
-							) : (
-								<h3 className="m-auto text-center font-secondary text-[0.75rem] font-normal text-black/50">
-									Click anywhere on the map to add locations!
-								</h3>
-							)}
+			<div
+				className={`absolute bottom-0 left-1/2 z-10 flex max-h-[20rem] w-full -translate-x-1/2 transform flex-col overflow-hidden rounded-lg border border-black/25 bg-white transition duration-500 sm:max-h-[25rem] sm:w-[35rem] md:max-h-[20rem] lg:bottom-auto lg:left-0 lg:max-h-[40rem] lg:w-[25rem] lg:translate-x-5 lg:translate-y-5 ${
+					showModal ? 'opacity-100' : 'opacity-75 hover:opacity-100'
+				}`}
+			>
+				<MapAdminNavbar onClick={() => setShowModal(!showModal)} />
+				{showModal && (
+					<form
+						onSubmit={handleSubmit}
+						className="flex h-full flex-grow flex-col gap-4 overflow-y-scroll p-4 text-black"
+					>
+						<div
+							id="formSubmit"
+							className="flex flex-col gap-2 text-base-regular-text sm:text-sm-regular-text md:text-md-regular-text lg:text-lg-regular-text xl:text-xl-regular-text 2xl:text-regular-text"
+						>
+							<TextInput
+								label="Route Name"
+								name="route_name"
+								placeholder="Enter Route Name"
+								error={inputError?.route_name || undefined}
+								onChange={() => {}}
+							/>
+							<DropdownInput
+								label="Category"
+								name="category"
+								placeholder="Enter Category"
+								options={routeCategoryOptions}
+								error={inputError?.category || undefined}
+								onChange={() => {}}
+							/>
+							<TextInput
+								label="Minimum Fare"
+								name="min_fare"
+								placeholder="Enter Minimum Fare"
+								error={inputError?.min_fare || undefined}
+								onChange={() => {}}
+							/>
 						</div>
-					</div>
-					<Button type="submit">Add Route</Button>
-				</form>
+						<div className="w-full border border-black/25" />
+						<div className="flex min-h-max flex-col gap-2 overflow-y-hidden lg:min-h-full">
+							<h3 className="text-center text-regular-text font-bold">Stations List</h3>
+							<div className="flex max-h-[10rem] w-full overflow-y-scroll bg-dark-gray p-2 lg:h-full">
+								{locationsList.length > 0 ? (
+									<ol className="w-full list-outside list-decimal pl-7 text-[1rem]">
+										{locationsList.map((location, index) => (
+											<li key={index} className="w-full">
+												<div className="flex w-full items-center justify-between">
+													<p>{location.location.location_name}</p>
+													<button type="button" onClick={() => deleteLocation(index)}>
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															fill="none"
+															viewBox="0 0 24 24"
+															strokeWidth={2}
+															stroke="currentColor"
+															className="size-6 opacity-50 hover:opacity-100"
+														>
+															<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+														</svg>
+													</button>
+												</div>
+											</li>
+										))}
+									</ol>
+								) : (
+									<h3 className="m-auto text-center font-secondary text-[0.75rem] font-normal text-black/50">
+										Click anywhere on the map to add locations!
+									</h3>
+								)}
+							</div>
+						</div>
+						<Button type="submit">Add Route</Button>
+					</form>
+				)}
 			</div>
 			<div id="map" className="z-0 h-full w-full" />
 		</main>

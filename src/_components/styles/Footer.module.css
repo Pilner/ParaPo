@@ -2,7 +2,7 @@
 	height: 20vh;
 	width: 100%;
 	background-color: var(--black);
-	color: white
+	color: white;
 }
 
 #footer > div,
@@ -89,7 +89,8 @@
 		height: 100%;
 	}
 
-	#footerLeft, #footerRight {
+	#footerLeft,
+	#footerRight {
 		justify-content: center;
 		align-items: normal;
 	}
@@ -98,7 +99,7 @@
 		margin-bottom: 2rem;
 	}
 
-	#footerLeft > div > div:first-child > h1  {
+	#footerLeft > div > div:first-child > h1 {
 		font-size: 48px;
 	}
 
@@ -121,5 +122,4 @@
 		margin: 0;
 		font-size: 12px;
 	}
-
 }

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { GetLocationData } from '@/_types/GetData';
 
 const headers = {
 	'Content-Type': 'application/json',
@@ -10,15 +11,21 @@ const fetchOneLocation = async (location_id: string | number) => {
 	return data;
 };
 
-const fetchAllLocations = async () => {
-	const response = await fetch('/api/get/location');
-	const data: any[] = await response.json();
+const fetchAllLocations = async (page?: number, all?: boolean) => {
+	const response = await fetch(
+		`/api/get/location${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${all && `all=${all}`}`
+	);
+	const data: GetLocationData = await response.json();
 	return data;
 };
 
-const searchLocations = async (keyword: string) => {
-	const response = await fetch(`/api/get/location/search/${keyword}`);
-	const data: any[] = await response.json();
+const searchLocations = async (keyword: string, page?: number, all?: boolean) => {
+	const response = await fetch(
+		`/api/get/location/search/${keyword}${(page || all) && '?'}${page && `page=${page}`}${page && all && '&'}${
+			all && `all=${all}`
+		}`
+	);
+	const data: GetLocationData = await response.json();
 	return data;
 };
 
@@ -64,17 +71,17 @@ export const useGetLocation = (location_id: string | number) => {
 	});
 };
 
-export const useGetLocations = () => {
+export const useGetLocations = (page?: number, all?: boolean) => {
 	return useQuery({
-		queryKey: ['locations'],
-		queryFn: fetchAllLocations,
+		queryKey: ['locations', `page-${page}`],
+		queryFn: () => fetchAllLocations(page, all),
 	});
 };
 
-export const useSearchLocations = (keyword: string) => {
+export const useSearchLocations = (keyword: string, page?: number, all?: boolean) => {
 	return useQuery({
-		queryKey: ['search', 'locations', keyword],
-		queryFn: () => searchLocations(keyword),
+		queryKey: ['search', 'locations', keyword, `page-${page}`],
+		queryFn: () => searchLocations(keyword, page, all),
 		enabled: !!keyword,
 	});
 };
