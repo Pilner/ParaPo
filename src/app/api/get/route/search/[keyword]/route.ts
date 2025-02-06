@@ -24,6 +24,29 @@ export async function GET(req: NextRequest, params: params) {
 	try {
 		if (all) {
 			const routes = await prisma.routes.findMany({
+        where: {
+					OR: [
+						{
+							route_name: {
+								contains: keyword,
+							},
+						},
+						{
+							category: {
+								contains: keyword,
+							},
+						},
+						{
+							Locations: {
+								some: {
+									location_name: {
+										contains: keyword,
+									},
+								},
+							},
+						},
+					],
+				},
 				include: {
 					Locations: true,
 				},
@@ -33,7 +56,31 @@ export async function GET(req: NextRequest, params: params) {
 			});
 
 			// Get the total count of routes
-			const totalRoutes = await prisma.routes.count();
+			const totalRoutes = await prisma.routes.count({
+				where: {
+					OR: [
+						{
+							route_name: {
+								contains: keyword,
+							},
+						},
+						{
+							category: {
+								contains: keyword,
+							},
+						},
+						{
+							Locations: {
+								some: {
+									location_name: {
+										contains: keyword,
+									},
+								},
+							},
+						},
+					],
+				},
+			});
 
 			return new Response(JSON.stringify({ routes, totalRoutes, page: 1, limit: totalRoutes }), {
 				status: 200,

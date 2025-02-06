@@ -11,6 +11,7 @@ interface params {
 }
 
 export async function GET(req: NextRequest, params: params) {
+
 	// Get the keyword from the params
 	const keyword = params.params.keyword;
 
@@ -38,6 +39,31 @@ export async function GET(req: NextRequest, params: params) {
 	try {
 		if (all) {
 			const locations = await prisma.locations.findMany({
+        where: {
+					OR: [
+						{
+							location_name: {
+								contains: keyword,
+							},
+						},
+						{
+							Routes: {
+								OR: [
+									{
+										route_name: {
+											contains: keyword,
+										},
+									},
+									{
+										category: {
+											contains: keyword,
+										},
+									},
+								],
+							},
+						},
+					],
+				},
 				include: {
 					Routes: true,
 				},
@@ -47,7 +73,33 @@ export async function GET(req: NextRequest, params: params) {
 			});
 
 			// Get the total count of locations
-			const totalLocations = await prisma.locations.count();
+			const totalLocations = await prisma.locations.count({
+				where: {
+					OR: [
+						{
+							location_name: {
+								contains: keyword,
+							},
+						},
+						{
+							Routes: {
+								OR: [
+									{
+										route_name: {
+											contains: keyword,
+										},
+									},
+									{
+										category: {
+											contains: keyword,
+										},
+									},
+								],
+							},
+						},
+					],
+				},
+			});
 
 			return new Response(JSON.stringify({ locations, totalLocations, page: 1, limit: totalLocations }), {
 				status: 200,
@@ -82,6 +134,9 @@ export async function GET(req: NextRequest, params: params) {
 							},
 						},
 					],
+				},
+        include: {
+					Routes: true,
 				},
 				// sort
 				orderBy: {

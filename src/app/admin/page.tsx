@@ -112,11 +112,40 @@ function UsersTab() {
 		}
 	}
 
+	useEffect(() => {
+		if (searchError) {
+			console.error(searchError);
+			toast.error('An error occurred while fetching the users');
+		}
+		if (searchData) {
+			setUsers(searchData);
+		}
+	}, [searchData, searchError]);
+
+	useEffect(() => {
+		if (showAddPopup || showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showAddPopup, showQuickEditPopup]);
+
+	function handleSearch(input: string) {
+		if (data) {
+			if (input === '' || input === null) {
+				setUsers(data);
+			} else {
+				setSearchInput(input);
+			}
+		}
+	}
+
 	return (
 		<>
 			<div className="my-4 flex flex-col gap-4">
 				<div className="font-regular flex flex-col justify-between px-2 font-secondary text-[1rem] text-black md:flex-row">
 					<div className="w-full md:w-[20rem]">
+
 						<TextInput placeholder="Search User" onChange={handleSearch} />
 					</div>
 					<div className="ml-auto mt-4 md:ml-0 md:mt-0">
@@ -263,6 +292,34 @@ function RouteList() {
 		}
 	}
 
+	useEffect(() => {
+		if (searchError) {
+			console.error(searchError);
+			toast.error('An error occurred while fetching the routes');
+		}
+		if (searchData) {
+			setRoutes(searchData);
+		}
+	}, [searchData, searchError]);
+
+	useEffect(() => {
+		if (showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showQuickEditPopup]);
+
+	function handleSearch(input: string) {
+		if (data) {
+			if (input === '' || input === null) {
+				setRoutes(data);
+			} else {
+				setSearchInput(input);
+			}
+		}
+	}
+
 	return (
 		<>
 			<div className="font-regular flex flex-col justify-between px-2 font-secondary text-[1rem] text-black md:flex-row">
@@ -383,6 +440,34 @@ function LocationList() {
 				setData(locationData);
 			} else {
 				setCurrentPage(1);
+			}
+		}
+	}
+
+	useEffect(() => {
+		if (searchError) {
+			console.error(searchError);
+			toast.error('An error occurred while fetching the locations');
+		}
+		if (searchData) {
+			setLocations(searchData);
+		}
+	}, [searchData, searchError]);
+
+	useEffect(() => {
+		if (showQuickEditPopup) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [showQuickEditPopup]);
+
+	function handleSearch(input: string) {
+		if (data) {
+			if (input === '' || input === null) {
+				setLocations(data);
+			} else {
+				setSearchInput(input);
 			}
 		}
 	}

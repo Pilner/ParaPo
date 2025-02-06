@@ -29,6 +29,12 @@ const searchLocations = async (keyword: string, page?: number, all?: boolean) =>
 	return data;
 };
 
+const searchLocations = async (keyword: string) => {
+	const response = await fetch(`/api/get/location/search/${keyword}`);
+	const data: any[] = await response.json();
+	return data;
+};
+
 const createLocation = async (location: any) => {
 	const response = await fetch(`/api/post/location`, {
 		method: 'POST',
@@ -82,6 +88,14 @@ export const useSearchLocations = (keyword: string, page?: number, all?: boolean
 	return useQuery({
 		queryKey: ['search', 'locations', keyword, `page-${page}`],
 		queryFn: () => searchLocations(keyword, page, all),
+		enabled: !!keyword,
+	});
+};
+
+export const useSearchLocations = (keyword: string) => {
+	return useQuery({
+		queryKey: ['search', 'locations', keyword],
+		queryFn: () => searchLocations(keyword),
 		enabled: !!keyword,
 	});
 };

@@ -11,6 +11,7 @@ interface params {
 }
 
 export async function GET(req: NextRequest, params: params) {
+
 	// Get the keyword from the params
 	const keyword = params.params.keyword;
 
@@ -38,6 +39,15 @@ export async function GET(req: NextRequest, params: params) {
 	try {
 		if (all) {
 			const users = await prisma.users.findMany({
+        where: {
+					OR: [
+						{
+							username: {
+								contains: keyword,
+							},
+						},
+					],
+				},
 				select: {
 					user_id: true,
 					username: true,
@@ -51,7 +61,17 @@ export async function GET(req: NextRequest, params: params) {
 				},
 			});
 
-			const totalUsers = await prisma.users.count();
+			const totalUsers = await prisma.users.count({
+				where: {
+					OR: [
+						{
+							username: {
+								contains: keyword,
+							},
+						},
+					],
+				},
+			});
 
 			return new Response(JSON.stringify({ users, totalUsers, page: 1, limit: totalUsers }), {
 				status: 200,
