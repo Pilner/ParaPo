@@ -34,22 +34,18 @@ export function QuickEditUserPopup({ user, onCancel }: QuickEditUserPopupProps) 
 	};
 
 	const handleDelete = async () => {
-		try {
-			deleteUser(user.user_id, {
-				onSuccess: (data) => {
-					toast.success('User deleted successfully');
-					console.log(data);
-					handleCancel();
-				},
-				onError: (error) => {
-					console.error('Error deleting user:', error);
-					throw new Error(error.message);
-				},
-			});
-		} catch (error) {
-			console.error(error);
-			toast.error('Failed to delete user');
-		}
+		deleteUser(user.user_id, {
+			onSuccess: (data) => {
+				toast.success('User deleted successfully');
+				console.log(data);
+				handleCancel();
+			},
+			onError: (error) => {
+				toast.error(error.message);
+				console.log('Error deleting user:', error);
+				throw new Error(error.message);
+			},
+		});
 	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,22 +68,18 @@ export function QuickEditUserPopup({ user, onCancel }: QuickEditUserPopupProps) 
 			setInputError(null);
 		}
 
-		try {
-			updateUser(payload, {
-				onSuccess: (data) => {
-					toast.success('User updated successfully');
-					console.log(data);
-					handleCancel();
-				},
-				onError: (error) => {
-					console.error('Error updating user:', error);
-					throw new Error(error.message);
-				},
-			});
-		} catch (error) {
-			console.error(error);
-			toast.error('Failed to update user');
-		}
+		updateUser(payload, {
+			onSuccess: (data) => {
+				toast.success('User updated successfully');
+				console.log(data);
+				handleCancel();
+			},
+			onError: (error) => {
+				toast.error(error.message);
+				console.error('Error updating user:', error);
+				throw new Error(error.message);
+			},
+		});
 	};
 
 	return (
@@ -199,22 +191,18 @@ export function QuickEditRoutesPopup({ route, onCancel }: QuickEditRoutesPopupPr
 			setInputError(null);
 		}
 
-		try {
-			updateRoute(payload, {
-				onSuccess: (data) => {
-					toast.success('Route updated successfully');
-					console.log(data);
-					handleCancel();
-				},
-				onError: (error) => {
-					console.error('Error updating route:', error);
-					throw new Error(error.message);
-				},
-			});
-		} catch (error) {
-			console.error(error);
-			toast.error('Failed to update route');
-		}
+		updateRoute(payload, {
+			onSuccess: (data) => {
+				toast.success('Route updated successfully');
+				console.log(data);
+				handleCancel();
+			},
+			onError: (error) => {
+				toast.error(error.message);
+				console.error('Error updating route:', error);
+				throw new Error(error.message);
+			},
+		});
 	};
 
 	const handleDelete = async () => {
@@ -356,22 +344,18 @@ export function QuickEditLocationsPopup({ location, onCancel }: QuickEditLocatio
 			setInputError(null);
 		}
 
-		try {
-			updateLocation(payload, {
-				onSuccess: (data) => {
-					toast.success('Location updated successfully');
-					console.log(data);
-					handleCancel();
-				},
-				onError: (error) => {
-					console.error('Error updating location:', error);
-					throw new Error(error.message);
-				},
-			});
-		} catch (error) {
-			console.error(error);
-			toast.error('Failed to update location');
-		}
+		updateLocation(payload, {
+			onSuccess: (data) => {
+				toast.success('Location updated successfully');
+				console.log(data);
+				handleCancel();
+			},
+			onError: (error) => {
+				toast.error(error.message);
+				console.error('Error updating location:', error);
+				throw new Error(error.message);
+			},
+		});
 	};
 
 	return (

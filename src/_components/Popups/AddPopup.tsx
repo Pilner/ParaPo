@@ -15,7 +15,7 @@ interface PopupProps {
 export function AddUserPopup({ onCancel }: PopupProps) {
 	const [inputError, setInputError] = useState<Record<string, string> | null>(null);
 
-	const { mutate: updateUser } = usePostUser();
+	const { mutate: createUser } = usePostUser();
 
 	const handleCancel = () => {
 		onCancel();
@@ -40,22 +40,18 @@ export function AddUserPopup({ onCancel }: PopupProps) {
 			setInputError(null);
 		}
 
-		try {
-			updateUser(payload, {
-				onSuccess: (data) => {
-					toast.success('User created successfully');
-					console.log(data);
-					handleCancel();
-				},
-				onError: (error) => {
-					console.error('Error creating user:', error);
-					throw new Error(error.message);
-				},
-			});
-		} catch (error) {
-			console.error(error);
-			toast.error('Failed to create user');
-		}
+		createUser(payload, {
+			onSuccess: (data) => {
+				toast.success('User created successfully');
+				console.log(data);
+				handleCancel();
+			},
+			onError: (error) => {
+				toast.error(error.message);
+				console.error('Error creating user:', error.message);
+				throw new Error(error.message);
+			},
+		});
 	};
 
 	return (

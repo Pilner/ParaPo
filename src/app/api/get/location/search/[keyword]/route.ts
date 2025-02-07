@@ -11,7 +11,6 @@ interface params {
 }
 
 export async function GET(req: NextRequest, params: params) {
-
 	// Get the keyword from the params
 	const keyword = params.params.keyword;
 
@@ -23,10 +22,9 @@ export async function GET(req: NextRequest, params: params) {
 	if (!session) {
 		return new Response(
 			JSON.stringify({
-				status: 401,
 				message: 'Unauthorized',
 			}),
-			{ headers }
+			{ headers, status: 401 }
 		);
 	}
 
@@ -39,7 +37,7 @@ export async function GET(req: NextRequest, params: params) {
 	try {
 		if (all) {
 			const locations = await prisma.locations.findMany({
-        where: {
+				where: {
 					OR: [
 						{
 							location_name: {
@@ -135,7 +133,7 @@ export async function GET(req: NextRequest, params: params) {
 						},
 					],
 				},
-        include: {
+				include: {
 					Routes: true,
 				},
 				// sort

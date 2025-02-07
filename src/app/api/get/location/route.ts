@@ -13,10 +13,9 @@ export async function GET(req: NextRequest) {
 	if (!session) {
 		return new Response(
 			JSON.stringify({
-				status: 401,
 				message: 'Unauthorized',
 			}),
-			{ headers }
+			{ headers, status: 401 }
 		);
 	}
 

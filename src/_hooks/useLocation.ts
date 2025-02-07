@@ -37,12 +37,13 @@ const createLocation = async (location: any) => {
 	});
 
 	if (!response.ok) {
-		throw new Error('An error occurred');
+		const data = await response.json();
+		throw new Error(data.message);
 	}
 
 	const data = await response.json();
 
-	return data.data;
+	return data;
 };
 
 const updateLocation = async (location: any) => {
@@ -53,12 +54,13 @@ const updateLocation = async (location: any) => {
 	});
 
 	if (!response.ok) {
-		throw new Error('An error occurred');
+		const data = await response.json();
+		throw new Error(data.message);
 	}
 
 	const data = await response.json();
 
-	return data.data;
+	return data;
 };
 
 // ------------------

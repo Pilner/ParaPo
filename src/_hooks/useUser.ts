@@ -37,12 +37,13 @@ const createUser = async (user: any) => {
 	});
 
 	if (!response.ok) {
-		throw new Error('An error occurred');
+		const data = await response.json();
+		throw new Error(data.message);
 	}
 
 	const data = await response.json();
 
-	return data.data;
+	return data;
 };
 
 const updateUser = async (user: any) => {
@@ -53,12 +54,14 @@ const updateUser = async (user: any) => {
 	});
 
 	if (!response.ok) {
-		throw new Error('An error occurred');
+		const data = await response.json();
+		throw new Error(data.message);
 	}
 
 	const data = await response.json();
+	console.log(data);
 
-	return data.data;
+	return data;
 };
 
 const deleteUser = async (user_id: string | number) => {
@@ -68,12 +71,13 @@ const deleteUser = async (user_id: string | number) => {
 	});
 
 	if (!response.ok) {
-		throw new Error('An error occurred');
+		const data = await response.json();
+		throw new Error(data.message);
 	}
 
 	const data = await response.json();
 
-	return data.data;
+	return data;
 };
 
 // ------------------

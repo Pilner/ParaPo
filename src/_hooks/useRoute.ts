@@ -37,12 +37,13 @@ const createRoute = async (route: any) => {
 	});
 
 	if (!response.ok) {
-		throw new Error('An error occurred');
+		const data = await response.json();
+		throw new Error(data.message);
 	}
 
 	const data = await response.json();
 
-	return data.data;
+	return data;
 };
 
 const updateRoute = async (route: any) => {
@@ -53,12 +54,13 @@ const updateRoute = async (route: any) => {
 	});
 
 	if (!response.ok) {
-		throw new Error('An error occurred');
+		const data = await response.json();
+		throw new Error(data.message);
 	}
 
 	const data = await response.json();
 
-	return data.data;
+	return data;
 };
 
 const deleteRoute = async (route_id: string | number) => {
@@ -68,8 +70,13 @@ const deleteRoute = async (route_id: string | number) => {
 	});
 
 	if (!response.ok) {
-		throw new Error('An error occurred');
+		const data = await response.json();
+		throw new Error(data.message);
 	}
+
+	const data = await response.json();
+
+	return data;
 };
 
 // ------------------
@@ -115,7 +122,7 @@ export const usePutRoute = (route_id: string | number) => {
 	return useMutation({
 		mutationFn: updateRoute,
 		onSuccess: () => {
-			// queryClient.invalidateQueries({ queryKey: ['route', route_id] });
+			queryClient.invalidateQueries({ queryKey: ['route', route_id] });
 			queryClient.invalidateQueries({ queryKey: ['routes'] });
 		},
 	});
