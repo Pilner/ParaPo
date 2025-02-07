@@ -1,4 +1,4 @@
-<h1 style="text-align:center">ParaPo</h1>
+<h1 align="center">ParaPo</h1>
 
 A web-based navigation application designed for Filipino commuters. A transit routing map software made using:
 
