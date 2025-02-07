@@ -22,10 +22,9 @@ export async function DELETE(req: NextApiRequest, params: params) {
 	if (!session) {
 		return new Response(
 			JSON.stringify({
-				status: 401,
 				message: 'Unauthorized',
 			}),
-			{ headers }
+			{ headers, status: 401 }
 		);
 	}
 
@@ -33,13 +32,8 @@ export async function DELETE(req: NextApiRequest, params: params) {
 		// check if data is the last row in the table
 		const count = await prisma.users.count();
 		if (count === 1) {
-			return new Response(
-				JSON.stringify({
-					status: 400,
-					message: 'Cannot delete the last user',
-				}),
-				{ headers }
-			);
+			console.log('Cannot delete the last user');
+			throw new Error('Cannot delete the last user');
 		}
 
 		const user = await prisma.users.delete({
@@ -59,9 +53,15 @@ export async function DELETE(req: NextApiRequest, params: params) {
 			status: 200,
 			headers,
 		});
-	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.name, error.message);
+	} catch (error: any) {
+		console.error(error.name, error.message);
+		if (error.message === 'Cannot delete the last user') {
+			return new Response(
+				JSON.stringify({
+					message: 'Cannot delete the last user',
+				}),
+				{ headers, status: 400 }
+			);
 		}
 
 		// Return an error message with status code 500 if an error occurs

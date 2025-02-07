@@ -165,26 +165,22 @@ export default function AddRouteMap() {
 			setInputError(null);
 		}
 
-		try {
-			addRoute(payload, {
-				onSuccess: () => {
-					toast.success('Route created successfully', {
-						onClose: () => {
-							// router.push('/admin');
-							window.location.href = '/admin';
-						},
-						autoClose: 1000,
-					});
-				},
-				onError: (error) => {
-					console.error('Error adding route:', error);
-					throw new Error(error.message);
-				},
-			});
-		} catch (error) {
-			console.error(error);
-			toast.error('Error adding route');
-		}
+		addRoute(payload, {
+			onSuccess: () => {
+				toast.success('Route created successfully', {
+					onClose: () => {
+						// router.push('/admin');
+						window.location.href = '/admin';
+					},
+					autoClose: 1000,
+				});
+			},
+			onError: (error) => {
+				toast.error(error.message);
+				console.error('Error adding route:', error);
+				throw new Error(error.message);
+			},
+		});
 	};
 
 	const deleteLocation = (index: number) => {

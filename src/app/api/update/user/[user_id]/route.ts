@@ -39,10 +39,17 @@ export async function PUT(req: Request, params: params) {
 	}
 
 	if (user_id != user_id_params) {
-		return new Response(JSON.stringify({ message: 'Invalid user_id', user_id_params }), {
-			status: 400,
-			headers,
-		});
+		return new Response(
+			JSON.stringify({
+				message: 'Invalid user_id',
+				user_id,
+				user_id_params,
+			}),
+			{
+				status: 400,
+				headers,
+			}
+		);
 	}
 
 	if (password !== confirmPassword) {
@@ -87,6 +94,14 @@ export async function PUT(req: Request, params: params) {
 		if ((error as any).code === 'P2025') {
 			return new Response(JSON.stringify({ message: 'Item not found' }), {
 				status: 404,
+				headers,
+			});
+		}
+
+		// if unique constraint failed
+		if ((error as any).code === 'P2002') {
+			return new Response(JSON.stringify({ message: 'Username already exists' }), {
+				status: 409,
 				headers,
 			});
 		}

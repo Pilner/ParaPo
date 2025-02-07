@@ -38,7 +38,7 @@ export default function EditRouteMap() {
 	const [route, setRoute] = useState({} as any);
 
 	const { data, error } = useGetRoute(Array.isArray(route_id) ? route_id[0] : route_id);
-	const { mutate: editRoute } = usePutRoute(Array.isArray(route_id) ? route_id[0] : route_id);
+	const { mutate: updateRoute } = usePutRoute(Array.isArray(route_id) ? route_id[0] : route_id);
 
 	useEffect(() => {
 		// Initialize the map from Mapbox
@@ -252,26 +252,22 @@ export default function EditRouteMap() {
 			setInputError(null);
 		}
 
-		try {
-			editRoute(payload, {
-				onSuccess: () => {
-					toast.success('Route edited successfully', {
-						onClose: () => {
-							// router.push('/admin');
-							window.location.href = '/admin';
-						},
-						autoClose: 1000,
-					});
-				},
-				onError: (error) => {
-					console.error('Error adding route:', error);
-					throw new Error(error.message);
-				},
-			});
-		} catch (error) {
-			console.error(error);
-			toast.error('Error adding route');
-		}
+		updateRoute(payload, {
+			onSuccess: () => {
+				toast.success('Route edited successfully', {
+					onClose: () => {
+						// router.push('/admin');
+						window.location.href = '/admin';
+					},
+					autoClose: 1000,
+				});
+			},
+			onError: (error) => {
+				toast.error(error.message);
+				console.error('Error adding route:', error);
+				throw new Error(error.message);
+			},
+		});
 	};
 
 	const deleteLocation = (index: number) => {
