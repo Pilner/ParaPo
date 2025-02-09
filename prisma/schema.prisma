@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model Users {
+    user_id    Int      @id @default(autoincrement())
+    username   String   @unique
+    password   String
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+}
+
+model Locations {
+    location_id   Int    @id @default(autoincrement())
+    location_name String
+
+    longitude Float
+    latitude  Float
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    route_id Int    @map("route_id") // Foreign key reference
+    Routes   Routes @relation(fields: [route_id], references: [route_id], onDelete: Cascade)
+}
+
+model Routes {
+    route_id   Int    @id @default(autoincrement())
+    route_name String
+    category   String
+    min_fare   Float
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    Locations Locations[]
+}
