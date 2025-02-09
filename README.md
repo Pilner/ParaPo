@@ -105,8 +105,8 @@ npx prisma migrate reset
 - `/catalog/route/[id]` - is the Catalog Route Map Page
 - `/map` - is the Route Map Page
 - `/admin` - is the Admin Dashboard Page
-- `/admin/page/add/route` - is the Creation of Route Page
-- `/admin/page/edit/route/[route_id]` - is the Editing of Route Page
+- `/admin/map/add/route` - is the Creation of Route Page
+- `/admin/map/edit/route/[route_id]` - is the Editing of Route Page
 - `/**` - is the 404 Error Page
 
 ## API Routes
