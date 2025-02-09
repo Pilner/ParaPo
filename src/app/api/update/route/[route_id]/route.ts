@@ -46,16 +46,19 @@ export async function PUT(req: Request, params: params) {
 	}
 
 	try {
-		// count the number of locations in the Locations table
-		const locationsCountDB = await prisma.locations.count({
+		const locationsDB = await prisma.locations.findMany({
 			where: {
 				route_id: parseInt(route_id_params),
 			},
 		});
 
-		console.log(locationsCountDB, Locations.length);
-
-		if (locationsCountDB !== Locations.length) {
+		// if locationsDB and Locations does not have the same contents, delete all locations and add the new ones
+		if (
+			locationsDB.length !== Locations.length ||
+			locationsDB.some((location, index) => {
+				return location.location_id !== Locations[index].location_id;
+			})
+		) {
 			// Delete all locations associated with the route
 			await prisma.locations.deleteMany({
 				where: {
