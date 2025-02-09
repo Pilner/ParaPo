@@ -15,7 +15,7 @@ export const Providers = ({ children }: Props) => {
 		<SessionProvider>
 			<QueryClientProvider client={queryClient}>
 				{children}
-				<ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
+				{/* <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" /> */}
 			</QueryClientProvider>
 		</SessionProvider>
 	);
